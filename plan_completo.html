@@ -205,6 +205,42 @@ details[open] .week-summary{background:var(--surface3)}
 .z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
 .z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
 .z-pct{font-size:12px;color:var(--muted)}
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
 @media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
 
 @media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
@@ -225,6 +261,7 @@ details[open] .week-summary{background:var(--surface3)}
   .charts-grid{grid-template-columns:1fr}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -258,7 +295,8 @@ details[open] .week-summary{background:var(--surface3)}
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('plan')">Plan Semanal</button>
+  <button class="tab-btn active" onclick="switchTab('metodo')">Metodolog&iacute;a</button>
+  <button class="tab-btn" onclick="switchTab('plan')">Plan Semanal</button>
   <button class="tab-btn" onclick="switchTab('gym')">Fuerza / Gym</button>
   <button class="tab-btn" onclick="switchTab('supps')">Suplementaci&oacute;n</button>
   <button class="tab-btn" onclick="switchTab('nutrition')">Nutrici&oacute;n</button>
@@ -270,9 +308,334 @@ details[open] .week-summary{background:var(--surface3)}
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TAB 0: METODOLOG&Iacute;A — Periodizaci&oacute;n y Principios                     -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div id="tab-metodo" class="tab-panel active">
+
+<!-- INTRO -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h2 style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px">Por qu&eacute; este plan funciona &mdash; La ciencia detr&aacute;s de cada decisi&oacute;n</h2>
+  <p style="font-size:15px;color:#cbd5e1;line-height:1.8;margin-bottom:12px">
+    Este plan sigue un modelo de <strong style="color:var(--accent)">periodizaci&oacute;n por bloques</strong> con <strong style="color:var(--accent)">distribuci&oacute;n polarizada 80/20</strong> (Seiler 2010). No es un plan aleatorio de semanas &mdash; cada sesi&oacute;n, cada semana y cada fase tiene un prop&oacute;sito espec&iacute;fico dentro de un sistema de adaptaci&oacute;n biol&oacute;gica. Entender este sistema te permite tomar decisiones inteligentes cuando la vida real modifique el plan.
+  </p>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7">
+    <strong>Polarizada 80/20</strong> significa que el 80% de tu volumen es en Z1-Z2 (f&aacute;cil, conversacional) y solo el 20% en Z3-Z5 (duro). La tentaci&oacute;n es hacer todo "moderado" &mdash; eso produce peores resultados que ir muy suave la mayor&iacute;a del tiempo y muy duro pocas veces (Stoggl &amp; Sperlich 2014).
+  </p>
+</div>
+
+<!-- MACROCICLO -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:16px">MACROCICLO &mdash; La visi&oacute;n completa (25 semanas)</h3>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:16px">
+    El macrociclo es el plan completo de 25 semanas. Progresa desde lo general (base aer&oacute;bica) hacia lo espec&iacute;fico (trail de monta&ntilde;a) y culmina con la supercompensaci&oacute;n final (taper) para que llegues al d&iacute;a de carrera en tu mejor momento. Cada fase construye sobre la anterior &mdash; <strong style="color:var(--red)">saltar fases causa lesiones y estancamiento</strong>.
+  </p>
+
+  <!-- Visual timeline -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:20px">
+    <div style="background:linear-gradient(135deg,#f9731615,#f9731630);border:1px solid #f9731640;border-radius:8px;padding:16px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#f97316;letter-spacing:2px;text-transform:uppercase">Fase 1</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;margin:6px 0">Base Aer&oacute;bica</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">Sem 1&ndash;7</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px">24 Mar &ndash; 10 May</div>
+      <div style="margin-top:8px;font-size:12px;color:#94a3b8">Volumen Z1-Z2<br>Gym: Adaptaci&oacute;n anat&oacute;mica<br>377km &middot; 5,900m D+</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#f59e0b15,#f59e0b30);border:1px solid #f59e0b40;border-radius:8px;padding:16px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#f59e0b;letter-spacing:2px;text-transform:uppercase">Fase 2</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;margin:6px 0">Desarrollo Trail</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">Sem 8&ndash;12</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px">11 May &ndash; 14 Jun</div>
+      <div style="margin-top:8px;font-size:12px;color:#94a3b8">Hill reps Z4-Z5 + VK<br>Gym: Fuerza M&aacute;xima<br>328km &middot; 12,700m D+</div>
+      <div style="margin-top:6px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#f97316">Palencia (Sem 12)</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#22d3ee15,#22d3ee30);border:1px solid #22d3ee40;border-radius:8px;padding:16px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#22d3ee;letter-spacing:2px;text-transform:uppercase">Fase 3</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;margin:6px 0">Bloque Sierra</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">Sem 13&ndash;22</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px">15 Jun &ndash; 23 Aug</div>
+      <div style="margin-top:8px;font-size:12px;color:#94a3b8">B2B sierra + VK avanzados<br>Gym: Potencia + Pliometr&iacute;a<br>598km &middot; 24,900m D+</div>
+      <div style="margin-top:6px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#ef4444">Sem 18: PICO (80km/4500m)</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#a78bfa15,#a78bfa30);border:1px solid #a78bfa40;border-radius:8px;padding:16px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#a78bfa;letter-spacing:2px;text-transform:uppercase">Fase 4</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;margin:6px 0">Taper + TP60</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">Sem 23&ndash;25</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px">07 Sep &ndash; 11 Oct</div>
+      <div style="margin-top:8px;font-size:12px;color:#94a3b8">&minus;50% volumen<br>Mantiene intensidad<br>178km &middot; 6,100m D+</div>
+      <div style="margin-top:6px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:#22d3ee">TP60 (Sem 25)</div>
+    </div>
+  </div>
+</div>
+
+<!-- MESOCICLOS -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--amber);letter-spacing:1px;margin-bottom:16px">MESOCICLOS &mdash; Bloques de 3-4 semanas</h3>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:16px">
+    Dentro de cada fase, las semanas se agrupan en bloques de 3-4 semanas llamados <strong style="color:var(--amber)">mesociclos</strong>. Cada mesociclo sigue un patr&oacute;n <strong style="color:var(--accent)">3:1 (carga:descarga)</strong>: tres semanas de carga progresiva seguidas de una semana de deload. Este patr&oacute;n est&aacute; basado en Meeusen 2013 &mdash; sin deloads regulares, el cuerpo acumula fatiga central y perif&eacute;rica que destruye la calidad del entrenamiento y aumenta riesgo de lesi&oacute;n.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:20px">
+    <!-- Mesociclo pattern visual -->
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--green);letter-spacing:1px;margin-bottom:10px">PATR&Oacute;N 3:1 T&Iacute;PICO</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:8px">
+        <div style="flex:1;background:linear-gradient(to top,#22d3ee40,#22d3ee);border-radius:4px 4px 0 0;height:50%"></div>
+        <div style="flex:1;background:linear-gradient(to top,#f59e0b40,#f59e0b);border-radius:4px 4px 0 0;height:70%"></div>
+        <div style="flex:1;background:linear-gradient(to top,#ef444440,#ef4444);border-radius:4px 4px 0 0;height:90%"></div>
+        <div style="flex:1;background:linear-gradient(to top,#84cc1640,#84cc16);border-radius:4px 4px 0 0;height:35%"></div>
+      </div>
+      <div style="display:flex;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">
+        <span style="flex:1;text-align:center">Carga</span>
+        <span style="flex:1;text-align:center">Carga+</span>
+        <span style="flex:1;text-align:center">Pico</span>
+        <span style="flex:1;text-align:center;color:#84cc16">Deload</span>
+      </div>
+    </div>
+
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--amber);letter-spacing:1px;margin-bottom:10px">MESOCICLOS EN ESTE PLAN</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.8">
+        <div><span style="color:#f97316">Fase 1:</span> Sem 1-3 carga &rarr; Sem 4 deload &rarr; Sem 5-6 carga &rarr; Sem 7 deload</div>
+        <div><span style="color:#f59e0b">Fase 2:</span> Sem 8-10 carga &rarr; Sem 11 taper &rarr; Sem 12 carrera</div>
+        <div><span style="color:#22d3ee">Fase 3:</span> Sem 14-16 carga &rarr; Sem 17 deload &rarr; Sem 18-20 carga &rarr; Sem 19/21 deload</div>
+        <div><span style="color:#a78bfa">Fase 4:</span> Taper progresivo 3 semanas</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--red);letter-spacing:1px;margin-bottom:10px">REGLAS DEL DELOAD</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.8">
+        <div>&minus;25% volumen (km y D+)</div>
+        <div>Mismos ejercicios gym, &minus;10-15% carga</div>
+        <div>Sin sesiones de calidad (no Z4-Z5)</div>
+        <div>Prioriza sue&ntilde;o (8-9h)</div>
+        <div style="color:var(--red);font-weight:600;margin-top:4px">El deload NO es perder tiempo &mdash; es donde ocurre la adaptaci&oacute;n</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPERCOMPENSACI&Oacute;N -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--red);letter-spacing:1px;margin-bottom:16px">SUPERCOMPENSACI&Oacute;N &mdash; El principio que gobierna TODO</h3>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:16px">
+    Tu cuerpo <strong style="color:var(--red)">NO se adapta durante el entrenamiento</strong>. Se adapta durante la <strong style="color:var(--green)">recuperaci&oacute;n</strong>. Cuando entrenas, produces da&ntilde;o muscular, agotas gluc&oacute;geno y fatigeas el sistema nervioso. Despu&eacute;s del entrenamiento, el cuerpo no solo repara &mdash; reconstruye por ENCIMA del nivel anterior. Esto es la supercompensaci&oacute;n.
+  </p>
+
+  <!-- Supercompensation wave visual -->
+  <div style="background:var(--surface3);border-radius:10px;padding:24px;margin-bottom:16px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:12px;text-align:center">CICLO DE SUPERCOMPENSACI&Oacute;N</div>
+    <svg viewBox="0 0 800 200" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <!-- Baseline -->
+      <line x1="0" y1="120" x2="800" y2="120" stroke="#1e2d45" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="10" y="115" fill="#64748b" font-size="11" font-family="JetBrains Mono">Nivel base</text>
+      <!-- Supercompensation wave -->
+      <path d="M 0,120 L 100,120 C 130,120 140,160 160,170 C 180,178 200,175 220,160 C 260,130 280,90 320,80 C 360,72 400,75 420,85 C 440,95 450,110 460,120 L 480,120 C 510,120 520,165 540,172 C 560,178 580,170 600,155 C 640,125 660,82 700,72 C 740,65 780,75 800,90"
+        fill="none" stroke="#22d3ee" stroke-width="3"/>
+      <!-- Labels -->
+      <text x="125" y="195" fill="#ef4444" font-size="11" font-family="Rajdhani" font-weight="600">Fatiga</text>
+      <text x="210" y="195" fill="#f59e0b" font-size="11" font-family="Rajdhani" font-weight="600">Recuperaci&oacute;n</text>
+      <text x="300" y="65" fill="#84cc16" font-size="11" font-family="Rajdhani" font-weight="700">SUPER-COMPENSACI&Oacute;N</text>
+      <text x="130" y="30" fill="#64748b" font-size="10" font-family="JetBrains Mono">Est&iacute;mulo 1</text>
+      <line x1="150" y1="33" x2="150" y2="118" stroke="#64748b" stroke-width="1" stroke-dasharray="2,3"/>
+      <text x="500" y="30" fill="#64748b" font-size="10" font-family="JetBrains Mono">Est&iacute;mulo 2</text>
+      <line x1="470" y1="33" x2="470" y2="118" stroke="#64748b" stroke-width="1" stroke-dasharray="2,3"/>
+      <!-- Arrow at peak -->
+      <text x="305" y="80" fill="#84cc16" font-size="16">&#8593;</text>
+      <text x="680" y="58" fill="#84cc16" font-size="11" font-family="Rajdhani" font-weight="700">NUEVO NIVEL</text>
+    </svg>
+    <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;font-size:12px">
+      <span style="color:#ef4444">&#9632; Fatiga post-entreno (24-72h)</span>
+      <span style="color:#f59e0b">&#9632; Recuperaci&oacute;n (48-96h)</span>
+      <span style="color:#84cc16">&#9632; Supercompensaci&oacute;n (72-120h)</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--red);margin-bottom:6px">Entrenar demasiado pronto</div>
+      <p style="font-size:12px;color:#94a3b8">Si metes otro est&iacute;mulo durante la fase de fatiga, acumulas da&ntilde;o sobre da&ntilde;o. Resultado: sobreentrenamiento, lesi&oacute;n, p&eacute;rdida de rendimiento.</p>
+    </div>
+    <div style="background:rgba(132,204,22,.08);border:1px solid rgba(132,204,22,.2);border-radius:8px;padding:14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px">Entrenar en el momento justo</div>
+      <p style="font-size:12px;color:#94a3b8">El siguiente est&iacute;mulo llega en la cresta de la supercompensaci&oacute;n. Cada ciclo te lleva m&aacute;s alto. Esto es lo que busca el patr&oacute;n 3:1.</p>
+    </div>
+    <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:14px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--amber);margin-bottom:6px">Entrenar demasiado tarde</div>
+      <p style="font-size:12px;color:#94a3b8">Si esperas demasiado, la supercompensaci&oacute;n se pierde y vuelves al nivel base. Resultado: no progresas (desentrenamiento).</p>
+    </div>
+  </div>
+</div>
+
+<!-- MICROCICLO (SEMANA T&Iacute;PICA) -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--purple);letter-spacing:1px;margin-bottom:16px">MICROCICLO &mdash; C&oacute;mo leer cada semana</h3>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:16px">
+    Cada semana (microciclo) sigue una estructura fija que protege las <strong style="color:var(--purple)">sesiones clave</strong> y respeta los tiempos de recuperaci&oacute;n. Las dos sesiones m&aacute;s importantes de la semana son el <strong style="color:#f97316">mi&eacute;rcoles (calidad)</strong> y el <strong style="color:#6366f1">s&aacute;bado (long run)</strong>. Todo lo dem&aacute;s gira alrededor de proteger estas dos sesiones.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px">
+    <div style="background:#1e293b;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#334155">L</div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px">REST</div>
+      <div style="width:100%;height:4px;background:#334155;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#64748b;margin-top:6px">Recupera del B2B</div>
+    </div>
+    <div style="background:#0f2d2d;border:1px solid #22d3ee40;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#22d3ee">M</div>
+      <div style="font-size:11px;color:#22d3ee;margin-top:4px">EASY + GYM</div>
+      <div style="width:100%;height:4px;background:#22d3ee60;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#94a3b8;margin-top:6px">DOBLE SESI&Oacute;N<br>AM run / PM gym</div>
+    </div>
+    <div style="background:#2d1a0f;border:2px solid #f97316;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f97316">X</div>
+      <div style="font-size:11px;color:#f97316;margin-top:4px">CALIDAD</div>
+      <div style="width:100%;height:4px;background:#f97316;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#f97316;margin-top:6px;font-weight:600">SESI&Oacute;N CLAVE 1<br>Intervalos/Tempo</div>
+    </div>
+    <div style="background:#0f2d2d;border:1px solid #22d3ee40;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#22d3ee">J</div>
+      <div style="font-size:11px;color:#22d3ee;margin-top:4px">EASY + GYM</div>
+      <div style="width:100%;height:4px;background:#22d3ee60;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#94a3b8;margin-top:6px">DOBLE SESI&Oacute;N<br>AM run / PM gym</div>
+    </div>
+    <div style="background:#1e293b;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#334155">V</div>
+      <div style="font-size:11px;color:#64748b;margin-top:4px">REST</div>
+      <div style="width:100%;height:4px;background:#334155;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#64748b;margin-top:6px">Protege el Long</div>
+    </div>
+    <div style="background:#0f1a2d;border:2px solid #6366f1;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#6366f1">S</div>
+      <div style="font-size:11px;color:#6366f1;margin-top:4px">LONG RUN</div>
+      <div style="width:100%;height:4px;background:#6366f1;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#6366f1;margin-top:6px;font-weight:600">SESI&Oacute;N CLAVE 2<br>Resistencia</div>
+    </div>
+    <div style="background:#2d1010;border:1px solid #ef444440;border-radius:6px;padding:12px 8px;text-align:center">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#ef4444">D</div>
+      <div style="font-size:11px;color:#ef4444;margin-top:4px">B2B / REC</div>
+      <div style="width:100%;height:4px;background:#ef444460;border-radius:2px;margin-top:8px"></div>
+      <div style="font-size:10px;color:#94a3b8;margin-top:6px">Fatiga acumulada<br>o recovery</div>
+    </div>
+  </div>
+</div>
+
+<!-- DOBLE SESI&Oacute;N + ORDEN RUN/GYM -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--green);letter-spacing:1px;margin-bottom:16px">DOBLE SESI&Oacute;N &mdash; Orden carrera/gym y por qu&eacute;</h3>
+  <p style="font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:16px">
+    Los martes y jueves combinan carrera + gym. El <strong style="color:var(--green)">orden y la separaci&oacute;n</strong> entre sesiones importa &mdash; afecta a la se&ntilde;alizaci&oacute;n molecular (AMPK para endurance vs mTOR para fuerza). Separar por 6+ horas reduce la interferencia (Doma &amp; Deakin 2013, Robineau 2016).
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:16px">
+    <div style="background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(249,115,22,.12));border:1px solid rgba(249,115,22,.2);border-radius:10px;padding:18px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f97316;margin-bottom:8px">FASE A &mdash; Semanas 1-7</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:8px">
+        <strong>Misma sesi&oacute;n:</strong> Easy run primero &rarr; 15min pausa &rarr; Gym despu&eacute;s<br>
+      </div>
+      <div style="font-size:12px;color:#94a3b8;line-height:1.6">
+        <strong>Raz&oacute;n:</strong> Las cargas son bajas (60-70% 1RM), no necesitas SNC fresco. La carrera Z1 calienta perfectamente para los ejercicios. Prioridad: aprender movimientos con buena t&eacute;cnica.
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(245,158,11,.12));border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:18px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f59e0b;margin-bottom:8px">FASE B &mdash; Semanas 8-16</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:8px">
+        <strong>DOBLE SESI&Oacute;N:</strong> AM easy run (7:00) &rarr; PM gym (18:00)<br>
+        <span style="font-size:11px;color:var(--muted)">Separaci&oacute;n: 10-11h</span>
+      </div>
+      <div style="font-size:12px;color:#94a3b8;line-height:1.6">
+        <strong>Raz&oacute;n:</strong> Ahora mueves el 80-85% 1RM. Necesitas el SNC fresco para reclutar m&aacute;xima fuerza. Si acabas de correr 10km, tu squat pierde 5-10% y la calidad del est&iacute;mulo neuromuscular cae (Schumann 2014). La separaci&oacute;n elimina interferencia AMPK/mTOR.
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(34,211,238,.06),rgba(34,211,238,.12));border:1px solid rgba(34,211,238,.2);border-radius:10px;padding:18px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#22d3ee;margin-bottom:8px">FASE C &mdash; Semanas 17-22</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.7;margin-bottom:8px">
+        <strong>Misma sesi&oacute;n:</strong> Easy run primero &rarr; 15min pausa &rarr; Gym despu&eacute;s<br>
+        <span style="font-size:11px;color:var(--muted)">O doble si tienes tiempo</span>
+      </div>
+      <div style="font-size:12px;color:#94a3b8;line-height:1.6">
+        <strong>Raz&oacute;n:</strong> Gym es mantenimiento/potencia. Las cargas bajan, la explosividad sube. Running es prioridad absoluta en el bloque sierra. La carrera se protege a toda costa.
+      </div>
+    </div>
+  </div>
+
+  <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:8px;padding:14px;margin-bottom:12px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">REGLA DE ORO</div>
+    <p style="font-size:13px;color:#cbd5e1">NUNCA hagas gym el d&iacute;a anterior a una sesi&oacute;n clave (mi&eacute;rcoles calidad o s&aacute;bado long). NUNCA hagas gym el mismo d&iacute;a que una sesi&oacute;n de calidad. El gym solo coexiste con easy runs Z1.</p>
+  </div>
+
+  <div style="background:var(--surface3);border-radius:8px;padding:16px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:10px">ESTRUCTURA DOBLE SESI&Oacute;N (MARTES/JUEVES FASES B-C)</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center">
+      <div style="background:rgba(34,211,238,.08);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--accent)">SESI&Oacute;N AM (7:00-8:00)</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px">Easy run 8-12km Z1<br>Cadencia, relajaci&oacute;n, base aer&oacute;bica</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--muted)">&rarr;</div>
+      <div style="background:rgba(167,139,250,.08);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--purple)">SESI&Oacute;N PM (18:00-19:15)</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px">Gym Fase B/C (45-60min)<br>SNC fresco, m&aacute;xima calidad</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">
+      10-11h separaci&oacute;n &rarr; interferencia molecular m&iacute;nima (Robineau 2016)
+    </div>
+  </div>
+</div>
+
+<!-- C&Oacute;MO USAR ESTE PLAN -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:16px">C&Oacute;MO USAR ESTE PLAN</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px">Si pierdes una sesi&oacute;n</div>
+      <p style="font-size:12px;color:#94a3b8;line-height:1.6">Nunca "recuperes" una sesi&oacute;n perdida a&ntilde;adi&eacute;ndola al d&iacute;a siguiente. Simplemente saltar y seguir. Si pierdes una sesi&oacute;n clave (X o S), intenta moverla un d&iacute;a. Si pierdes un easy run, ignora.</p>
+    </div>
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--amber);margin-bottom:6px">Se&ntilde;ales de alarma</div>
+      <p style="font-size:12px;color:#94a3b8;line-height:1.6">FC reposo +5bpm, insomnio, falta de motivaci&oacute;n, dolor articular (no muscular), HRV Coros drop &gt;10%. Si ves 2+, convierte la siguiente sesi&oacute;n en Z1 o descanso.</p>
+    </div>
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--green);margin-bottom:6px">Prioridad de sesiones</div>
+      <p style="font-size:12px;color:#94a3b8;line-height:1.6">Si la semana se complica: 1&ordm; S&aacute;bado long, 2&ordm; Mi&eacute;rcoles calidad, 3&ordm; Gym (1 sesi&oacute;n m&iacute;nimo), 4&ordm; Easy runs. Los easy runs son los primeros en caer.</p>
+    </div>
+    <div style="background:var(--surface3);border-radius:8px;padding:16px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--purple);margin-bottom:6px">Ajuste por sensaciones</div>
+      <p style="font-size:12px;color:#94a3b8;line-height:1.6">Los km y D+ son objetivos, no mandatos. Si un d&iacute;a de long run te sientes mal en el km 15, para. Es mejor un long de 15km sano que 25km destrozado. La consistencia gana al volumen.</p>
+    </div>
+  </div>
+</div>
+
+<!-- REFERENCIAS -->
+<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:28px">
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:12px">REFERENCIAS CIENT&Iacute;FICAS</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:6px;font-size:11px;color:#64748b;line-height:1.6">
+    <div>Seiler 2010 — Distribuci&oacute;n polarizada 80/20 en atletas endurance</div>
+    <div>Stoggl &amp; Sperlich 2014 — Polarizada vs threshold vs high-volume training</div>
+    <div>Meeusen 2013 — Sobreentrenamiento: prevenci&oacute;n con periodizaci&oacute;n 3:1</div>
+    <div>Beattie 2017 — HST 16 sem: econom&iacute;a carrera +4.6%, potencia +8.6%</div>
+    <div>Blagrove 2018 — HST reduce lesiones 50% en fondistas</div>
+    <div>Petersen 2011 — Nordic curl: &minus;70% lesiones isquiosurales</div>
+    <div>Mikkola 2007 — Pliometr&iacute;a mejora RE +4.1%</div>
+    <div>Schumann 2014 — Orden fuerza-primero mejora ganancias en concurrent training</div>
+    <div>Robineau 2016 — 6-8h separaci&oacute;n elimina interferencia concurrent</div>
+    <div>Doma &amp; Deakin 2013 — Separar sesiones concurrent por &ge;6h</div>
+    <div>Giovanelli 2016 — Power hiking eficiente en pendientes &gt;15%</div>
+    <div>Mujika &amp; Padilla 2003 — Taper &oacute;ptimo 2 semanas, &minus;40-50% volumen</div>
+    <div>Bosquet 2007 — Reducci&oacute;n volumen 41-60% &oacute;ptima en taper</div>
+    <div>Hoffman 2016 — B2B weekends mejoran tolerancia fatiga ultra</div>
+    <div>Jeukendrup 2014 — Glucosa:fructosa 2:1, absorci&oacute;n hasta 90g CHO/h</div>
+    <div>Morton 2018 — Prote&iacute;na 1.8g/kg &oacute;ptima en d&eacute;ficit cal&oacute;rico</div>
+    <div>Patoz 2020 — Hill reps mejoran econom&iacute;a trail</div>
+    <div>Hobson 2012 — Beta-alanina mejora rendimiento Z4-Z5 (1-10min)</div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
 <!-- TAB 1: PLAN SEMANAL DETALLADO                                         -->
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
-<div id="tab-plan" class="tab-panel active">
+<div id="tab-plan" class="tab-panel">
 
 <!-- FASE 1 -->
 <div class="phase-block">
@@ -456,9 +819,9 @@ details[open] .week-summary{background:var(--surface3)}
         </div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">20 Apr</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">10km</span><span class="sess-date">21 Apr</span></div><p class="sess-desc">10km Z1&ndash;Z2 + GYM FASE B (intro). Primera sesi&oacute;n con carga alta: 4&times;5 sentadilla @80%1RM.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">10km</span><span class="sess-date">21 Apr</span></div><p class="sess-desc">AM: 10km Z1&ndash;Z2 (7:00). PM: GYM FASE B intro (18:00) &mdash; primera sesi&oacute;n con carga alta: 4&times;5 sentadilla @80%1RM. Doble sesi&oacute;n desde hoy.</p></div>
           <div class="session-card" style="background:#2d1a0f;border-left:3px solid #f97316"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f97316">INTERVALOS Z4</span><span class="sess-km">14km &uarr;400m</span><span class="sess-date">22 Apr</span></div><p class="sess-desc">Hill reps: 2km Z1 warm-up &rarr; 6&times;3min subida Z4 (RPE 8/10, bajada trote Z1) &rarr; 2km Z1. Evidencia: Patoz 2020 &mdash; hill reps mejoran econom&iacute;a trail.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">12km &uarr;300m</span><span class="sess-date">23 Apr</span></div><p class="sess-desc">12km Z2 con subidas. GYM FASE B despu&eacute;s.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">12km &uarr;300m</span><span class="sess-date">23 Apr</span></div><p class="sess-desc">AM: 12km Z2 con subidas (7:00). PM: GYM FASE B (18:00). Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">24 Apr</span></div><p class="sess-desc">Descanso.</p></div>
           <div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG RUN</span><span class="sess-km">24km &uarr;500m</span><span class="sess-date">25 Apr</span></div><p class="sess-desc">24km Z1&ndash;Z2. Pedriza/Navacerrada. 2-3 geles. Practica nutrition race-day: 1 gel cada 35-40min.</p></div>
           <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#22d3ee">EASY Z1</span><span class="sess-km">12km</span><span class="sess-date">26 Apr</span></div><p class="sess-desc">12km Z1 recovery. Cadencia &gt;172spm.</p></div>
@@ -483,9 +846,9 @@ details[open] .week-summary{background:var(--surface3)}
         </div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">27 Apr</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">12km</span><span class="sess-date">28 Apr</span></div><p class="sess-desc">12km Z1&ndash;Z2 + GYM FASE B. Squat pesado 4&times;5@80%1RM. Hip thrust 4&times;6.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">12km</span><span class="sess-date">28 Apr</span></div><p class="sess-desc">AM: 12km Z1&ndash;Z2 (7:00). PM: GYM FASE B (18:00) &mdash; Squat pesado 4&times;5@80%1RM, hip thrust 4&times;6. Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#1a2f0f;border-left:3px solid #84cc16"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#84cc16">TEMPO Z3</span><span class="sess-km">16km &uarr;300m</span><span class="sess-date">29 Apr</span></div><p class="sess-desc">16km: 3km Z1 &rarr; 2&times;20min @Z3 con 5min Z1 rec &rarr; 3km Z1. 2&ordf; parte en subida larga si posible.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">12km &uarr;300m</span><span class="sess-date">30 Apr</span></div><p class="sess-desc">12km Z1&ndash;Z2 trail o parque. GYM FASE B.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">12km &uarr;300m</span><span class="sess-date">30 Apr</span></div><p class="sess-desc">AM: 12km Z1&ndash;Z2 trail o parque (7:00). PM: GYM FASE B (18:00). Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#1a1f2e;border-left:3px solid #475569"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#475569">RECOVERY</span><span class="sess-km">8km</span><span class="sess-date">01 May</span></div><p class="sess-desc">8km regenerativo Z1. Decide seg&uacute;n HRV Coros: si HRV bajo, descansa.</p></div>
           <div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG TRAIL</span><span class="sess-km">26km &uarr;900m</span><span class="sess-date">02 May</span></div><p class="sess-desc">26km Z1&ndash;Z2 trail. Pedriza o Manzanares. D+&gt;800m. 3 geles. Prueba bastones si los llevas en Palencia.</p></div>
           <div class="session-card" style="background:#2d1010;border-left:3px solid #ef4444"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#ef4444">B2B TRAIL</span><span class="sess-km">14km &uarr;300m</span><span class="sess-date">03 May</span></div><p class="sess-desc">14km Z1&ndash;Z2 trail B2B. Piernas cargadas. Simula segunda jornada. Hoffman 2016: B2B mejora tolerancia fatiga acumulada.</p></div>
@@ -510,7 +873,7 @@ details[open] .week-summary{background:var(--surface3)}
         </div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">04 May</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">10km</span><span class="sess-date">05 May</span></div><p class="sess-desc">10km Z1 + GYM FASE B 50% carga. Mantenimiento.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">10km</span><span class="sess-date">05 May</span></div><p class="sess-desc">AM: 10km Z1 (7:00). PM: GYM FASE B 50% carga (18:00). Deload &mdash; doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#22d3ee">EASY Z1-Z2</span><span class="sess-km">12km &uarr;200m</span><span class="sess-date">06 May</span></div><p class="sess-desc">12km Z1&ndash;Z2. Practica t&eacute;cnica bajada trail: zancada corta, centro de gravedad bajo, peso ligeramente atr&aacute;s.</p></div>
           <div class="session-card" style="background:#1a0f2d;border-left:3px solid #a78bfa"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#a78bfa">GYM FASE B</span><span class="sess-date">07 May</span></div><p class="sess-desc">GYM FASE B (40min). Carga moderada.</p></div>
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">08 May</span></div><p class="sess-desc">Descanso.</p></div>
@@ -551,9 +914,9 @@ details[open] .week-summary{background:var(--surface3)}
         </div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">11 May</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">10km</span><span class="sess-date">12 May</span></div><p class="sess-desc">10km Z1&ndash;Z2 + GYM FASE B.</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">10km</span><span class="sess-date">12 May</span></div><p class="sess-desc">AM: 10km Z1&ndash;Z2 (7:00). PM: GYM FASE B (18:00). Doble sesi&oacute;n &mdash; 10h separaci&oacute;n para m&aacute;xima calidad neuromuscular.</p></div>
           <div class="session-card" style="background:#2d1a0f;border-left:3px solid #f97316"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f97316">HILL REPS Z4-Z5</span><span class="sess-km">14km &uarr;600m</span><span class="sess-date">13 May</span></div><p class="sess-desc">Palencia-specific: 2km Z1 &rarr; 8&times;3min subida &gt;8% Z4&ndash;Z5 con bajada activa &rarr; 2km Z1. RPE 8-9 en subidas.</p></div>
-          <div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL Z2</span><span class="sess-km">12km &uarr;500m</span><span class="sess-date">14 May</span></div><p class="sess-desc">12km trail t&eacute;cnico Z2. Power hiking rampas &gt;15%. GYM FASE B.</p></div>
+          <div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL Z2</span><span class="sess-km">12km &uarr;500m</span><span class="sess-date">14 May</span></div><p class="sess-desc">AM: 12km trail t&eacute;cnico Z2. Power hiking rampas &gt;15%. PM: GYM FASE B (18:00). Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span><span class="sess-date">15 May</span></div><p class="sess-desc">Descanso.</p></div>
           <div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG TRAIL</span><span class="sess-km">28km &uarr;1,200m</span><span class="sess-date">16 May</span></div><p class="sess-desc">28km Z1&ndash;Z2 trail. D+&gt;1000m. Nutrition: gel c/40min, 60g CHO/h. Equipa como Palencia.</p></div>
           <div class="session-card" style="background:#2d1010;border-left:3px solid #ef4444"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#ef4444">B2B TRAIL</span><span class="sess-km">16km &uarr;500m</span><span class="sess-date">17 May</span></div><p class="sess-desc">16km trail Z1&ndash;Z2 B2B. RPE &le;6/10. Registra sensaciones.</p></div>
@@ -577,9 +940,9 @@ details[open] .week-summary{background:var(--surface3)}
         <div class="week-notes">&#9888; Semana alta carga. HRV, sue&ntilde;o y apetito son sem&aacute;foros. Drop HRV &gt;10% = reduce.</div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">10km</span></div><p class="sess-desc">10km Z1 + GYM FASE B (squat pesado, hip thrust, nordic curl).</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">10km</span></div><p class="sess-desc">AM: 10km Z1 (7:00). PM: GYM FASE B (18:00) &mdash; squat pesado, hip thrust, nordic curl. Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#2d0f1a;border-left:3px solid #f43f5e"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f43f5e">VK SIMULADO</span><span class="sess-km">12km &uarr;1,000m</span></div><p class="sess-desc">VK: 6km subida continua 1000m D+. Z4&ndash;Z5. Objetivo &lt;65min. Bajada trote Z1. Sin monta&ntilde;a: 5&times;8min cinta al 10%.</p></div>
-          <div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL T&Eacute;CNICO</span><span class="sess-km">14km &uarr;600m</span></div><p class="sess-desc">14km trail t&eacute;cnico Z2&ndash;Z3 con bajadas t&eacute;cnicas. GYM FASE B.</p></div>
+          <div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL T&Eacute;CNICO</span><span class="sess-km">14km &uarr;600m</span></div><p class="sess-desc">AM: 14km trail t&eacute;cnico Z2&ndash;Z3 con bajadas t&eacute;cnicas. PM: GYM FASE B (18:00). Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#1a1f2e;border-left:3px solid #475569"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#475569">RECOVERY</span><span class="sess-km">8km</span></div><p class="sess-desc">8km Z1 o descanso seg&uacute;n HRV.</p></div>
           <div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG TRAIL</span><span class="sess-km">30km &uarr;1,500m</span></div><p class="sess-desc">30km Z1&ndash;Z2 trail. Primera vez 30km. D+&gt;1200m. Nutrition completa. Simula equipaci&oacute;n Palencia.</p></div>
           <div class="session-card" style="background:#2d1010;border-left:3px solid #ef4444"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#ef4444">B2B TRAIL</span><span class="sess-km">18km &uarr;900m</span></div><p class="sess-desc">18km trail B2B Z1&ndash;Z2. Segunda jornada crucial. Aprende a moverte con fatiga.</p></div>
@@ -602,7 +965,7 @@ details[open] .week-summary{background:var(--surface3)}
         </div>
         <div class="sessions-grid">
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div>
-          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM B</span><span class="sess-km">10km</span></div><p class="sess-desc">10km Z1 + GYM FASE B (&uacute;ltima sesi&oacute;n pesada antes de taper).</p></div>
+          <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">AM RUN / PM GYM B</span><span class="sess-km">10km</span></div><p class="sess-desc">AM: 10km Z1 (7:00). PM: GYM FASE B (18:00) &mdash; &uacute;ltima sesi&oacute;n pesada antes de taper. Doble sesi&oacute;n.</p></div>
           <div class="session-card" style="background:#2d1a0f;border-left:3px solid #f97316"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f97316">UMBRAL TRAIL</span><span class="sess-km">15km &uarr;800m</span></div><p class="sess-desc">3km Z1 &rarr; 3&times;20min @Z3&ndash;Z4 (RPE 7-8) con 5min Z1, incluye subidas y bajadas &rarr; 3km Z1.</p></div>
           <div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL T&Eacute;CNICO</span><span class="sess-km">15km &uarr;700m</span></div><p class="sess-desc">15km trail Z2&ndash;Z3. M&aacute;ximo terreno irregular.</p></div>
           <div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div>
@@ -713,7 +1076,7 @@ details[open] .week-summary{background:var(--surface3)}
 
     <details class="week-item"><summary class="week-summary"><span class="wk-num" style="background:#22d3ee22;color:#22d3ee">Sem 19</span><span class="wk-dates">27 Jul &ndash; 02 Aug</span><span class="wk-title">SIERRA deload agosto</span><span class="wk-stats">50km &middot; &uarr;2,000m</span><span class="wk-load" style="background:#84cc1622;color:#84cc16">LOW-MED</span></summary><div class="week-body"><div class="week-objective"><h4>Objetivo</h4><p>Supercompensaci&oacute;n post-semana pico. Requiere 10-14 d&iacute;as. Este deload es TAN importante como la semana pico. Sin &eacute;l, la adaptaci&oacute;n no ocurre. GYM mantenimiento. Duerme 8-9h. Come bien.</p></div><div class="sessions-grid"><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY</span><span class="sess-km">10km &uarr;300m</span></div><p class="sess-desc">10km Z1 + movilidad 20min.</p></div><div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#d97706">TRAIL</span><span class="sess-km">12km &uarr;500m</span></div><p class="sess-desc">12km Z2 t&eacute;cnico suave.</p></div><div class="session-card" style="background:#1a0f2d;border-left:3px solid #a78bfa"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#a78bfa">GYM C MANT.</span></div><p class="sess-desc">GYM FASE C mantenimiento.</p></div><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG DELOAD</span><span class="sess-km">22km &uarr;1,200m</span></div><p class="sess-desc">22km Z1&ndash;Z2 deload long.</p></div><div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#22d3ee">EASY</span><span class="sess-km">10km</span></div><p class="sess-desc">10km Z1.</p></div></div></div></details>
 
-    <details class="week-item"><summary class="week-summary"><span class="wk-num" style="background:#22d3ee22;color:#22d3ee">Sem 20</span><span class="wk-dates">03 Aug &ndash; 09 Aug</span><span class="wk-title">SIERRA segundo bloque TP60</span><span class="wk-stats">75km &middot; &uarr;4,000m</span><span class="wk-load" style="background:#ef444422;color:#ef4444">HIGH</span></summary><div class="week-body"><div class="week-objective"><h4>Objetivo</h4><p>Segundo bloque pico. Semanas 18 y 20 son las m&aacute;s importantes del ciclo. VK race-pace TP60: esfuerzo sostenible 6-7h, Z4 controlado. 34km long con 2200m D+ simula las condiciones reales. Despu&eacute;s de esta semana, solo queda absorber y tapear.</p></div><div class="sessions-grid"><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#2d0f1a;border-left:3px solid #f43f5e"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#f43f5e">VK RACE-PACE</span><span class="sess-km">12km &uarr;1,200m</span></div><p class="sess-desc">VK race-pace TP60: esfuerzo sostenible. Z4 controlado, no Z5.</p></div><div class="session-card" style="background:#2d1a0f;border-left:3px solid #f97316"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f97316">INTERVALOS</span><span class="sess-km">16km &uarr;800m</span></div><p class="sess-desc">4&times;10min @Z4 en subidas con 5min bajada activa. Simula repechos TP60.</p></div><div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL</span><span class="sess-km">14km &uarr;600m</span></div><p class="sess-desc">14km Z2 t&eacute;cnico. GYM FASE C.</p></div><div class="session-card" style="background:#1a1f2e;border-left:3px solid #475569"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#475569">REC</span><span class="sess-km">8km</span></div><p class="sess-desc">8km Z1.</p></div><div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG SIERRA</span><span class="sess-km">34km &uarr;2,200m</span></div><p class="sess-desc">34km Z1&ndash;Z2 sierra. Race-conditions TP60 completas.</p></div><div class="session-card" style="background:#2d1010;border-left:3px solid #ef4444"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#ef4444">B2B</span><span class="sess-km">18km &uarr;1,000m</span></div><p class="sess-desc">18km B2B Z1&ndash;Z2.</p></div></div></div></details>
+    <details class="week-item"><summary class="week-summary"><span class="wk-num" style="background:#22d3ee22;color:#22d3ee">Sem 20</span><span class="wk-dates">03 Aug &ndash; 09 Aug</span><span class="wk-title">SIERRA segundo bloque TP60</span><span class="wk-stats">75km &middot; &uarr;4,000m</span><span class="wk-load" style="background:#ef444422;color:#ef4444">HIGH</span></summary><div class="week-body"><div class="week-objective"><h4>Objetivo</h4><p>Segundo bloque pico. Semanas 18 y 20 son las m&aacute;s importantes del ciclo. VK race-pace TP60: esfuerzo sostenible 6-7h, Z4 controlado. 34km long con 2200m D+ simula las condiciones reales. Despu&eacute;s de esta semana, solo queda absorber y tapear.</p></div><div class="sessions-grid"><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#2d0f1a;border-left:3px solid #f43f5e"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#f43f5e">VK RACE-PACE</span><span class="sess-km">12km &uarr;1,200m</span></div><p class="sess-desc">VK race-pace TP60: esfuerzo sostenible. Z4 controlado, no Z5.</p></div><div class="session-card" style="background:#2d1a0f;border-left:3px solid #f97316"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#f97316">INTERVALOS</span><span class="sess-km">16km &uarr;800m</span></div><p class="sess-desc">4&times;10min @Z4 en subidas con 5min bajada activa. Simula repechos TP60.</p></div><div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL</span><span class="sess-km">14km &uarr;600m</span></div><p class="sess-desc">14km Z2 t&eacute;cnico &rarr; 15min pausa &rarr; GYM FASE C (potencia). Run primero: running es prioridad en bloque sierra.</p></div><div class="session-card" style="background:#1a1f2e;border-left:3px solid #475569"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#475569">REC</span><span class="sess-km">8km</span></div><p class="sess-desc">8km Z1.</p></div><div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG SIERRA</span><span class="sess-km">34km &uarr;2,200m</span></div><p class="sess-desc">34km Z1&ndash;Z2 sierra. Race-conditions TP60 completas.</p></div><div class="session-card" style="background:#2d1010;border-left:3px solid #ef4444"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#ef4444">B2B</span><span class="sess-km">18km &uarr;1,000m</span></div><p class="sess-desc">18km B2B Z1&ndash;Z2.</p></div></div></div></details>
 
     <details class="week-item"><summary class="week-summary"><span class="wk-num" style="background:#22d3ee22;color:#22d3ee">Sem 21</span><span class="wk-dates">10 Aug &ndash; 16 Aug</span><span class="wk-title">SIERRA deload septiembre</span><span class="wk-stats">55km &middot; &uarr;2,200m</span><span class="wk-load" style="background:#f59e0b22;color:#f59e0b">MED</span></summary><div class="week-body"><div class="week-objective"><h4>Objetivo</h4><p>&Uacute;ltimo deload antes del taper TP60. GYM FASE C &uacute;ltima sesi&oacute;n pesada &mdash; despu&eacute;s solo mantenimiento. Baja gym a mantenimiento progresivo.</p></div><div class="sessions-grid"><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">L</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY + GYM C</span><span class="sess-km">10km &uarr;300m</span></div><p class="sess-desc">10km Z1 + GYM FASE C &uacute;ltima sesi&oacute;n pesada.</p></div><div class="session-card" style="background:#1a2f0f;border-left:3px solid #84cc16"><div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#84cc16">TEMPO</span><span class="sess-km">14km &uarr;600m</span></div><p class="sess-desc">14km: 3&times;15min @Z3 en ondulado. Fresco y controlado.</p></div><div class="session-card" style="background:#1a1008;border-left:3px solid #d97706"><div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#d97706">TRAIL</span><span class="sess-km">12km &uarr;500m</span></div><p class="sess-desc">12km Z2 t&eacute;cnico.</p></div><div class="session-card" style="background:#1e293b;border-left:3px solid #334155"><div class="sess-header"><span class="sess-day">V</span><span class="sess-type" style="color:#334155">REST</span></div><p class="sess-desc">Descanso.</p></div><div class="session-card" style="background:#0f1a2d;border-left:3px solid #6366f1"><div class="sess-header"><span class="sess-day">S</span><span class="sess-type" style="color:#6366f1">LONG DELOAD</span><span class="sess-km">22km &uarr;1,200m</span></div><p class="sess-desc">22km Z1&ndash;Z2. Deload long.</p></div><div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee"><div class="sess-header"><span class="sess-day">D</span><span class="sess-type" style="color:#22d3ee">EASY</span><span class="sess-km">10km</span></div><p class="sess-desc">10km Z1.</p></div></div></div></details>
 
@@ -1269,6 +1632,126 @@ details[open] .week-summary{background:var(--surface3)}
   </div>
 </div>
 
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB: STRAVA ANALYSIS (injected by trail_analyzer.py)      -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-strava" class="tab-panel">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">12</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Semanas analizadas</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">418</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km totales período</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">9,718</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">m D+ período</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">34.8</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km / semana promedio</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">188.0</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">FC max registrada</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">61%</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">% trail avg</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Volumen semanal — km</div>
+      <canvas id="chartKm" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Desnivel positivo — m</div>
+      <canvas id="chartD" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Tiempo carrera — min</div>
+      <canvas id="chartTime" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">% Sesiones Trail vs Road</div>
+      <canvas id="chartTrail" style="max-height:200px"></canvas>
+    </div>
+  </div>
+
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Zonas FC — FCmax: 188.0 bpm</div>
+    
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#64748b'></span>
+        <span class='z-name'>Z1 Regenerativo</span>
+        <span class='z-range'>0–122 bpm</span>
+        <span class='z-pct'>0-65% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#22d3ee'></span>
+        <span class='z-name'>Z2 Aeróbico</span>
+        <span class='z-range'>122–141 bpm</span>
+        <span class='z-pct'>65-75% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#84cc16'></span>
+        <span class='z-name'>Z3 Tempo</span>
+        <span class='z-range'>141–160 bpm</span>
+        <span class='z-pct'>75-85% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#f97316'></span>
+        <span class='z-name'>Z4 Umbral</span>
+        <span class='z-range'>160–173 bpm</span>
+        <span class='z-pct'>85-92% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#ef4444'></span>
+        <span class='z-name'>Z5 VO2max</span>
+        <span class='z-range'>173–188 bpm</span>
+        <span class='z-pct'>92-100% FCmax</span>
+      </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">Zonas 5-zonas Seiler/Coggan. 80% en Z1-Z2, 20% en Z3-Z5 (polarizada).</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB: COMPLIANCE / SEGUIMIENTO                              -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-compliance" class="tab-panel">
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px">
+    <p style="font-size:14px;color:#94a3b8;line-height:1.7">Compara lo planificado vs ejecutado usando datos de Strava. Ejecuta <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">python trail_analyzer.py</code> semanalmente para actualizar.</p>
+    <p style="margin-top:8px;font-size:12px;color:var(--muted)">Verde: >90% | Ambar: 70-90% | Rojo: &lt;70%</p>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Semana</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Periodo</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Fase</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan km</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real km</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan D+</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real D+</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">FC avg</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Runs</th>
+        </tr>
+      </thead>
+      <tbody id="compliance-body">
+        <tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 
