@@ -280,33 +280,33 @@ details[open] .week-summary{background:var(--surface3)}
     
       <div class='zone-row'>
         <span class='z-dot' style='background:#64748b'></span>
-        <span class='z-name'>Z1 Regenerativo</span>
-        <span class='z-range'>0–122 bpm</span>
-        <span class='z-pct'>0-65% FCmax</span>
+        <span class='z-name'>Z1 Recuperación</span>
+        <span class='z-range'>0–142 bpm</span>
+        <span class='z-pct'>< 142 bpm — Regenerativo, conversación fácil</span>
       </div>
       <div class='zone-row'>
         <span class='z-dot' style='background:#22d3ee'></span>
         <span class='z-name'>Z2 Aeróbico</span>
-        <span class='z-range'>122–141 bpm</span>
-        <span class='z-pct'>65-75% FCmax</span>
+        <span class='z-range'>142–152 bpm</span>
+        <span class='z-pct'>142–152 bpm — Base aeróbica, justo debajo de VT1</span>
       </div>
       <div class='zone-row'>
         <span class='z-dot' style='background:#84cc16'></span>
         <span class='z-name'>Z3 Tempo</span>
-        <span class='z-range'>141–160 bpm</span>
-        <span class='z-pct'>75-85% FCmax</span>
+        <span class='z-range'>152–172 bpm</span>
+        <span class='z-pct'>152–172 bpm — Entre umbrales, frases cortas</span>
       </div>
       <div class='zone-row'>
         <span class='z-dot' style='background:#f97316'></span>
         <span class='z-name'>Z4 Umbral</span>
-        <span class='z-range'>160–173 bpm</span>
-        <span class='z-pct'>85-92% FCmax</span>
+        <span class='z-range'>172–180 bpm</span>
+        <span class='z-pct'>172–180 bpm — Por encima de VT2, insostenible >20min</span>
       </div>
       <div class='zone-row'>
         <span class='z-dot' style='background:#ef4444'></span>
         <span class='z-name'>Z5 VO2max</span>
-        <span class='z-range'>173–188 bpm</span>
-        <span class='z-pct'>92-100% FCmax</span>
+        <span class='z-range'>180–194 bpm</span>
+        <span class='z-pct'>180–194 bpm — Máximo esfuerzo</span>
       </div>
     <p style="font-size:12px;color:var(--muted);margin-top:12px">📚 Zonas calculadas según modelo 5-zonas Seiler/Coggan. 80% del volumen en Z1–Z2, 20% en Z3–Z5 (Seiler 2010 — distribución polarizada).</p>
   </div>
@@ -379,7 +379,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-km'>8km</span>
             <span class='sess-date'>24 Mar</span>
           </div>
-          <p class='sess-desc'>8km Z1 (<130bpm). Cadencia >170spm. Run first → GYM FASE A después.</p>
+          <p class='sess-desc'>8km Z1 (<142bpm — por debajo de VT1). Cadencia >170spm. Run first → GYM FASE A después.</p>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -388,7 +388,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-km'>12km</span>
             <span class='sess-date'>25 Mar</span>
           </div>
-          <p class='sess-desc'>12km Z1–Z2 (<140bpm). Plano. Foco en relajación y cadencia.</p>
+          <p class='sess-desc'>12km Z1–Z2 (<152bpm — techo Z2/VT1). Plano. Foco en relajación y cadencia.</p>
         </div>
         <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
           <div class='sess-header'>
@@ -2993,7 +2993,7 @@ details[open] .week-summary{background:var(--surface3)}
 </div><!-- end #app -->
 
 <script>
-const CHART_DATA = {"labels": ["12-29", "01-05", "01-12", "01-19", "01-26", "02-02", "02-09", "02-16", "02-23", "03-02", "03-09", "03-16"], "km": [10.5, 25.7, 41.0, 22.4, 40.1, 46.6, 55.0, 39.8, 30.4, 27.2, 35.8, 43.6], "d_plus": [87, 212, 469, 1133, 418, 722, 2848, 1097, 974, 417, 984, 357], "time": [57, 148, 236, 211, 237, 272, 492, 299, 208, 154, 225, 219], "trail": [0, 50, 75, 67, 75, 100, 100, 100, 33, 67, 50, 20], "hr_max": 188.0};
+const CHART_DATA = {"labels": ["12-29", "01-05", "01-12", "01-19", "01-26", "02-02", "02-09", "02-16", "02-23", "03-02", "03-09", "03-16"], "km": [10.5, 25.7, 41.0, 22.4, 40.1, 46.6, 55.0, 39.8, 30.4, 27.2, 35.8, 43.6], "d_plus": [87, 212, 469, 1133, 418, 722, 2848, 1097, 974, 417, 984, 357], "time": [57, 148, 236, 211, 237, 272, 492, 299, 208, 154, 225, 219], "trail": [0, 50, 75, 67, 75, 100, 100, 100, 33, 67, 50, 20], "hr_max": 194};
 const PLAN_DATA = [{"week": 1, "phase": 1, "km": 42, "d_plus": 500}, {"week": 2, "phase": 1, "km": 55, "d_plus": 700}, {"week": 3, "phase": 1, "km": 60, "d_plus": 900}, {"week": 4, "phase": 1, "km": 45, "d_plus": 500}, {"week": 5, "phase": 1, "km": 62, "d_plus": 1200}, {"week": 6, "phase": 1, "km": 65, "d_plus": 1500}, {"week": 7, "phase": 1, "km": 60, "d_plus": 900}, {"week": 8, "phase": 1, "km": 48, "d_plus": 600}, {"week": 9, "phase": 2, "km": 65, "d_plus": 1800}, {"week": 10, "phase": 2, "km": 70, "d_plus": 2500}, {"week": 11, "phase": 2, "km": 72, "d_plus": 3000}, {"week": 12, "phase": 2, "km": 50, "d_plus": 1200}, {"week": 13, "phase": 2, "km": 62, "d_plus": 1800}, {"week": 14, "phase": 2, "km": 68, "d_plus": 2200}, {"week": 15, "phase": 2, "km": 72, "d_plus": 2800}, {"week": 16, "phase": 2, "km": 48, "d_plus": 1000}, {"week": 17, "phase": 3, "km": 70, "d_plus": 3500}, {"week": 18, "phase": 3, "km": 52, "d_plus": 2200}, {"week": 19, "phase": 3, "km": 80, "d_plus": 4500}, {"week": 20, "phase": 3, "km": 50, "d_plus": 2000}, {"week": 21, "phase": 3, "km": 75, "d_plus": 4000}, {"week": 22, "phase": 3, "km": 68, "d_plus": 3200}, {"week": 23, "phase": 4, "km": 55, "d_plus": 1800}, {"week": 24, "phase": 4, "km": 40, "d_plus": 900}, {"week": 25, "phase": 4, "km": 69, "d_plus": 4200}, {"week": 26, "phase": 5, "km": 35, "d_plus": 400}, {"week": 27, "phase": 5, "km": 55, "d_plus": 1200}, {"week": 28, "phase": 5, "km": 40, "d_plus": 800}, {"week": 29, "phase": 5, "km": 83, "d_plus": 3400}];
 
 function switchTab(id) {

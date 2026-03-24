@@ -190,6 +190,24 @@ details[open] .week-summary{background:var(--surface3)}
 .z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
 .z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
 .z-pct{font-size:12px;color:var(--muted)}
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
+
+
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
 @media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
 
 @media(max-width:768px){
@@ -198,6 +216,7 @@ details[open] .week-summary{background:var(--surface3)}
   .sessions-grid{grid-template-columns:1fr}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -237,6 +256,8 @@ details[open] .week-summary{background:var(--surface3)}
   <button class="tab-btn" onclick="switchTab('supps')">Suplementaci&oacute;n</button>
   <button class="tab-btn" onclick="switchTab('nutrition')">Nutrici&oacute;n</button>
   <button class="tab-btn" onclick="switchTab('race')">Estrategia Carrera</button>
+  <button class="tab-btn" onclick="switchTab('strava')">Strava Analysis</button>
+  <button class="tab-btn" onclick="switchTab('compliance')">Seguimiento</button>
   <button class="tab-btn" onclick="switchTab('strava')">Strava Analysis</button>
   <button class="tab-btn" onclick="switchTab('compliance')">Seguimiento</button>
 </div>
@@ -502,11 +523,11 @@ details[open] .week-summary{background:var(--surface3)}
           </div>
           <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee">
             <div class="sess-header"><span class="sess-day">M</span><span class="sess-type" style="color:#22d3ee">EASY Z1-Z2</span><span class="sess-km">8km</span><span class="sess-date">24 Mar</span></div>
-            <p class="sess-desc">8km Z1 (&lt;130bpm). Cadencia &gt;170spm. Run first &rarr; GYM FASE A después.</p>
+            <p class="sess-desc">8km Z1 (&lt;142bpm). Cadencia &gt;170spm. Run first &rarr; GYM FASE A después.</p>
           </div>
           <div class="session-card" style="background:#0f2d2d;border-left:3px solid #22d3ee">
             <div class="sess-header"><span class="sess-day">X</span><span class="sess-type" style="color:#22d3ee">EASY Z1-Z2</span><span class="sess-km">12km</span><span class="sess-date">25 Mar</span></div>
-            <p class="sess-desc">12km Z1–Z2 (&lt;140bpm). Plano. Foco en relajación y cadencia.</p>
+            <p class="sess-desc">12km Z1–Z2 (&lt;152bpm). Plano. Foco en relajación y cadencia.</p>
           </div>
           <div class="session-card" style="background:#1a0f2d;border-left:3px solid #a78bfa">
             <div class="sess-header"><span class="sess-day">J</span><span class="sess-type" style="color:#a78bfa">GYM FUERZA</span><span class="sess-date">26 Mar</span></div>
@@ -2263,6 +2284,126 @@ details[open] .week-summary{background:var(--surface3)}
         <span class='z-name'>Z5 VO2max</span>
         <span class='z-range'>173–188 bpm</span>
         <span class='z-pct'>92-100% FCmax</span>
+      </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">Zonas 5-zonas Seiler/Coggan. 80% en Z1-Z2, 20% en Z3-Z5 (polarizada).</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB: COMPLIANCE / SEGUIMIENTO                              -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-compliance" class="tab-panel">
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px">
+    <p style="font-size:14px;color:#94a3b8;line-height:1.7">Compara lo planificado vs ejecutado usando datos de Strava. Ejecuta <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">python trail_analyzer.py</code> semanalmente para actualizar.</p>
+    <p style="margin-top:8px;font-size:12px;color:var(--muted)">Verde: >90% | Ambar: 70-90% | Rojo: &lt;70%</p>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Semana</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Periodo</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Fase</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan km</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real km</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan D+</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real D+</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">FC avg</th>
+          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Runs</th>
+        </tr>
+      </thead>
+      <tbody id="compliance-body">
+        <tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB: STRAVA ANALYSIS (injected by trail_analyzer.py)      -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-strava" class="tab-panel">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">12</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Semanas analizadas</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">418</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km totales período</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">9,718</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">m D+ período</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">34.8</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km / semana promedio</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">194</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">FC max registrada</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">61%</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">% trail avg</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Volumen semanal — km</div>
+      <canvas id="chartKm" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Desnivel positivo — m</div>
+      <canvas id="chartD" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Tiempo carrera — min</div>
+      <canvas id="chartTime" style="max-height:200px"></canvas>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">% Sesiones Trail vs Road</div>
+      <canvas id="chartTrail" style="max-height:200px"></canvas>
+    </div>
+  </div>
+
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Zonas FC — FCmax: 194 bpm</div>
+    
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#64748b'></span>
+        <span class='z-name'>Z1 Recuperación</span>
+        <span class='z-range'>0–142 bpm</span>
+        <span class='z-pct'>< 142 bpm — Regenerativo</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#22d3ee'></span>
+        <span class='z-name'>Z2 Aeróbico</span>
+        <span class='z-range'>142–152 bpm</span>
+        <span class='z-pct'>142–152 bpm — Justo debajo de VT1</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#84cc16'></span>
+        <span class='z-name'>Z3 Tempo</span>
+        <span class='z-range'>152–172 bpm</span>
+        <span class='z-pct'>152–172 bpm — Entre VT1 y VT2</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#f97316'></span>
+        <span class='z-name'>Z4 Umbral</span>
+        <span class='z-range'>172–180 bpm</span>
+        <span class='z-pct'>172–180 bpm — Por encima de VT2</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#ef4444'></span>
+        <span class='z-name'>Z5 VO2max</span>
+        <span class='z-range'>180–194 bpm</span>
+        <span class='z-pct'>180–194 bpm — Máximo esfuerzo</span>
       </div>
     <p style="font-size:12px;color:var(--muted);margin-top:12px">Zonas 5-zonas Seiler/Coggan. 80% en Z1-Z2, 20% en Z3-Z5 (polarizada).</p>
   </div>
