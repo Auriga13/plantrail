@@ -1,0 +1,48 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Trail 360//Analyzer//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260330
+SUMMARY:REST - Descanso
+DESCRIPTION:Descanso.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,REST
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260331
+SUMMARY:EASY 10km - Z1-Z2 + GYM
+DESCRIPTION:10km Z1–Z2 + GYM FASE A.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,EASY
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260401
+SUMMARY:TEMPO 14km ↑100m - Progresivos
+DESCRIPTION:14km progresivos: 3km Z1 → 6km Z2–Z3 progresivo (↑10s/km cada 2km) → 3km Z2 → 2km Z1 + 4×20s strides.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,TEMPO
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260402
+SUMMARY:EASY 10km ↑200m - Z1-Z2 cuestas + GYM
+DESCRIPTION:10km Z1–Z2 con cuestas suaves. GYM FASE A después.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,EASY
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260403
+SUMMARY:REST - Movilidad/yoga
+DESCRIPTION:Descanso o 30min movilidad/yoga runner.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,REST
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260404
+SUMMARY:LONG 20km ↑400m - Z1-Z2
+DESCRIPTION:20km Z1–Z2. Máximo D+ disponible. 1 gel en km12. <5:50/km en llano.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,LONG
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20260405
+SUMMARY:EASY 12km - Z1 recovery
+DESCRIPTION:12km Z1 recovery.\n\nSemana 2 - Reactivación aeróbica\nCarga: LOW-MED
+CATEGORIES:Trail 360,EASY
+END:VEVENT
+END:VCALENDAR

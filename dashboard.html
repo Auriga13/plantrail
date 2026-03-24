@@ -1,0 +1,2798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trail 360° — Jose / Temporada 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#080d16;--surface:#0d1421;--surface2:#111827;--surface3:#1e293b;
+  --border:#1e2d45;--text:#e2e8f0;--muted:#64748b;--accent:#22d3ee;
+  --amber:#f59e0b;--orange:#f97316;--red:#ef4444;--green:#84cc16;
+  --purple:#a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-size:15px;line-height:1.6;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 80% 50% at 20% 0%,#0c1f3a 0%,transparent 60%),
+  radial-gradient(ellipse 60% 40% at 80% 100%,#0a1a2e 0%,transparent 55%);
+  pointer-events:none;z-index:0}
+
+/* TOPOGRAPHIC PATTERN */
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M0 100 Q50 70 100 100 Q150 130 200 100' fill='none' stroke='%230f2040' stroke-width='1.5'/%3E%3Cpath d='M0 130 Q50 100 100 130 Q150 160 200 130' fill='none' stroke='%230f2040' stroke-width='1'/%3E%3Cpath d='M0 70 Q50 40 100 70 Q150 100 200 70' fill='none' stroke='%230f2040' stroke-width='1'/%3E%3Cpath d='M0 160 Q50 130 100 160 Q150 190 200 160' fill='none' stroke='%230c1a30' stroke-width='1'/%3E%3Cpath d='M0 40 Q50 10 100 40 Q150 70 200 40' fill='none' stroke='%230c1a30' stroke-width='1'/%3E%3C/svg%3E");
+  opacity:.4;pointer-events:none;z-index:0}
+
+/* LAYOUT */
+#app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 20px 60px}
+
+/* HEADER */
+header{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.brand{display:flex;flex-direction:column;gap:4px}
+.brand-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--accent),var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px}
+.races-header{display:flex;gap:12px;flex-wrap:wrap}
+.race-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;text-align:center;min-width:140px;
+  transition:transform .2s,box-shadow .2s;cursor:default}
+.race-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.rc-name{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;margin-bottom:2px}
+.rc-info{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:8px}
+.rc-days{font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;line-height:1}
+.rc-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.rc-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:0;overflow-x:auto}
+.tab-btn{font-family:'Rajdhani',sans-serif;font-weight:600;letter-spacing:1px;font-size:13px;
+  text-transform:uppercase;background:transparent;border:none;color:var(--muted);
+  padding:10px 18px;cursor:pointer;border-bottom:2px solid transparent;
+  transition:color .2s,border-color .2s;white-space:nowrap}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* STRAVA ANALYSIS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.stat-value{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;
+  background:linear-gradient(135deg,var(--accent),var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.chart-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-title{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+.chart-box canvas{max-height:200px}
+.zones-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.zones-title{font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
+.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
+.z-pct{font-size:12px;color:var(--muted)}
+
+/* PLAN */
+.phase-block{margin-bottom:32px}
+.phase-header{padding:16px 20px;background:var(--surface2);border-radius:10px 10px 0 0;margin-bottom:2px}
+.phase-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.phase-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px}
+.weeks-list{display:flex;flex-direction:column;gap:2px}
+.week-item{background:var(--surface2);border-radius:0}
+.week-item:last-child{border-radius:0 0 10px 10px}
+.week-summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px;
+  cursor:pointer;flex-wrap:wrap;transition:background .15s}
+.week-summary:hover{background:var(--surface3)}
+.week-summary::-webkit-details-marker{display:none}
+details[open] .week-summary{background:var(--surface3)}
+.wk-num{font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.wk-dates{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:90px}
+.wk-title{flex:1;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600}
+.wk-stats{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent)}
+.wk-load{font-size:10px;font-family:'Rajdhani',sans-serif;letter-spacing:1px;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.week-body{padding:12px 16px;border-top:1px solid var(--border)}
+.week-notes{background:#162032;border-left:3px solid var(--amber);padding:10px 14px;
+  border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13px;color:#cbd5e1}
+.sessions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.session-card{padding:10px 12px;border-radius:6px}
+.sess-header{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.sess-day{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  background:var(--surface3);padding:2px 7px;border-radius:4px;flex-shrink:0}
+.sess-type{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;flex:1}
+.sess-km{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.sess-date{font-size:10px;color:var(--muted);margin-left:auto}
+.sess-desc{font-size:13px;color:#94a3b8;line-height:1.5}
+
+/* FUERZA */
+.strength-phase{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.sp-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sp-id{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--purple)}
+.sp-name{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;flex:1}
+.sp-weeks{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  background:var(--surface3);padding:3px 9px;border-radius:4px}
+.sp-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.sp-meta span{font-size:13px;color:#94a3b8}
+.sp-ref{font-size:12px;color:var(--purple);margin-bottom:16px;font-style:italic}
+.ex-table{width:100%;border-collapse:collapse;font-size:13px}
+.ex-table th{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;
+  border-bottom:1px solid var(--border)}
+.ex-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.ex-table tr:last-child td{border-bottom:none}
+.ex-name{font-weight:600;color:var(--text)}
+.ex-focus{color:var(--amber);font-size:12px}
+.ex-notes{color:#94a3b8;font-size:12px}
+
+/* NUTRICIÓN */
+.nutr-overview{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.nutr-overview h3{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+.nutr-kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.kv-item{background:var(--surface3);border-radius:8px;padding:10px 14px}
+.kv-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.kv-value{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--green)}
+.nutr-days{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.nutr-day{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.nd-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.nd-icon{font-size:20px}
+.nd-type{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;flex:1}
+.nd-kcal{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber)}
+.nd-macros{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.macro{font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 8px;border-radius:4px;background:var(--surface3)}
+.macro.cho{color:#f59e0b}.macro.prot{color:#22d3ee}.macro.fat{color:#a78bfa}
+.nd-desc{font-size:13px;color:#94a3b8;margin-bottom:6px}
+.nd-example{font-size:12px;color:var(--muted);font-style:italic;border-top:1px solid var(--border);padding-top:6px;margin-top:6px}
+.race-nutr{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.race-nutr h3{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.rn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+.rn-item{background:var(--surface3);border-radius:8px;padding:10px 14px}
+.rn-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.rn-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange)}
+.supps{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.supps h3{font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.supp-item{border-bottom:1px solid var(--border);padding:12px 0}
+.supp-item:last-child{border-bottom:none}
+.supp-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;margin-bottom:2px}
+.supp-dose{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:3px}
+.supp-ev{font-size:12px;color:var(--muted)}
+
+/* SEGUIMIENTO */
+.compliance-intro{background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+  padding:20px;margin-bottom:20px}
+.compliance-intro p{font-size:14px;color:#94a3b8;line-height:1.7}
+.compliance-table-wrap{overflow-x:auto}
+.compliance-table{width:100%;border-collapse:collapse;font-size:13px}
+.compliance-table th{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.compliance-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.compliance-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.ct-week{font-family:'JetBrains Mono',monospace;font-size:11px}
+.ct-plan{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:12px}
+.ct-actual{color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:12px}
+.ct-pct{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600}
+.bar-wrap{width:80px;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .3s}
+.no-data{color:var(--muted);font-style:italic;font-size:12px}
+
+@media(max-width:768px){
+  .charts-grid{grid-template-columns:1fr}
+  .header-top{flex-direction:column}
+  .races-header{gap:8px}
+  .wk-title{width:100%}
+  .ex-table .ex-focus,.ex-table .ex-notes{display:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-title">Trail 360° — Temporada 2026</div>
+      <div class="brand-sub">PALENCIA MTN 44km/3500m · TP60 63km/2500m · Madrid, España</div>
+    </div>
+    <div class="races-header">
+        <div class='race-card' style='border-color:#f97316'>
+          <div class='rc-name' style='color:#f97316'>Maratón MTN Palencia</div>
+          <div class='rc-info'>44km · 3,500m D+</div>
+          <div class='rc-days' style='color:#f97316'>172</div>
+          <div class='rc-label'>días</div>
+          <div class='rc-date'>12 Sep 2026</div>
+        </div>
+        <div class='race-card' style='border-color:#22d3ee'>
+          <div class='rc-name' style='color:#22d3ee'>TP60</div>
+          <div class='rc-info'>63km · 2,500m D+</div>
+          <div class='rc-days' style='color:#22d3ee'>201</div>
+          <div class='rc-label'>días</div>
+          <div class='rc-date'>11 Oct 2026</div>
+        </div></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="switchTab('strava')">📊 Análisis Strava</button>
+  <button class="tab-btn" onclick="switchTab('plan')">🗓 Plan Entrenamiento</button>
+  <button class="tab-btn" onclick="switchTab('fuerza')">💪 Fuerza</button>
+  <button class="tab-btn" onclick="switchTab('nutricion')">🥗 Nutrición</button>
+  <button class="tab-btn" onclick="switchTab('seguimiento')">📈 Seguimiento</button>
+</nav>
+
+<!-- ═══ TAB: STRAVA ═══ -->
+<div id="tab-strava" class="tab-panel active">
+  <div class="stats-grid" id="strava-stats">
+    <div class="stat-card">
+      <div class="stat-value" id="sv-weeks">—</div>
+      <div class="stat-label">Semanas analizadas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="sv-km">—</div>
+      <div class="stat-label">km totales período</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="sv-d">—</div>
+      <div class="stat-label">m D+ período</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="sv-avg-km">—</div>
+      <div class="stat-label">km / semana promedio</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="sv-hr">—</div>
+      <div class="stat-label">FC máx registrada</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="sv-trail">—</div>
+      <div class="stat-label">% trail avg</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-box">
+      <div class="chart-title">Volumen semanal — km</div>
+      <canvas id="chartKm"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Desnivel positivo semanal — m</div>
+      <canvas id="chartD"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Tiempo de carrera — minutos</div>
+      <canvas id="chartTime"></canvas>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">% Sesiones Trail vs Road</div>
+      <canvas id="chartTrail"></canvas>
+    </div>
+  </div>
+
+  <div class="zones-panel">
+    <div class="zones-title">Zonas de FC para entrenamiento — FCmax: <span id="hr-max-val">—</span> bpm</div>
+    
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#64748b'></span>
+        <span class='z-name'>Z1 Regenerativo</span>
+        <span class='z-range'>0–122 bpm</span>
+        <span class='z-pct'>0-65% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#22d3ee'></span>
+        <span class='z-name'>Z2 Aeróbico</span>
+        <span class='z-range'>122–141 bpm</span>
+        <span class='z-pct'>65-75% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#84cc16'></span>
+        <span class='z-name'>Z3 Tempo</span>
+        <span class='z-range'>141–160 bpm</span>
+        <span class='z-pct'>75-85% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#f97316'></span>
+        <span class='z-name'>Z4 Umbral</span>
+        <span class='z-range'>160–173 bpm</span>
+        <span class='z-pct'>85-92% FCmax</span>
+      </div>
+      <div class='zone-row'>
+        <span class='z-dot' style='background:#ef4444'></span>
+        <span class='z-name'>Z5 VO2max</span>
+        <span class='z-range'>173–188 bpm</span>
+        <span class='z-pct'>92-100% FCmax</span>
+      </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">📚 Zonas calculadas según modelo 5-zonas Seiler/Coggan. 80% del volumen en Z1–Z2, 20% en Z3–Z5 (Seiler 2010 — distribución polarizada).</p>
+  </div>
+</div>
+
+<!-- ═══ TAB: PLAN ═══ -->
+<div id="tab-plan" class="tab-panel">
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px">
+    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Resumen del Plan — 25 semanas</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">Inicio plan</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">24 Mar 2026</div>
+      </div>
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">Palencia MTN</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f97316">14 Jun 2026 (Sem 12)</div>
+      </div>
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">TP60</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#22d3ee">10 Oct 2026 (Sem 25)</div>
+      </div>
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">Volumen pico</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f59e0b">80km / 4500m D+ (Sem 18)</div>
+      </div>
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">Metodología</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#84cc16">Polarizada 80/20 + Bloques</div>
+      </div>
+      <div style="background:var(--surface3);border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:var(--muted)">Fuerza</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#a78bfa">2×/semana todo el ciclo</div>
+      </div>
+    </div>
+  </div>
+  
+        <div class='phase-block'>
+          <div class='phase-header' style='border-left:4px solid #f97316'>
+            <div class='phase-title' style='color:#f97316'>FASE 1: BASE AERÓBICA</div>
+            <div class='phase-meta'>
+              Semanas 1–7 &nbsp;·&nbsp; 377 km totales &nbsp;·&nbsp; 5,900m D+ acumulado
+            </div>
+          </div>
+          <div class='weeks-list'>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 1</span>
+            <span class='wk-dates'>23 Mar – 29 Mar</span>
+            <span class='wk-title'>Recuperación activa post-media</span>
+            <span class='wk-stats'>42km · ↑500m D+</span>
+            <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 ⚠ Prioridad absoluta: regeneración. No superes Z2 en ningún momento.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>23 Mar</span>
+          </div>
+          <p class='sess-desc'>Descanso total. Crioterapia si tienes acceso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>24 Mar</span>
+          </div>
+          <p class='sess-desc'>8km Z1 (<130bpm). Cadencia >170spm. GYM FASE A después.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>25 Mar</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2 (<140bpm). Plano. Foco en relajación y cadencia.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>26 Mar</span>
+          </div>
+          <p class='sess-desc'>GYM FASE A (45min). Sin rodaje hoy.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>27 Mar</span>
+          </div>
+          <p class='sess-desc'>Descanso. Movilidad 15min (hip flexors, gemelos).</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>16km ↑300m</span>
+            <span class='sess-date'>28 Mar</span>
+          </div>
+          <p class='sess-desc'>16km Z1–Z2 suave. Busca alguna subida. Sin geles (fomenta oxidación de grasas).</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑200m</span>
+            <span class='sess-date'>29 Mar</span>
+          </div>
+          <p class='sess-desc'>10km Z1 recovery. Si hay agujetas reduce a 8km.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 2</span>
+            <span class='wk-dates'>30 Mar – 05 Apr</span>
+            <span class='wk-title'>Reactivación aeróbica</span>
+            <span class='wk-stats'>55km · ↑700m D+</span>
+            <span class='wk-load' style='background:#84cc1622;color:#84cc16'>LOW-MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Reintroduce volumen progresivamente. FC media debería bajar 3-5bpm vs sem1 al mismo ritmo.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>30 Mar</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>31 Mar</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 + GYM FASE A.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>14km ↑100m</span>
+            <span class='sess-date'>01 Apr</span>
+          </div>
+          <p class='sess-desc'>14km progresivos: 3km Z1 → 6km Z2–Z3 progresivo (↑10s/km cada 2km) → 3km Z2 → 2km Z1 + 4×20s strides.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑200m</span>
+            <span class='sess-date'>02 Apr</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 con cuestas suaves. GYM FASE A después.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>03 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso o 30min movilidad/yoga runner.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>20km ↑400m</span>
+            <span class='sess-date'>04 Apr</span>
+          </div>
+          <p class='sess-desc'>20km Z1–Z2. Máximo D+ disponible. 1 gel en km12. <5:50/km en llano.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>05 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 3</span>
+            <span class='wk-dates'>06 Apr – 12 Apr</span>
+            <span class='wk-title'>Primera carga + tempo real</span>
+            <span class='wk-stats'>60km · ↑900m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Primera semana con carga real. Monitoriza FC reposo cada mañana.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>06 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>07 Apr</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 + GYM FASE A. Foco squat búlgaro y step-up.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>15km ↑200m</span>
+            <span class='sess-date'>08 Apr</span>
+          </div>
+          <p class='sess-desc'>15km: 2km Z1 → 3×15min @Z3 (RPE 7/10) con 3min Z1 recuperación → 2km Z1. Un bloque en cuesta si posible.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km ↑300m</span>
+            <span class='sess-date'>09 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2 con 3×5min subida Z3. GYM FASE A después.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>10 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>22km ↑400m</span>
+            <span class='sess-date'>11 Apr</span>
+          </div>
+          <p class='sess-desc'>22km Z1–Z2. 2 geles (km12, km18). Objetivo: finalizar sin fatiga severa.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>12 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1. Recovery. Evalúa sensaciones para semana 4.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 4</span>
+            <span class='wk-dates'>13 Apr – 19 Apr</span>
+            <span class='wk-title'>Deload planificado — sem 4</span>
+            <span class='wk-stats'>45km · ↑500m D+</span>
+            <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 🔄 DELOAD: −25% volumen. Evidencia: Meeusen 2013 — deload cada 3-4 semanas previene sobreentrenamiento.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>13 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>14 Apr</span>
+          </div>
+          <p class='sess-desc'>8km Z1 + GYM FASE A cargas −10%.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km ↑100m</span>
+            <span class='sess-date'>15 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2 suave. Sin calidad. Técnica y cadencia.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>16 Apr</span>
+          </div>
+          <p class='sess-desc'>GYM FASE A (40min). Solo fuerza.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>17 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>18km ↑400m</span>
+            <span class='sess-date'>18 Apr</span>
+          </div>
+          <p class='sess-desc'>18km Z1–Z2. Long reducido. Prueba equipo trail.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>19 Apr</span>
+          </div>
+          <p class='sess-desc'>10km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 5</span>
+            <span class='wk-dates'>20 Apr – 26 Apr</span>
+            <span class='wk-title'>Aeróbico + intro colinas</span>
+            <span class='wk-stats'>62km · ↑1200m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Inicio de colinas. FC en hill reps debería llegar a Z4–Z5.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>20 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>21 Apr</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 + GYM FASE B (intro). Primera sesión con más carga fuerza.</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>14km ↑400m</span>
+            <span class='sess-date'>22 Apr</span>
+          </div>
+          <p class='sess-desc'>Hill reps: 2km Z1 warm-up → 6×3min subida Z4 (RPE 8/10, bajada trote Z1) → 2km Z1. Evidencia: Patoz 2020 — hill reps mejoran economía trail.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km ↑300m</span>
+            <span class='sess-date'>23 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z2 con subidas. GYM FASE B después.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>24 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>24km ↑500m</span>
+            <span class='sess-date'>25 Apr</span>
+          </div>
+          <p class='sess-desc'>24km Z1–Z2. Busca Pedriza/Navacerrada si puedes. 2-3 geles. Practica nutrition race-day.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>26 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1. Recovery. Cadencia >172spm.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 6</span>
+            <span class='wk-dates'>27 Apr – 03 May</span>
+            <span class='wk-title'>Carga alta + primer B2B trail</span>
+            <span class='wk-stats'>65km · ↑1500m D+</span>
+            <span class='wk-load' style='background:#f9731622;color:#f97316'>MED-HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Primera sesión B2B real. Nota sensaciones del segundo día.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>27 Apr</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>28 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2 + GYM FASE B. Squat pesado 4×5@80%1RM.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>16km ↑300m</span>
+            <span class='sess-date'>29 Apr</span>
+          </div>
+          <p class='sess-desc'>16km: 3km Z1 → 2×20min @Z3 con 5min Z1 recuperación → 3km Z1. Si posible, 2ª parte en subida larga.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km ↑300m</span>
+            <span class='sess-date'>30 Apr</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2 trail o parque. GYM FASE B.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>01 May</span>
+          </div>
+          <p class='sess-desc'>8km regenerativo Z1. Decisión según HRV Coros.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>26km ↑900m</span>
+            <span class='sess-date'>02 May</span>
+          </div>
+          <p class='sess-desc'>26km Z1–Z2 trail. Pedriza o Manzanares si posible. D+>800m. 3 geles. Prueba bastones si los llevas en Palencia.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>14km ↑300m</span>
+            <span class='sess-date'>03 May</span>
+          </div>
+          <p class='sess-desc'>14km Z1–Z2 trail B2B. Piernas cargadas. Simula segunda jornada de carrera. Evidencia: Hoffman 2016 — B2B weekends mejoran tolerancia fatiga acumulada.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 7</span>
+            <span class='wk-dates'>04 May – 10 May</span>
+            <span class='wk-title'>Deload + evaluación FC</span>
+            <span class='wk-stats'>48km · ↑600m D+</span>
+            <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 🔄 DELOAD + EVALUACIÓN. Compara Strava: misma ruta, ¿FC media bajó 3-5bpm? → adaptación verificada.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>04 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>05 May</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + GYM FASE B 50% carga.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km ↑200m</span>
+            <span class='sess-date'>06 May</span>
+          </div>
+          <p class='sess-desc'>12km Z1–Z2. Sin calidad. Técnica bajada trail: zancada corta, peso atrás.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>07 May</span>
+          </div>
+          <p class='sess-desc'>GYM FASE B (40min).</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>08 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>18km ↑400m</span>
+            <span class='sess-date'>09 May</span>
+          </div>
+          <p class='sess-desc'>18km Z1–Z2. TEST: anota FC media y ritmo, compara con semana 1 → muestra progreso base aeróbica.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>10 May</span>
+          </div>
+          <p class='sess-desc'>10km Z1.</p>
+        </div></div>
+          </div>
+        </details></div>
+        </div>
+        <div class='phase-block'>
+          <div class='phase-header' style='border-left:4px solid #f59e0b'>
+            <div class='phase-title' style='color:#f59e0b'>FASE 2: DESARROLLO TRAIL — PALENCIA PREP</div>
+            <div class='phase-meta'>
+              Semanas 8–12 &nbsp;·&nbsp; 328 km totales &nbsp;·&nbsp; 12,700m D+ acumulado
+            </div>
+          </div>
+          <div class='weeks-list'>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f59e0b22;color:#f59e0b'>Sem 8</span>
+            <span class='wk-dates'>11 May – 17 May</span>
+            <span class='wk-title'>Intro Fase 2 — Trail específico</span>
+            <span class='wk-stats'>65km · ↑1800m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Evidencia power hiking: Giovanelli 2016 — power hiking eficiente en pendientes >15% vs correr.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>11 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>12 May</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 + GYM FASE B.</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>13 May</span>
+          </div>
+          <p class='sess-desc'>Hill reps Palencia-specific: 2km Z1 → 8×3min subida >8% pendiente Z4–Z5 con bajada activa → 2km Z1. RPE 8-9 en subidas.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>14 May</span>
+          </div>
+          <p class='sess-desc'>12km trail técnico Z2. Power hiking rampas >15%. GYM FASE B.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>15 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>28km ↑1200m</span>
+            <span class='sess-date'>16 May</span>
+          </div>
+          <p class='sess-desc'>28km Z1–Z2 trail. D+>1000m. Nutrition: gel c/40min, 60g CHO/h. Equipa como Palencia.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>16km ↑500m</span>
+            <span class='sess-date'>17 May</span>
+          </div>
+          <p class='sess-desc'>16km trail Z1–Z2 B2B. RPE ≤6/10. Registra sensaciones.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f59e0b22;color:#f59e0b'>Sem 9</span>
+            <span class='wk-dates'>18 May – 24 May</span>
+            <span class='wk-title'>VK simulado + volumen alto</span>
+            <span class='wk-stats'>70km · ↑2500m D+</span>
+            <span class='wk-load' style='background:#ef444422;color:#ef4444'>HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 ⚠ Semana alta carga. Monitoriza HRV Coros cada mañana. Drop >10%: reduce siguiente sesión.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>18 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>19 May</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + GYM FASE B (squat pesado, hip thrust, nordic curl).</p>
+        </div>
+        <div class='session-card' style='background:#2d0f1a;border-left:3px solid #f43f5e'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f43f5e'>VERTICAL KM</span>
+            <span class='sess-km'>12km ↑1000m</span>
+            <span class='sess-date'>20 May</span>
+          </div>
+          <p class='sess-desc'>VK simulado: 6km subida continua apuntando 1000m D+ total, Z4–Z5. Bajada trote Z1. Tiempo objetivo <65min. Sin montaña: 5×8min cinta al 10%.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>21 May</span>
+          </div>
+          <p class='sess-desc'>14km trail técnico Z2–Z3 con bajadas técnicas. GYM FASE B.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>22 May</span>
+          </div>
+          <p class='sess-desc'>8km Z1 o descanso según HRV.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>30km ↑1500m</span>
+            <span class='sess-date'>23 May</span>
+          </div>
+          <p class='sess-desc'>30km Z1–Z2 trail. Primera vez 30km esta temporada. D+>1200m. Nutrition completa. Simula equipación Palencia.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>18km ↑900m</span>
+            <span class='sess-date'>24 May</span>
+          </div>
+          <p class='sess-desc'>18km trail B2B Z1–Z2. Segunda jornada crucial.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f59e0b22;color:#f59e0b'>Sem 10</span>
+            <span class='wk-dates'>25 May – 31 May</span>
+            <span class='wk-title'>Pico carga pre-Palencia</span>
+            <span class='wk-stats'>72km · ↑3000m D+</span>
+            <span class='wk-load' style='background:#ef444422;color:#ef4444'>HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Semana pico. Señales sobreentrenamiento: FC reposo +5bpm, insomnio, falta de motivación.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>25 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>26 May</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + GYM FASE B (última sesión pesada antes de taper).</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>15km ↑800m</span>
+            <span class='sess-date'>27 May</span>
+          </div>
+          <p class='sess-desc'>Umbral trail: 3km Z1 → 3×20min @Z3–Z4 (RPE 7-8) con 5min Z1, incluye subidas y bajadas → 3km Z1.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>15km ↑700m</span>
+            <span class='sess-date'>28 May</span>
+          </div>
+          <p class='sess-desc'>15km trail técnico Z2–Z3. Máximo terreno irregular disponible.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>29 May</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>32km ↑1800m</span>
+            <span class='sess-date'>30 May</span>
+          </div>
+          <p class='sess-desc'>32km Z1–Z2 trail. SESIÓN CLAVE PRE-PALENCIA. Simula esfuerzo carrera. Nutrition: 0.8g CHO/kg/h ≈ 66g CHO/h. Bastones si los llevas.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>18km ↑700m</span>
+            <span class='sess-date'>31 May</span>
+          </div>
+          <p class='sess-desc'>18km Z1–Z2 B2B piernas cargadas.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f59e0b22;color:#f59e0b'>Sem 11</span>
+            <span class='wk-dates'>01 Jun – 07 Jun</span>
+            <span class='wk-title'>TAPER Palencia — 1/2</span>
+            <span class='wk-stats'>52km · ↑1200m D+</span>
+            <span class='wk-load' style='background:#66622;color:#666'>MED-LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Evidencia taper: Mujika & Padilla 2003 — 2 semanas, −40-50% volumen, mantener intensidad.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>01 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>02 Jun</span>
+          </div>
+          <p class='sess-desc'>10km Z1. Sin gym, solo activación 15min.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>12km ↑300m</span>
+            <span class='sess-date'>03 Jun</span>
+          </div>
+          <p class='sess-desc'>12km: 3km Z1 → 4×8min @Z3 con 3min Z1 → 2km Z1. Mantén intensidad, baja volumen.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>10km ↑400m</span>
+            <span class='sess-date'>04 Jun</span>
+          </div>
+          <p class='sess-desc'>10km trail Z1–Z2 suave. Piernas ágiles.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>05 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>20km ↑500m</span>
+            <span class='sess-date'>06 Jun</span>
+          </div>
+          <p class='sess-desc'>20km Z1–Z2 trail. Long reducido −38% vs pico. 3-4 aceleraciones 2min @pace carrera.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>07 Jun</span>
+          </div>
+          <p class='sess-desc'>10km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#f59e0b22;color:#f59e0b'>Sem 12</span>
+            <span class='wk-dates'>08 Jun – 14 Jun</span>
+            <span class='wk-title'>🏁 RACE WEEK — Maratón MTN Palencia</span>
+            <span class='wk-stats'>69km · ↑4200m D+</span>
+            <span class='wk-load' style='background:#fbbf2422;color:#fbbf24'>RACE</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 ⚠ Palencia es objetivo B — sirve de test para TP60. No la corras como carrera A.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>08 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso. Carga CHO día 1/3: 8g CHO/kg ≈ 656g. Arroz, pasta, plátano, pan blanco. Evita fibra.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>09 Jun</span>
+          </div>
+          <p class='sess-desc'>8km Z1. 4×20s strides. Repasa estrategia y plan nutricional.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>6km ↑100m</span>
+            <span class='sess-date'>10 Jun</span>
+          </div>
+          <p class='sess-desc'>6km Z1 + 3×1min @pace objetivo. Activación neuromuscular.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>11 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso. Prepara mochila, bastones, geles (1 c/40min). Cena: 150g arroz + 120g pollo.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>3km</span>
+            <span class='sess-date'>12 Jun</span>
+          </div>
+          <p class='sess-desc'>3km activación muy suave. Viaje si aplica.</p>
+        </div>
+        <div class='session-card' style='background:#2d1f00;border-left:3px solid #fbbf24'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#fbbf24'>🏁 CARRERA</span>
+            <span class='sess-km'>44km ↑3500m</span>
+            <span class='sess-date'>13 Jun</span>
+          </div>
+          <p class='sess-desc'>🏁 MARATÓN MTN PALENCIA (44km/3500m D+). Estrategia: Z2 cómodo primeros 10km, power hike >15%, gel c/35-40min desde km10. OBJETIVO: finalizar fuerte y aprender para TP60.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>4km</span>
+            <span class='sess-date'>14 Jun</span>
+          </div>
+          <p class='sess-desc'>Caminata suave. Proteína 2g/kg en las primeras 24h.</p>
+        </div></div>
+          </div>
+        </details></div>
+        </div>
+        <div class='phase-block'>
+          <div class='phase-header' style='border-left:4px solid #22d3ee'>
+            <div class='phase-title' style='color:#22d3ee'>FASE 3: RECUPERACIÓN + BLOQUE SIERRA</div>
+            <div class='phase-meta'>
+              Semanas 13–22 &nbsp;·&nbsp; 608 km totales &nbsp;·&nbsp; 25,400m D+ acumulado
+            </div>
+          </div>
+          <div class='weeks-list'>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 13</span>
+            <span class='wk-dates'>15 Jun – 21 Jun</span>
+            <span class='wk-title'>Recuperación post-Palencia</span>
+            <span class='wk-stats'>35km · ↑400m D+</span>
+            <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Evidencia post-maratón montaña: Burt 2011 — daño muscular persiste 5-7 días. Mínimo 10-14 días regeneración.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>15 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso total.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>6km</span>
+            <span class='sess-date'>16 Jun</span>
+          </div>
+          <p class='sess-desc'>6km caminata/trote Z1. Masaje si tienes acceso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>17 Jun</span>
+          </div>
+          <p class='sess-desc'>8km Z1 muy suave.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>18 Jun</span>
+          </div>
+          <p class='sess-desc'>GYM Fase B mantenimiento (50% carga). Movilidad 20min.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>19 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>14km ↑300m</span>
+            <span class='sess-date'>20 Jun</span>
+          </div>
+          <p class='sess-desc'>14km Z1–Z2 trail suave. Sin exigencia.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑100m</span>
+            <span class='sess-date'>21 Jun</span>
+          </div>
+          <p class='sess-desc'>10km Z1.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 14</span>
+            <span class='wk-dates'>22 Jun – 28 Jun</span>
+            <span class='wk-title'>Rebuild aeróbico</span>
+            <span class='wk-stats'>58km · ↑1400m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Cambia el mindset: de carrera de montaña a ultra (63km). Mayor énfasis en D+ sostenido.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>22 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>23 Jun</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2 + GYM FASE C (inicio bloque TP60).</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>14km ↑400m</span>
+            <span class='sess-date'>24 Jun</span>
+          </div>
+          <p class='sess-desc'>14km: 2km Z1 → 3×15min @Z3 con 4min Z1 → 2km Z1. Primera calidad post-Palencia.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>25 Jun</span>
+          </div>
+          <p class='sess-desc'>12km trail Z2. GYM FASE C.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>26 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>22km ↑500m</span>
+            <span class='sess-date'>27 Jun</span>
+          </div>
+          <p class='sess-desc'>22km Z1–Z2. Long moderado en rebuild.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>12km</span>
+            <span class='sess-date'>28 Jun</span>
+          </div>
+          <p class='sess-desc'>12km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 15</span>
+            <span class='wk-dates'>29 Jun – 05 Jul</span>
+            <span class='wk-title'>Carga media-alta + inicio sierra semanal</span>
+            <span class='wk-stats'>65km · ↑2000m D+</span>
+            <span class='wk-load' style='background:#f9731622;color:#f97316'>MED-HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Si tienes fin de semana en sierra, ambas sesiones allí.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>29 Jun</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>30 Jun</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + GYM FASE C.</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>14km ↑700m</span>
+            <span class='sess-date'>01 Jul</span>
+          </div>
+          <p class='sess-desc'>Hill repeats TP60-spec: 10×3min subida Z4 con bajada activa. Foco en técnica de bajada (frena excéntrico).</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>02 Jul</span>
+          </div>
+          <p class='sess-desc'>14km trail Z2. GYM FASE C.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>03 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>27km ↑1100m</span>
+            <span class='sess-date'>04 Jul</span>
+          </div>
+          <p class='sess-desc'>27km Z1–Z2 trail. Primer long TP60 del ciclo.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>16km ↑600m</span>
+            <span class='sess-date'>05 Jul</span>
+          </div>
+          <p class='sess-desc'>16km trail B2B Z1–Z2.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 16</span>
+            <span class='wk-dates'>06 Jul – 12 Jul</span>
+            <span class='wk-title'>🏔 SIERRA — sem 1 (julio)</span>
+            <span class='wk-stats'>70km · ↑3500m D+</span>
+            <span class='wk-load' style='background:#ef444422;color:#ef4444'>HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 🏔 Inicio bloque sierra (La Ponderosa / Manzanares). Aprovecha el acceso directo desde casa.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>06 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#2d0f1a;border-left:3px solid #f43f5e'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#f43f5e'>VERTICAL KM</span>
+            <span class='sess-km'>10km ↑1000m</span>
+            <span class='sess-date'>07 Jul</span>
+          </div>
+          <p class='sess-desc'>VK Sierra: subida continua 6km / 1000m D+. Pedriza o Manzanares. Z4–Z5. Tiempo objetivo <65min.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>16km ↑800m</span>
+            <span class='sess-date'>08 Jul</span>
+          </div>
+          <p class='sess-desc'>16km técnico Z2–Z3 en sierra. Incluye bajada técnica en roca/tierra.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>09 Jul</span>
+          </div>
+          <p class='sess-desc'>GYM FASE C o sesión peso corporal sierra: pistols, step-ups, jump squats.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>8km ↑200m</span>
+            <span class='sess-date'>10 Jul</span>
+          </div>
+          <p class='sess-desc'>8km Z1 suave.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>30km ↑2000m</span>
+            <span class='sess-date'>11 Jul</span>
+          </div>
+          <p class='sess-desc'>30km Z1–Z2 sierra. D+>1800m. Bastones + mochila hidratación. Nutrition race-simulation completa.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>18km ↑1000m</span>
+            <span class='sess-date'>12 Jul</span>
+          </div>
+          <p class='sess-desc'>18km trail B2B Z1–Z2. Objetivo: terminar bien, no rápido.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 17</span>
+            <span class='wk-dates'>13 Jul – 19 Jul</span>
+            <span class='wk-title'>🏔 SIERRA — deload</span>
+            <span class='wk-stats'>52km · ↑2200m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 🔄 DELOAD en bloque sierra. La montaña añade estrés sistémico extra (calor, terreno, altitud).</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>13 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑300m</span>
+            <span class='sess-date'>14 Jul</span>
+          </div>
+          <p class='sess-desc'>10km Z1 sierra suave + GYM FASE C reducido.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>15 Jul</span>
+          </div>
+          <p class='sess-desc'>12km con 2×15min @Z3 en terreno ondulado sierra.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>10km ↑400m</span>
+            <span class='sess-date'>16 Jul</span>
+          </div>
+          <p class='sess-desc'>10km trail Z1–Z2 técnico.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>17 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>22km ↑1200m</span>
+            <span class='sess-date'>18 Jul</span>
+          </div>
+          <p class='sess-desc'>22km deload long. D+ reducido.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>19 Jul</span>
+          </div>
+          <p class='sess-desc'>10km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 18</span>
+            <span class='wk-dates'>20 Jul – 26 Jul</span>
+            <span class='wk-title'>🏔 SIERRA — pico carga agosto</span>
+            <span class='wk-stats'>80km · ↑4500m D+</span>
+            <span class='wk-load' style='background:#ef444422;color:#ef4444'>HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 ⚠ SEMANA PICO máximo del ciclo. D+ total ~4500m. HRV, sueño y apetito son semáforos de carga.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>20 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#2d0f1a;border-left:3px solid #f43f5e'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#f43f5e'>VERTICAL KM</span>
+            <span class='sess-km'>12km ↑1200m</span>
+            <span class='sess-date'>21 Jul</span>
+          </div>
+          <p class='sess-desc'>VK avanzado: 7km / 1200m D+ continuo. Z4–Z5. Objetivo tiempo < sem16. GYM FASE C si posible.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>18km ↑1000m</span>
+            <span class='sess-date'>22 Jul</span>
+          </div>
+          <p class='sess-desc'>18km técnico Z2–Z3. Máxima dificultad de terreno. Foco bajadas: cadencia >180spm, peso atrás, zancada corta.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>23 Jul</span>
+          </div>
+          <p class='sess-desc'>14km Z2. Recovery activo con D+.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>8km ↑200m</span>
+            <span class='sess-date'>24 Jul</span>
+          </div>
+          <p class='sess-desc'>8km Z1 suave.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>35km ↑2500m</span>
+            <span class='sess-date'>25 Jul</span>
+          </div>
+          <p class='sess-desc'>35km Z1–Z2. SESIÓN REINA del ciclo. D+>2200m. Simula primer 55km TP60. Nutrition completa c/35-40min. Todo el equipo de carrera.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>20km ↑1000m</span>
+            <span class='sess-date'>26 Jul</span>
+          </div>
+          <p class='sess-desc'>20km trail B2B Z1–Z2. Segunda jornada dura. RPE máx 7/10.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 19</span>
+            <span class='wk-dates'>27 Jul – 02 Aug</span>
+            <span class='wk-title'>🏔 SIERRA — deload agosto</span>
+            <span class='wk-stats'>50km · ↑2000m D+</span>
+            <span class='wk-load' style='background:#84cc1622;color:#84cc16'>LOW-MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Supercompensación requiere 10-14 días post-semana pico. Este deload es tan importante como el pico.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>27 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑300m</span>
+            <span class='sess-date'>28 Jul</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + movilidad 20min.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>29 Jul</span>
+          </div>
+          <p class='sess-desc'>12km Z2 técnico suave.</p>
+        </div>
+        <div class='session-card' style='background:#1a0f2d;border-left:3px solid #a78bfa'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#a78bfa'>GYM FUERZA</span>
+            
+            <span class='sess-date'>30 Jul</span>
+          </div>
+          <p class='sess-desc'>GYM FASE C mantenimiento.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>31 Jul</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>22km ↑1200m</span>
+            <span class='sess-date'>01 Aug</span>
+          </div>
+          <p class='sess-desc'>22km Z1–Z2 deload long.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>02 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 20</span>
+            <span class='wk-dates'>03 Aug – 09 Aug</span>
+            <span class='wk-title'>🏔 SIERRA — segundo bloque TP60</span>
+            <span class='wk-stats'>75km · ↑4000m D+</span>
+            <span class='wk-load' style='background:#ef444422;color:#ef4444'>HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Segundo bloque pico TP60. Semanas 18 y 20 son las más importantes del ciclo.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>03 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#2d0f1a;border-left:3px solid #f43f5e'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#f43f5e'>VERTICAL KM</span>
+            <span class='sess-km'>12km ↑1200m</span>
+            <span class='sess-date'>04 Aug</span>
+          </div>
+          <p class='sess-desc'>VK race-pace TP60: simula esfuerzo sostenible 6-7h. No Z5 total, Z4 controlado.</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>16km ↑800m</span>
+            <span class='sess-date'>05 Aug</span>
+          </div>
+          <p class='sess-desc'>TP60-specific: 4×10min @Z4 en subidas con 5min bajada activa. Simula repechos TP60.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>06 Aug</span>
+          </div>
+          <p class='sess-desc'>14km Z2 técnico. GYM FASE C.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>8km ↑200m</span>
+            <span class='sess-date'>07 Aug</span>
+          </div>
+          <p class='sess-desc'>8km Z1.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>34km ↑2200m</span>
+            <span class='sess-date'>08 Aug</span>
+          </div>
+          <p class='sess-desc'>34km Z1–Z2 sierra. Race-conditions TP60 completas. Objetivo: terminar en Z2 cómodo.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>18km ↑1000m</span>
+            <span class='sess-date'>09 Aug</span>
+          </div>
+          <p class='sess-desc'>18km B2B Z1–Z2.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 21</span>
+            <span class='wk-dates'>10 Aug – 16 Aug</span>
+            <span class='wk-title'>🏔 SIERRA — deload septiembre</span>
+            <span class='wk-stats'>55km · ↑2200m D+</span>
+            <span class='wk-load' style='background:#f59e0b22;color:#f59e0b'>MED</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Último deload antes del taper TP60. Baja gym a mantenimiento.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>10 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑300m</span>
+            <span class='sess-date'>11 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1 + GYM FASE C última sesión pesada.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>14km ↑600m</span>
+            <span class='sess-date'>12 Aug</span>
+          </div>
+          <p class='sess-desc'>14km: 3×15min @Z3 en ondulado. Fresco y controlado.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>13 Aug</span>
+          </div>
+          <p class='sess-desc'>12km Z2 técnico.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>14 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>22km ↑1200m</span>
+            <span class='sess-date'>15 Aug</span>
+          </div>
+          <p class='sess-desc'>22km Z1–Z2. Deload long.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>16 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#22d3ee22;color:#22d3ee'>Sem 22</span>
+            <span class='wk-dates'>17 Aug – 23 Aug</span>
+            <span class='wk-title'>Pre-taper — última carga</span>
+            <span class='wk-stats'>68km · ↑3200m D+</span>
+            <span class='wk-load' style='background:#f9731622;color:#f97316'>MED-HIGH</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Última semana de carga alta. A partir de aquí solo bajamos.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>17 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#2d0f1a;border-left:3px solid #f43f5e'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#f43f5e'>VERTICAL KM</span>
+            <span class='sess-km'>10km ↑900m</span>
+            <span class='sess-date'>18 Aug</span>
+          </div>
+          <p class='sess-desc'>VK final: 5km / 900m D+. Último estímulo de alta intensidad antes del taper.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>15km ↑700m</span>
+            <span class='sess-date'>19 Aug</span>
+          </div>
+          <p class='sess-desc'>15km Z2–Z3 técnico. GYM FASE C mantenimiento.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑300m</span>
+            <span class='sess-date'>20 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>21 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>28km ↑1800m</span>
+            <span class='sess-date'>22 Aug</span>
+          </div>
+          <p class='sess-desc'>28km Z1–Z2. Último long run serio antes taper. D+>1500m.</p>
+        </div>
+        <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#ef4444'>B2B TRAIL</span>
+            <span class='sess-km'>15km ↑500m</span>
+            <span class='sess-date'>23 Aug</span>
+          </div>
+          <p class='sess-desc'>15km trail B2B suave.</p>
+        </div></div>
+          </div>
+        </details></div>
+        </div>
+        <div class='phase-block'>
+          <div class='phase-header' style='border-left:4px solid #a78bfa'>
+            <div class='phase-title' style='color:#a78bfa'>FASE 4: TAPER + TP60</div>
+            <div class='phase-meta'>
+              Semanas 23–25 &nbsp;·&nbsp; 178 km totales &nbsp;·&nbsp; 6,100m D+ acumulado
+            </div>
+          </div>
+          <div class='weeks-list'>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#a78bfa22;color:#a78bfa'>Sem 23</span>
+            <span class='wk-dates'>24 Aug – 30 Aug</span>
+            <span class='wk-title'>TAPER TP60 — 1/3</span>
+            <span class='wk-stats'>55km · ↑1800m D+</span>
+            <span class='wk-load' style='background:#66622;color:#666'>MED-LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Taper inicio. Evidencia: Bosquet 2007 — reducción volumen 41-60% óptima. Intensidad: mantener.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>24 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km ↑200m</span>
+            <span class='sess-date'>25 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1–Z2. Solo mantenimiento.</p>
+        </div>
+        <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#f97316'>INTERVALOS Z4</span>
+            <span class='sess-km'>12km ↑500m</span>
+            <span class='sess-date'>26 Aug</span>
+          </div>
+          <p class='sess-desc'>12km: 4×6min @Z4 con 4min Z1. Mantén intensidad, reduce volumen.</p>
+        </div>
+        <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#d97706'>TRAIL Z2</span>
+            <span class='sess-km'>10km ↑400m</span>
+            <span class='sess-date'>27 Aug</span>
+          </div>
+          <p class='sess-desc'>10km trail Z2.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>28 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>24km ↑1000m</span>
+            <span class='sess-date'>29 Aug</span>
+          </div>
+          <p class='sess-desc'>24km Z1–Z2 trail −30% vs pico. 4 aceleraciones 3min @pace TP60.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>10km</span>
+            <span class='sess-date'>30 Aug</span>
+          </div>
+          <p class='sess-desc'>10km Z1 recovery.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#a78bfa22;color:#a78bfa'>Sem 24</span>
+            <span class='wk-dates'>31 Aug – 06 Sep</span>
+            <span class='wk-title'>TAPER TP60 — 2/3</span>
+            <span class='wk-stats'>40km · ↑900m D+</span>
+            <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 Sensaciones de piernas pesadas normales y transitorias. No añadas km extra aunque tengas energía.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>31 Aug</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km ↑100m</span>
+            <span class='sess-date'>01 Sep</span>
+          </div>
+          <p class='sess-desc'>8km Z1. Sin presión.</p>
+        </div>
+        <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#84cc16'>TEMPO Z3</span>
+            <span class='sess-km'>10km ↑300m</span>
+            <span class='sess-date'>02 Sep</span>
+          </div>
+          <p class='sess-desc'>10km: 2km Z1 → 3×8min @Z3 con 3min Z1 → 2km Z1. Siente el cuerpo reactivo.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km ↑200m</span>
+            <span class='sess-date'>03 Sep</span>
+          </div>
+          <p class='sess-desc'>8km Z1–Z2 trail suave.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>04 Sep</span>
+          </div>
+          <p class='sess-desc'>Descanso.</p>
+        </div>
+        <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#6366f1'>LONG RUN</span>
+            <span class='sess-km'>16km ↑400m</span>
+            <span class='sess-date'>05 Sep</span>
+          </div>
+          <p class='sess-desc'>16km Z1–Z2. Long muy reducido. 2-3 aceleraciones 2min @pace TP60.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>8km</span>
+            <span class='sess-date'>06 Sep</span>
+          </div>
+          <p class='sess-desc'>8km Z1.</p>
+        </div></div>
+          </div>
+        </details>
+        <details class='week-item'>
+          <summary class='week-summary'>
+            <span class='wk-num' style='background:#a78bfa22;color:#a78bfa'>Sem 25</span>
+            <span class='wk-dates'>07 Sep – 13 Sep</span>
+            <span class='wk-title'>🏁 RACE WEEK — TP60</span>
+            <span class='wk-stats'>83km · ↑3400m D+</span>
+            <span class='wk-load' style='background:#fbbf2422;color:#fbbf24'>RACE</span>
+          </summary>
+          <div class='week-body'>
+            <div class='week-notes'>📌 🎯 OBJETIVO PRINCIPAL del ciclo. Estrategia conservadora primeros 30km → negativa split última parte.</div>
+            <div class='sessions-grid'>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>L</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>07 Sep</span>
+          </div>
+          <p class='sess-desc'>Descanso. CHO loading día 1/3: 8g CHO/kg ≈ 656g. Arroz, pasta, plátano. Sin fibra ni grasas.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>M</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>6km</span>
+            <span class='sess-date'>08 Sep</span>
+          </div>
+          <p class='sess-desc'>6km Z1. 4×30s strides. CHO loading día 2/3: 9g CHO/kg.</p>
+        </div>
+        <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
+          <div class='sess-header'>
+            <span class='sess-day'>X</span>
+            <span class='sess-type' style='color:#22d3ee'>EASY Z1-Z2</span>
+            <span class='sess-km'>4km</span>
+            <span class='sess-date'>09 Sep</span>
+          </div>
+          <p class='sess-desc'>4km activación + 3×1min @pace TP60. CHO loading día 3/3: 10g CHO/kg.</p>
+        </div>
+        <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
+          <div class='sess-header'>
+            <span class='sess-day'>J</span>
+            <span class='sess-type' style='color:#334155'>REST</span>
+            
+            <span class='sess-date'>10 Sep</span>
+          </div>
+          <p class='sess-desc'>Descanso. Prepara material completo: mochila, bastones, 10 geles (1 c/35min), electrolitos, frontales, drop bag si aplica.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>V</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>2km</span>
+            <span class='sess-date'>11 Sep</span>
+          </div>
+          <p class='sess-desc'>2km caminata o descanso total. Cena 18:30-19:00h: 180g arroz + 150g pollo + plátano.</p>
+        </div>
+        <div class='session-card' style='background:#2d1f00;border-left:3px solid #fbbf24'>
+          <div class='sess-header'>
+            <span class='sess-day'>S</span>
+            <span class='sess-type' style='color:#fbbf24'>🏁 CARRERA</span>
+            <span class='sess-km'>63km ↑2500m</span>
+            <span class='sess-date'>12 Sep</span>
+          </div>
+          <p class='sess-desc'>🏁 TP60 (63km/2500m D+). Estrategia: Z2 cómodo primeros 20km, power hike >15%, gel c/35min desde km15, electrolitos en cada CP. OBJETIVO A: completar en 7-8h sintiéndote bien.</p>
+        </div>
+        <div class='session-card' style='background:#1a1f2e;border-left:3px solid #475569'>
+          <div class='sess-header'>
+            <span class='sess-day'>D</span>
+            <span class='sess-type' style='color:#475569'>RECOVERY</span>
+            <span class='sess-km'>2km</span>
+            <span class='sess-date'>13 Sep</span>
+          </div>
+          <p class='sess-desc'>Caminata suave. Proteína 2g/kg. CHO 1.2g/kg c/hora × 4h. Descanso total.</p>
+        </div></div>
+          </div>
+        </details></div>
+        </div>
+</div>
+
+<!-- ═══ TAB: FUERZA ═══ -->
+<div id="tab-fuerza" class="tab-panel">
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px">
+    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Principios base — Evidencia científica</h3>
+    <ul style="list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px">
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">💪 Beattie 2017: HST 16 sem → economía carrera +4.6%, potencia +8.6%</li>
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">🦵 Petersen 2011: Nordic curl → −70% incidencia lesiones isquiosurales</li>
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">🏃 Blagrove 2018: HST reduce lesiones 50% en fondistas competitivos</li>
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">⚡ Mikkola 2007: plyometría 8 sem → economía carrera +4.1%</li>
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">🏔 Heisten 2021: fuerza+plyometría mejoran rendimiento en ultra-trail</li>
+      <li style="font-size:13px;color:#94a3b8;padding:8px 12px;background:var(--surface3);border-radius:6px">📐 Principio: NUNCA fuerza el día antes de sesión calidad o long run</li>
+    </ul>
+  </div>
+  
+        <div class='strength-phase'>
+          <div class='sp-header'>
+            <span class='sp-id'>FASE A</span>
+            <span class='sp-name'>FASE A — Adaptación Anatómica</span>
+            <span class='sp-weeks'>Sem 1–7</span>
+          </div>
+          <div class='sp-meta'>
+            <span>🎯 Construir base tendinosa y muscular. Prevenir lesiones. Activar glúteo y core.</span>
+            <span>📅 2×/semana (Mar+Jue)</span>
+            <span>⚡ 3×12-15 reps | 60-70% 1RM | RIR 3-4</span>
+          </div>
+          <div class='sp-ref'>📚 Blagrove 2018 — HST reduce lesiones 50% y mejora economía +3% en fondistas</div>
+          <table class='ex-table'>
+            <thead><tr><th>Ejercicio</th><th>Series×Reps</th><th>Foco</th><th>Notas</th></tr></thead>
+            <tbody>
+          <tr>
+            <td class='ex-name'>Sentadilla Goblet</td>
+            <td>3×15</td>
+            <td class='ex-focus'>Glúteo medio, cuádriceps</td>
+            <td class='ex-notes'>Kettlebell frontal. Profundidad completa. Activa glúteo.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Romanian Deadlift</td>
+            <td>3×12</td>
+            <td class='ex-focus'>Isquios + glúteo mayor</td>
+            <td class='ex-notes'>Cadena posterior. Clave economía trail. Rodillas ligeramente flexionadas.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Step-Up con mancuerna</td>
+            <td>3×12/lado</td>
+            <td class='ex-focus'>Cuádriceps unilateral</td>
+            <td class='ex-notes'>Banco 40-50cm. Simula subida trail.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Hip Thrust con barra</td>
+            <td>3×15</td>
+            <td class='ex-focus'>Glúteo máximo</td>
+            <td class='ex-notes'>Base de toda la cadena posterior. Progresión carga semanal.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Nordic Hamstring Curl</td>
+            <td>3×6-8</td>
+            <td class='ex-focus'>Isquios excéntrico</td>
+            <td class='ex-notes'>El más importante. Evidencia Petersen 2011: −70% lesiones isquio.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Calf Raise unilateral</td>
+            <td>3×15/lado</td>
+            <td class='ex-focus'>Sóleo + gastrocnemio</td>
+            <td class='ex-notes'>Excéntrico en la bajada (3s). Protege tendón de Aquiles.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Dead Bug</td>
+            <td>3×10/lado</td>
+            <td class='ex-focus'>Core anti-extensión</td>
+            <td class='ex-notes'>Lumbar pegada al suelo siempre. Base estabilidad.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Banded Clamshells</td>
+            <td>3×20/lado</td>
+            <td class='ex-focus'>Abductor cadera</td>
+            <td class='ex-notes'>Prevención IT band y rodilla corredor.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Farmer Carries</td>
+            <td>3×30m</td>
+            <td class='ex-focus'>Core + trapecio</td>
+            <td class='ex-notes'>Simula mochila trail. Estabilidad lumbar en carga.</td>
+          </tr></tbody>
+          </table>
+        </div>
+        <div class='strength-phase'>
+          <div class='sp-header'>
+            <span class='sp-id'>FASE B</span>
+            <span class='sp-name'>FASE B — Fuerza Máxima</span>
+            <span class='sp-weeks'>Sem 8–16</span>
+          </div>
+          <div class='sp-meta'>
+            <span>🎯 Aumentar fuerza máxima y potencia neuromuscular. Mejora directa de economía de carrera.</span>
+            <span>📅 2×/semana (Mar+Jue)</span>
+            <span>⚡ 4×4-6 reps | 80-85% 1RM | RIR 1-2</span>
+          </div>
+          <div class='sp-ref'>📚 Beattie 2017 — HST 16 sem: economía de carrera +4.6%, potencia +8.6%</div>
+          <table class='ex-table'>
+            <thead><tr><th>Ejercicio</th><th>Series×Reps</th><th>Foco</th><th>Notas</th></tr></thead>
+            <tbody>
+          <tr>
+            <td class='ex-name'>Sentadilla trasera</td>
+            <td>4×5</td>
+            <td class='ex-focus'>Potencia pierna global</td>
+            <td class='ex-notes'>Progresión lineal +2.5kg/sem. Técnica impecable.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Peso Muerto convencional</td>
+            <td>4×4</td>
+            <td class='ex-focus'>Cadena posterior total</td>
+            <td class='ex-notes'>Carga máxima semana a semana. Cinturón si >85%1RM.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Split Squat Búlgaro</td>
+            <td>4×6/lado</td>
+            <td class='ex-focus'>Unilateral trail-specific</td>
+            <td class='ex-notes'>Imprescindible. Con mancuernas o barra.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Hip Thrust pesado</td>
+            <td>4×6</td>
+            <td class='ex-focus'>Glúteo mayor potencia</td>
+            <td class='ex-notes'>Velocity concéntrica máxima.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Nordic Hamstring Curl</td>
+            <td>4×5</td>
+            <td class='ex-focus'>Isquios excéntrico</td>
+            <td class='ex-notes'>Mantiene protección lesional.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Box Jump</td>
+            <td>4×5</td>
+            <td class='ex-focus'>Potencia concéntrica</td>
+            <td class='ex-notes'>Intro plyometría. Caída suave amortiguada. Evidencia: Mikkola 2007 — plyometría mejora RE 4.1%.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Copenhagen Plank</td>
+            <td>3×20s/lado</td>
+            <td class='ex-focus'>Aductores + core lateral</td>
+            <td class='ex-notes'>Muy específico trail técnico. Progresión 5s/sem.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Paloff Press</td>
+            <td>3×10/lado</td>
+            <td class='ex-focus'>Anti-rotación core</td>
+            <td class='ex-notes'>Estabilidad en terreno irregular.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Single-leg RDL con mancuerna</td>
+            <td>3×8/lado</td>
+            <td class='ex-focus'>Isquio+glúteo+equilibrio</td>
+            <td class='ex-notes'>Propiocepción trail. Imprescindible.</td>
+          </tr></tbody>
+          </table>
+        </div>
+        <div class='strength-phase'>
+          <div class='sp-header'>
+            <span class='sp-id'>FASE C</span>
+            <span class='sp-name'>FASE C — Potencia + Específica Trail</span>
+            <span class='sp-weeks'>Sem 17–25</span>
+          </div>
+          <div class='sp-meta'>
+            <span>🎯 Potencia explosiva, tolerancia excéntrica bajadas, mantenimiento fuerza bloque alto volumen.</span>
+            <span>📅 2×/sem (o 1× en semanas pico de volumen)</span>
+            <span>⚡ 3×4-6 fuerza + 3×8 plyométrico</span>
+          </div>
+          <div class='sp-ref'>📚 Heisten 2021 — plyometría+fuerza mejoran rendimiento ultra-trail en corredores experimentados</div>
+          <table class='ex-table'>
+            <thead><tr><th>Ejercicio</th><th>Series×Reps</th><th>Foco</th><th>Notas</th></tr></thead>
+            <tbody>
+          <tr>
+            <td class='ex-name'>Sentadilla + salto (Jump Squat)</td>
+            <td>3×5</td>
+            <td class='ex-focus'>Potencia pierna</td>
+            <td class='ex-notes'>Barra vacía o 20-30%1RM. Máxima velocidad concéntrica.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Peso Muerto rumano unilateral</td>
+            <td>3×5/lado</td>
+            <td class='ex-focus'>Fuerza + propiocepción</td>
+            <td class='ex-notes'>Clave para control en bajadas técnicas.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Depth Jump</td>
+            <td>3×5</td>
+            <td class='ex-focus'>Stiffness tendinosa</td>
+            <td class='ex-notes'>Cajón 50cm, caída + rebote mínimo. Simula impacto bajada trail.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Hip Thrust explosivo</td>
+            <td>3×6</td>
+            <td class='ex-focus'>Potencia glúteo subidas</td>
+            <td class='ex-notes'>Velocidad en concéntrico máxima.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Step-up Jump</td>
+            <td>3×6/lado</td>
+            <td class='ex-focus'>Específico subida trail</td>
+            <td class='ex-notes'>Impulso + aterrizaje controlado.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Nordic Hamstring Curl</td>
+            <td>3×5</td>
+            <td class='ex-focus'>Mantenimiento isquios</td>
+            <td class='ex-notes'>No negociar. Semanas pico: 2 sets.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Lateral Bound</td>
+            <td>3×8/lado</td>
+            <td class='ex-focus'>Estabilidad lateral</td>
+            <td class='ex-notes'>Trail técnico lateral. Aterriza suave.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Copenhagen Plank progresivo</td>
+            <td>3×30s/lado</td>
+            <td class='ex-focus'>Aductores core</td>
+            <td class='ex-notes'>Progresión desde Fase B.</td>
+          </tr>
+          <tr>
+            <td class='ex-name'>Bear Crawl con peso</td>
+            <td>3×20m</td>
+            <td class='ex-focus'>Core + hombros</td>
+            <td class='ex-notes'>Integración para uso de bastones en carrera.</td>
+          </tr></tbody>
+          </table>
+        </div>
+</div>
+
+<!-- ═══ TAB: NUTRICIÓN ═══ -->
+<div id="tab-nutricion" class="tab-panel">
+  <div class="nutr-overview">
+    <h3>Plan Nutricional — Bases</h3>
+    <div class="nutr-kv">
+      <div class="kv-item"><div class="kv-label">Proteína objetivo</div><div class="kv-value">1.8g/kg → 148g/día</div></div>
+      <div class="kv-item"><div class="kv-label">Peso actual / objetivo</div><div class="kv-value">82kg → 76kg (−6kg)</div></div>
+      <div class="kv-item"><div class="kv-label">Ritmo de pérdida</div><div class="kv-value">~1kg/mes (realista)</div></div>
+      <div class="kv-item"><div class="kv-label">Timeline</div><div class="kv-value">6 meses → oct 2026</div></div>
+      <div class="kv-item"><div class="kv-label">Estrategia déficit</div><div class="kv-value">Solo días descanso/Z1 corto</div></div>
+      <div class="kv-item"><div class="kv-label">Evidence base</div><div class="kv-value">Morton 2018 + Burke 2011</div></div>
+    </div>
+  </div>
+  <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px">Plantillas por tipo de día</h3>
+  <div class="nutr-days">
+        <div class='nutr-day' style='border-top:3px solid #334155'>
+          <div class='nd-header'>
+            <span class='nd-icon'>🌙</span>
+            <span class='nd-type'>Descanso</span>
+            <span class='nd-kcal'>2100 kcal</span>
+          </div>
+          <div class='nd-macros'>
+            <span class='macro cho'>CHO: 180g</span>
+            <span class='macro prot'>Prot: 148g</span>
+            <span class='macro fat'>Grasa: 65g</span>
+          </div>
+          <p class='nd-desc'>Déficit 400kcal. Bajo en CHO, alto proteína y vegetales. Prioriza verdura no almidón.</p>
+          <p class='nd-example'>Desayuno: 3 huevos + espinacas + café. Comida: 200g pollo + ensalada grande + 50g legumbres. Cena: salmón + brócoli + yogur griego.</p>
+        </div>
+        <div class='nutr-day' style='border-top:3px solid #0f766e'>
+          <div class='nd-header'>
+            <span class='nd-icon'>🟢</span>
+            <span class='nd-type'>Rodaje Z1 (<10km)</span>
+            <span class='nd-kcal'>2400 kcal</span>
+          </div>
+          <div class='nd-macros'>
+            <span class='macro cho'>CHO: 250g</span>
+            <span class='macro prot'>Prot: 148g</span>
+            <span class='macro fat'>Grasa: 70g</span>
+          </div>
+          <p class='nd-desc'>Déficit leve 200kcal. CHO moderado. Sin gel necesario. Algunos de estos en ayunas (train-low).</p>
+          <p class='nd-example'>Desayuno post-run: 80g avena + plátano + 30g proteína whey. Comida: 150g arroz + 200g pollo + verdura. Cena: 150g salmón + boniato pequeño.</p>
+        </div>
+        <div class='nutr-day' style='border-top:3px solid #b45309'>
+          <div class='nd-header'>
+            <span class='nd-icon'>🟡</span>
+            <span class='nd-type'>Sesión calidad / Intervalos</span>
+            <span class='nd-kcal'>2900 kcal</span>
+          </div>
+          <div class='nd-macros'>
+            <span class='macro cho'>CHO: 380g</span>
+            <span class='macro prot'>Prot: 148g</span>
+            <span class='macro fat'>Grasa: 65g</span>
+          </div>
+          <p class='nd-desc'>Sin déficit. CHO alto pre y post sesión. Energía disponible para rendir.</p>
+          <p class='nd-example'>Pre-run (2.5h antes): 60g avena + plátano + miel (80g CHO). Post-run <30min: batido 300ml leche + 30g whey + plátano + 30g miel.</p>
+        </div>
+        <div class='nutr-day' style='border-top:3px solid #1e40af'>
+          <div class='nd-header'>
+            <span class='nd-icon'>🔵</span>
+            <span class='nd-type'>Long Run / B2B</span>
+            <span class='nd-kcal'>3400 kcal</span>
+          </div>
+          <div class='nd-macros'>
+            <span class='macro cho'>CHO: 480g</span>
+            <span class='macro prot'>Prot: 165g</span>
+            <span class='macro fat'>Grasa: 80g</span>
+          </div>
+          <p class='nd-desc'>Superávit leve. Máximo CHO. Recuperación muscular prioritaria.</p>
+          <p class='nd-example'>Pre-long (3h antes): 150g arroz + 100g pollo + plátano. Durante: gel c/35-40min. Post: 200g pasta + 150g carne + 500ml leche chocolatada.</p>
+        </div>
+        <div class='nutr-day' style='border-top:3px solid #7e22ce'>
+          <div class='nd-header'>
+            <span class='nd-icon'>⚡</span>
+            <span class='nd-type'>Carb Loading (3 días pre-carrera)</span>
+            <span class='nd-kcal'>4000 kcal</span>
+          </div>
+          <div class='nd-macros'>
+            <span class='macro cho'>CHO: 700g</span>
+            <span class='macro prot'>Prot: 130g</span>
+            <span class='macro fat'>Grasa: 60g</span>
+          </div>
+          <p class='nd-desc'>8-10g CHO/kg/día (day1: 8g → day3: 10g). Reduce proteína y grasa. Sin fibra. Sin alimentos nuevos.</p>
+          <p class='nd-example'>Día 3 (víspera): 200g pasta (almuerzo) + 200g arroz (cena) + 3 plátanos + 2 bebidas isotónicas + pan blanco + mermelada.</p>
+        </div></div>
+
+  <div class="race-nutr">
+    <h3>Nutrición en Carrera</h3>
+    <div class="rn-grid">
+      <div class="rn-item"><div class="rn-label">CHO objetivo por hora</div><div class="rn-val">70g/h (glucosa:fructosa 2:1)</div></div>
+      <div class="rn-item"><div class="rn-label">Frecuencia geles</div><div class="rn-val">Cada 35 minutos</div></div>
+      <div class="rn-item"><div class="rn-label">Geles Palencia (44km)</div><div class="rn-val">~6 geles</div></div>
+      <div class="rn-item"><div class="rn-label">Geles TP60 (63km)</div><div class="rn-val">~10 geles</div></div>
+      <div class="rn-item"><div class="rn-label">Hidratación</div><div class="rn-val">500-700ml/hora</div></div>
+      <div class="rn-item"><div class="rn-label">Sodio >3h</div><div class="rn-val">500-700mg/hora</div></div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:8px">📚 Evidencia: Jeukendrup 2014 — ratio glucosa:fructosa 2:1 permite absorción hasta 90g CHO/h sin problemas GI. Para 82kg: 66-74g CHO/h óptimo.</p>
+    <ul style="list-style:none">
+      <li style="font-size:13px;color:#94a3b8;padding:4px 0">⚠ Practica EXACTAMENTE el mismo gel/bebida que usarás en carrera (stomach training desde sem 5).</li>
+      <li style="font-size:13px;color:#94a3b8;padding:4px 0">⚠ No probar nada nuevo en race day. Jamás.</li>
+      <li style="font-size:13px;color:#94a3b8;padding:4px 0">☕ Cafeína 3mg/kg (≈250mg) en segunda mitad de carrera si la toleras habitualmente.</li>
+    </ul>
+  </div>
+
+  <div class="supps">
+    <h3>Suplementación — Solo con evidencia (Grado A/B)</h3>
+    
+      <div class='supp-item'>
+        <div class='supp-name'>Proteína Whey</div>
+        <div class='supp-dose'>30-40g post-sesión</div>
+        <div class='supp-ev'>Morton 2018 — óptimo. Prioridad si no alcanzas 1.8g/kg/día con comida.</div>
+      </div>
+      <div class='supp-item'>
+        <div class='supp-name'>Cafeína</div>
+        <div class='supp-dose'>3mg/kg (≈250mg) 45min antes sesión calidad / segunda mitad carrera</div>
+        <div class='supp-ev'>Spriet 2014 — mejora rendimiento 2-4% en endurance. Solo si toleras bien.</div>
+      </div>
+      <div class='supp-item'>
+        <div class='supp-name'>Beta-Alanina</div>
+        <div class='supp-dose'>3.2g/día (en 2 tomas para reducir parestesias)</div>
+        <div class='supp-ev'>Hobson 2012 — mejora rendimiento en esfuerzos 1-10min Z4-Z5. Útil para intervalos.</div>
+      </div>
+      <div class='supp-item'>
+        <div class='supp-name'>Creatina</div>
+        <div class='supp-dose'>3-5g/día (no requiere carga)</div>
+        <div class='supp-ev'>Rawson 2011 — mejora fuerza máxima y recuperación. Compatible con resistencia. Puede añadir 0.5-1kg de agua.</div>
+      </div>
+      <div class='supp-item'>
+        <div class='supp-name'>Vitamina D3</div>
+        <div class='supp-dose'>2000-4000 UI/día en invierno/primavera</div>
+        <div class='supp-ev'>Larson-Meyer 2010 — déficit frecuente en deportistas. Afecta fuerza y recuperación.</div>
+      </div>
+      <div class='supp-item'>
+        <div class='supp-name'>Omega-3</div>
+        <div class='supp-dose'>2-3g EPA+DHA/día</div>
+        <div class='supp-ev'>Philpott 2018 — reduce inflamación post-esfuerzo. Mejora recuperación en bloque alto.</div>
+      </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px;border-top:1px solid var(--border);padding-top:10px">❌ No recomendados: BCAA (innecesario si proteína total es adecuada), pre-workouts con estimulantes mezclados, antioxidantes en dosis altas (pueden bloquear adaptaciones al entrenamiento — Ristow 2009).</p>
+  </div>
+</div>
+
+<!-- ═══ TAB: SEGUIMIENTO ═══ -->
+<div id="tab-seguimiento" class="tab-panel">
+  <div class="compliance-intro">
+    <p>Este panel compara lo planificado vs lo ejecutado semana a semana usando los datos de Strava. Ejecuta el script semanalmente para actualizar. Los datos en verde indican cumplimiento >90%; en ámbar 70-90%; en rojo &lt;70%.</p>
+    <p style="margin-top:8px;font-size:12px;color:var(--muted)">💡 Truco: añade este script a un cron job o tarea programada para ejecutarlo cada lunes automáticamente.</p>
+  </div>
+  <div class="compliance-table-wrap">
+    <table class="compliance-table">
+      <thead>
+        <tr>
+          <th>Semana</th><th>Período</th><th>Fase</th>
+          <th>Plan km</th><th>Real km</th><th>% km</th>
+          <th>Plan D+</th><th>Real D+</th><th>% D+</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="compliance-body">
+        <tr><td colspan="10" class="no-data" style="text-align:center;padding:20px">
+          Cargando datos de Strava...
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end #app -->
+
+<script>
+const CHART_DATA = {"labels": ["12-29", "01-05", "01-12", "01-19", "01-26", "02-02", "02-09", "02-16", "02-23", "03-02", "03-09", "03-16"], "km": [10.5, 25.7, 41.0, 22.4, 40.1, 46.6, 55.0, 39.8, 30.4, 27.2, 35.8, 43.6], "d_plus": [87, 212, 469, 1133, 418, 722, 2848, 1097, 974, 417, 984, 357], "time": [57, 148, 236, 211, 237, 272, 492, 299, 208, 154, 225, 219], "trail": [0, 50, 75, 67, 75, 100, 100, 100, 33, 67, 50, 20], "hr_max": 188.0};
+const PLAN_DATA = [{"week": 1, "phase": 1, "km": 42, "d_plus": 500}, {"week": 2, "phase": 1, "km": 55, "d_plus": 700}, {"week": 3, "phase": 1, "km": 60, "d_plus": 900}, {"week": 4, "phase": 1, "km": 45, "d_plus": 500}, {"week": 5, "phase": 1, "km": 62, "d_plus": 1200}, {"week": 6, "phase": 1, "km": 65, "d_plus": 1500}, {"week": 7, "phase": 1, "km": 48, "d_plus": 600}, {"week": 8, "phase": 2, "km": 65, "d_plus": 1800}, {"week": 9, "phase": 2, "km": 70, "d_plus": 2500}, {"week": 10, "phase": 2, "km": 72, "d_plus": 3000}, {"week": 11, "phase": 2, "km": 52, "d_plus": 1200}, {"week": 12, "phase": 2, "km": 69, "d_plus": 4200}, {"week": 13, "phase": 3, "km": 35, "d_plus": 400}, {"week": 14, "phase": 3, "km": 58, "d_plus": 1400}, {"week": 15, "phase": 3, "km": 65, "d_plus": 2000}, {"week": 16, "phase": 3, "km": 70, "d_plus": 3500}, {"week": 17, "phase": 3, "km": 52, "d_plus": 2200}, {"week": 18, "phase": 3, "km": 80, "d_plus": 4500}, {"week": 19, "phase": 3, "km": 50, "d_plus": 2000}, {"week": 20, "phase": 3, "km": 75, "d_plus": 4000}, {"week": 21, "phase": 3, "km": 55, "d_plus": 2200}, {"week": 22, "phase": 3, "km": 68, "d_plus": 3200}, {"week": 23, "phase": 4, "km": 55, "d_plus": 1800}, {"week": 24, "phase": 4, "km": 40, "d_plus": 900}, {"week": 25, "phase": 4, "km": 83, "d_plus": 3400}];
+
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${id}')"]`).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+const CHART_DEFAULTS = {
+  responsive:true, maintainAspectRatio:true,
+  plugins:{legend:{display:false}},
+  scales:{
+    x:{grid:{color:'#1e2d45'},ticks:{color:'#64748b',font:{size:10,family:'JetBrains Mono'}}},
+    y:{grid:{color:'#1e2d45'},ticks:{color:'#64748b',font:{size:10,family:'JetBrains Mono'}}}
+  }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  const d = CHART_DATA;
+  
+  // Stats
+  const totalKm  = d.km.reduce((a,b)=>a+b,0);
+  const totalD   = d.d_plus.reduce((a,b)=>a+b,0);
+  const avgKm    = d.km.length ? (totalKm/d.km.length).toFixed(1) : 0;
+  const avgTrail = d.trail.length ? Math.round(d.trail.reduce((a,b)=>a+b,0)/d.trail.length) : 0;
+  document.getElementById('sv-weeks').textContent = d.labels.length;
+  document.getElementById('sv-km').textContent    = totalKm.toFixed(0);
+  document.getElementById('sv-d').textContent     = totalD.toLocaleString();
+  document.getElementById('sv-avg-km').textContent= avgKm;
+  document.getElementById('sv-hr').textContent    = d.hr_max;
+  document.getElementById('sv-trail').textContent = avgTrail+'%';
+  document.getElementById('hr-max-val').textContent = d.hr_max;
+
+  // Charts
+  new Chart(document.getElementById('chartKm').getContext('2d'), {
+    type:'bar', data:{labels:d.labels,
+      datasets:[{data:d.km,backgroundColor:'#22d3ee33',borderColor:'#22d3ee',borderWidth:2,borderRadius:4}]},
+    options:{...CHART_DEFAULTS}
+  });
+  new Chart(document.getElementById('chartD').getContext('2d'), {
+    type:'bar', data:{labels:d.labels,
+      datasets:[{data:d.d_plus,backgroundColor:'#f9731633',borderColor:'#f97316',borderWidth:2,borderRadius:4}]},
+    options:{...CHART_DEFAULTS}
+  });
+  new Chart(document.getElementById('chartTime').getContext('2d'), {
+    type:'line', data:{labels:d.labels,
+      datasets:[{data:d.time,borderColor:'#84cc16',backgroundColor:'#84cc1620',
+        pointBackgroundColor:'#84cc16',tension:.3,fill:true,pointRadius:3}]},
+    options:{...CHART_DEFAULTS}
+  });
+  new Chart(document.getElementById('chartTrail').getContext('2d'), {
+    type:'bar', data:{labels:d.labels,
+      datasets:[{data:d.trail,backgroundColor:'#a78bfa33',borderColor:'#a78bfa',borderWidth:2,borderRadius:4,
+        label:'% Trail'}]},
+    options:{...CHART_DEFAULTS,scales:{...CHART_DEFAULTS.scales,
+      y:{...CHART_DEFAULTS.scales.y,max:100,
+        ticks:{...CHART_DEFAULTS.scales.y.ticks,callback:v=>v+'%'}}}}
+  });
+
+  // Compliance table
+  buildCompliance();
+});
+
+function buildCompliance() {
+  const today = new Date();
+  const planStart = new Date('2026-03-24');
+  const tbody = document.getElementById('compliance-body');
+  const rows = [];
+  const phaseNames = {1:'Base',2:'Trail/Palencia',3:'Sierra',4:'Taper'};
+  const phaseColors = {1:'#f97316',2:'#f59e0b',3:'#22d3ee',4:'#a78bfa'};
+  
+  for (const pw of PLAN_DATA) {
+    const wStart = new Date(planStart.getTime() + (pw.week-1)*7*86400000);
+    const wEnd   = new Date(wStart.getTime() + 6*86400000);
+    if (wEnd > today) continue;  // future weeks: skip
+    
+    // Find matching Strava week
+    const wKey = wStart.toISOString().slice(0,10);
+    const strava = CHART_DATA.labels.indexOf(wKey.slice(5,10));
+    const actualKm  = strava>=0 ? CHART_DATA.km[strava]    : null;
+    const actualD   = strava>=0 ? CHART_DATA.d_plus[strava]: null;
+    
+    const kmPct  = actualKm != null ? Math.round(actualKm/pw.km*100) : null;
+    const dPct   = actualD  != null ? Math.round(actualD/pw.d_plus*100) : null;
+    const pc = phaseColors[pw.phase];
+    
+    function pctColor(p) { return p==null?'#64748b':p>=90?'#84cc16':p>=70?'#f59e0b':'#ef4444'; }
+    function pctBar(p)   { return p==null?'':
+      `<div class="bar-wrap"><div class="bar-fill" style="width:${Math.min(p,100)}%;background:${pctColor(p)}"></div></div>`; }
+    
+    const ds = `${wStart.toLocaleDateString('es-ES',{day:'2-digit',month:'short'})}`;
+    rows.push(`<tr>
+      <td class="ct-week"><span style="background:${pc}22;color:${pc};padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px">S${pw.week}</span></td>
+      <td style="font-size:11px;color:#64748b;font-family:'JetBrains Mono',monospace">${ds}</td>
+      <td style="font-size:11px;color:${pc}">${phaseNames[pw.phase]}</td>
+      <td class="ct-plan">${pw.km}km</td>
+      <td class="ct-actual">${actualKm!=null?actualKm+'km':'—'}</td>
+      <td><span style="color:${pctColor(kmPct)};font-family:'Rajdhani',sans-serif;font-weight:700">${kmPct!=null?kmPct+'%':'—'}</span> ${pctBar(kmPct)}</td>
+      <td class="ct-plan">${pw.d_plus}m</td>
+      <td class="ct-actual">${actualD!=null?actualD+'m':'—'}</td>
+      <td><span style="color:${pctColor(dPct)};font-family:'Rajdhani',sans-serif;font-weight:700">${dPct!=null?dPct+'%':'—'}</span> ${pctBar(dPct)}</td>
+      <td style="font-size:12px;color:#64748b">${kmPct!=null&&kmPct>=90?'✅':kmPct!=null&&kmPct>=70?'⚠️':'❌'}</td>
+    </tr>`);
+  }
+  
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 24 de marzo 2026. Ejecuta el script la próxima semana para ver tu primer seguimiento.</td></tr>';
+  } else {
+    tbody.innerHTML = rows.join('');
+  }
+}
+</script>
+</body>
+</html>
