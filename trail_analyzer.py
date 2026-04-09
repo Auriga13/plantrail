@@ -22,7 +22,7 @@ if sys.platform == "win32":
 # CONFIGURACIÓN — ⚠ ACTUALIZA FECHAS DE CARRERA SI ES NECESARIO
 # ═══════════════════════════════════════════════════════════════════════════════
 CLIENT_ID     = "114720"
-CLIENT_SECRET = "0302315694f075ae1f6a061db7b4287d975c67f1"
+CLIENT_SECRET = ""
 REDIRECT_URI  = "http://localhost:8888/callback"
 TOKEN_FILE    = Path("strava_token.json")
 OUTPUT_FILE   = Path("dashboard.html")
