@@ -1,4 +1,4 @@
-strava_token.json
+strava_token*
 .env
 *.env
 !.env.example
