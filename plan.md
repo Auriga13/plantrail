@@ -1043,16 +1043,38 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2 + 4×20s strides (sin gym).
+    tp:
+      sport: Run
+      title: Easy 8km Z2 + strides
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: EASY
     km: 6
     d: 100
     desc: 6km Z1 + 3×2min Z3 (aperturas).
+    tp:
+      sport: Run
+      title: Aperturas 3×2min Z3
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 3, on: '2:00', on_zone: z3, off: '2:00', off_zone: z1, note: 'aperturas pre-carrera'}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: J
     type: EASY
     km: 5
     d: 0
     desc: 5km Z1 muy suave + 4 strides.
+    tp:
+      sport: Run
+      title: Shakeout 5km Z1 + strides
+      steps:
+      - {kind: run, dist_km: 4, zone: z1}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -1064,6 +1086,11 @@ weeks:
     d: 3500
     desc: 🌄 PALENCIA — 44km / 3500m D+. Z2 en subidas / power-hike >15%, primera mitad controlada Z1–Z2,
       60–90g CHO/h, baja con cabeza para proteger cuádriceps de cara a TP60.
+    tp:
+      sport: TrailRun
+      title: '🏔 PALENCIA — 44km / 3500m (B-RACE)'
+      steps:
+      - {kind: run, dist_km: 44, zone: z2, note: 'Race: Z2 climbs / power-hike >15%, controlled Z1-Z2 first half, 60-90g CHO/h, descend within limits to protect quads for TP60'}
   - day: D
     type: REST
     km: 0
@@ -1097,6 +1124,11 @@ weeks:
     km: 6
     d: 0
     desc: 6km Z1 muy suave (evalúa cuádriceps).
+    tp:
+      sport: Run
+      title: 'Recovery 6km Z1 (evalúa cuádriceps)'
+      steps:
+      - {kind: run, dist_km: 6, zone: z1}
   - day: X
     type: REST
     km: 0
@@ -1107,6 +1139,13 @@ weeks:
     km: 8
     d: 100
     desc: 8km Z1–Z2 llano.
+    tp:
+      sport: Run
+      title: Easy 8km Z1–Z2 llano
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -1117,11 +1156,23 @@ weeks:
     km: 12
     d: 400
     desc: 12km Z1–Z2 suave, poco D+.
+    tp:
+      sport: TrailRun
+      title: Trail 12km Z1–Z2 suave +400m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 4
     d: 0
     desc: 4km Z1 + GYM mantenimiento ligero.
+    tp:
+      sport: Run
+      title: Recovery 4km Z1 (+GYM leve)
+      steps:
+      - {kind: run, dist_km: 4, zone: z1}
 - week: 13
   phase: 4
   phase_name: Recuperar + puente TP60
@@ -1152,16 +1203,35 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2. GYM mantenimiento ligero.
+    tp:
+      sport: Run
+      title: Easy 8km Z2 (+GYM mantenimiento)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 9
     d: 300
     desc: '9km: 2×15min Z3 en terreno rolling (TP60 es más llano que Palencia).'
+    tp:
+      sport: TrailRun
+      title: Tempo 2×15min Z3 rolling
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 2, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'terreno rolling'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: EASY
     km: 5
     d: 0
     desc: 5km Z2.
+    tp:
+      sport: Run
+      title: Easy 5km Z2
+      steps:
+      - {kind: run, dist_km: 5, zone: z2}
   - day: V
     type: REST
     km: 0
@@ -1172,6 +1242,13 @@ weeks:
     km: 38
     d: 1300
     desc: 38km / ~5h Z1–Z2, perfil tipo TP60. Ensayo completo de fueling y material.
+    tp:
+      sport: TrailRun
+      title: Long 38km Z1–Z2 +1300m ensayo TP60
+      steps:
+      - {kind: warmup, dist_km: 3, zone: z1}
+      - {kind: run, dist_km: 32, zone: z2, note: 'perfil TP60; ensayo completo fueling + material; 60-90g CHO/h'}
+      - {kind: cooldown, dist_km: 3, zone: z1}
   - day: D
     type: REST
     km: 0
@@ -1205,16 +1282,38 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2 + 4×20s strides. Última sesión de gym ligera, luego stop.
+    tp:
+      sport: Run
+      title: Easy 8km Z2 + strides (último GYM)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 12
     d: 300
     desc: '12km: 3×6min Z3 (mantener chispa).'
+    tp:
+      sport: TrailRun
+      title: Tempo 3×6min Z3 (chispa)
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 3, on: '6:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'mantener chispa'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 8
     d: 300
     desc: 8km Z2 trail.
+    tp:
+      sport: TrailRun
+      title: Trail 8km Z2
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -1225,6 +1324,13 @@ weeks:
     km: 14
     d: 300
     desc: 14km Z1–Z2 ~300m.
+    tp:
+      sport: TrailRun
+      title: Long 14km Z1–Z2 +300m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 10, zone: z2}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: REST
     km: 0
@@ -1259,16 +1365,36 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2 + 4×20s strides.
+    tp:
+      sport: Run
+      title: Easy 8km Z2 + strides
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: EASY
     km: 6
     d: 100
     desc: 6km Z1 + 3×90s Z3 (aperturas).
+    tp:
+      sport: Run
+      title: Aperturas 3×90s Z3
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 3, on: '1:30', on_zone: z3, off: '2:00', off_zone: z1, note: 'aperturas pre-carrera'}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: J
     type: EASY
     km: 5
     d: 0
     desc: 5km Z1 muy suave.
+    tp:
+      sport: Run
+      title: Easy 5km Z1 muy suave
+      steps:
+      - {kind: run, dist_km: 5, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -1279,10 +1405,22 @@ weeks:
     km: 4
     d: 0
     desc: 4km Z1 shakeout + 3 strides.
+    tp:
+      sport: Run
+      title: Shakeout 4km Z1 + strides
+      steps:
+      - {kind: run, dist_km: 3, zone: z1}
+      - {kind: strides, reps: 3, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: D
     type: RACE
     km: 63
     d: 2500
     desc: 🏁 TP60 — 63km / 2500m D+. Ritmo uniforme Z1–Z2, power-hike subidas, 60–90g CHO/h desde el inicio,
       electrolitos, estrategia de bolsa de avituallamiento. Intención de negative split.
+    tp:
+      sport: TrailRun
+      title: '🏁 TP60 — 63km / 2500m (A-RACE)'
+      steps:
+      - {kind: run, dist_km: 63, zone: z2, note: 'Race: even Z1-Z2 pacing, power-hike climbs, 60-90g CHO/h from the gun, electrolytes, drop-bag fuel, negative-split intent'}
 ```
