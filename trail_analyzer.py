@@ -170,7 +170,7 @@ def analyze(acts, zones_data):
     return {"weeks": sorted_weeks, "hr_max": hr_max, "hr_zones": hr_zones}
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# PLAN DE ENTRENAMIENTO COMPLETO (28 semanas)
+# PLAN DE ENTRENAMIENTO COMPLETO (15 semanas)
 # Base científica:
 #   Seiler 2010: distribución polarizada 80/20
 #   Koop 2016: back-to-back specificity trail
@@ -1128,7 +1128,7 @@ window.addEventListener('DOMContentLoaded', () => {{
 
 function buildCompliance() {{
   const today = new Date();
-  const planStart = new Date('2026-03-24');
+  const planStart = new Date('{PLAN_START.isoformat()}');
   const tbody = document.getElementById('compliance-body');
   const rows = [];
   const phaseNames = {{1:'Base',2:'Construcción',3:'Afinado Palencia',4:'Puente TP60',5:'Taper TP60'}};
@@ -1560,30 +1560,30 @@ def main():
     print(f"  • {len(PLAN)} semanas · {sum(len(s['exercises']) for s in STRENGTH)} ejercicios · HSN products")
     print("═"*60 + "\n")
 
-    # Auto-deploy to GitHub Pages
+    # Auto-deploy to GitHub Pages — only when explicitly requested.
+    # (set PLANTRAIL_DEPLOY=1; Part B's GitHub Action sets this.) Local runs never push.
     import subprocess
     script_dir = str(Path(__file__).parent)
-    try:
-        # Check if we're in a git repo with a remote
-        r = subprocess.run(["git","remote"], capture_output=True, text=True, cwd=script_dir)
-        if r.returncode == 0 and r.stdout.strip():
-            print("⚙ Desplegando a GitHub Pages...")
-            subprocess.run(["git","add","plan_completo.html","dashboard.html","index.html"], cwd=script_dir)
-            result = subprocess.run(
-                ["git","commit","-m",f"Update dashboard {date.today().isoformat()}"],
-                capture_output=True, text=True, cwd=script_dir)
-            if "nothing to commit" in result.stdout:
-                print("  ✓ Sin cambios — no se necesita deploy.")
-            else:
-                push = subprocess.run(["git","push"], capture_output=True, text=True, cwd=script_dir)
-                if push.returncode == 0:
-                    print("  ✓ Desplegado a https://auriga13.github.io/plantrail/")
+    if not os.environ.get("PLANTRAIL_DEPLOY"):
+        print("  (Auto-deploy desactivado — exporta PLANTRAIL_DEPLOY=1 para publicar)")
+    else:
+        try:
+            r = subprocess.run(["git","remote"], capture_output=True, text=True, cwd=script_dir)
+            if r.returncode == 0 and r.stdout.strip():
+                print("⚙ Desplegando a GitHub Pages...")
+                subprocess.run(["git","add","plan_completo.html","dashboard.html","index.html"], cwd=script_dir)
+                result = subprocess.run(
+                    ["git","commit","-m",f"Update dashboard {date.today().isoformat()}"],
+                    capture_output=True, text=True, cwd=script_dir)
+                if "nothing to commit" in result.stdout:
+                    print("  ✓ Sin cambios — no se necesita deploy.")
                 else:
-                    print(f"  ⚠ Push falló: {push.stderr.strip()}")
-        else:
-            print("  (Sin repositorio git — deploy manual necesario)")
-    except Exception as e:
-        print(f"  ⚠ Auto-deploy saltado: {e}")
+                    push = subprocess.run(["git","push"], capture_output=True, text=True, cwd=script_dir)
+                    print("  ✓ Desplegado" if push.returncode == 0 else f"  ⚠ Push falló: {push.stderr.strip()}")
+            else:
+                print("  (Sin repositorio git — deploy manual necesario)")
+        except Exception as e:
+            print(f"  ⚠ Auto-deploy saltado: {e}")
 
     print("\n  Ejecuta 'python trail_analyzer.py' cada lunes para actualizar.\n")
 
