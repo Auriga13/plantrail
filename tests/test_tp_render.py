@@ -13,17 +13,6 @@ def test_format_tp_block_intervals():
     assert "5x(3:00 z3, 2:00 z1)" in out
     assert "Cooldown 2km z1" in out
 
-def test_format_tp_block_yaml_boolean_keys():
-    # YAML 1.1 parses bare 'on'/'off' keys as True/False; plan_loader returns these
-    s = {"type": "TEMPO", "tp": {"sport": "Run", "title": "Cuestas 5×3min Z3",
-        "steps": [
-            {"kind": "warmup", "dist_km": 3, "zone": "z1"},
-            {"kind": "interval", "reps": 5, True: "3:00", "on_zone": "z3", False: "2:00", "off_zone": "z1", "note": "en cuesta"},
-            {"kind": "cooldown", "dist_km": 2, "zone": "z1"},
-        ]}}
-    out = format_tp_block(s)
-    assert "5x(3:00 z3, 2:00 z1)" in out
-    assert "[en cuesta]" in out
 
 def test_format_tp_block_rest_returns_empty():
     assert format_tp_block({"type": "REST"}) == ""

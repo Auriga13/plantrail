@@ -37,4 +37,19 @@ def load_plan(path: str = "plan.md") -> tuple[datetime.date, list[dict]]:
     weeks = data["weeks"]
     if not isinstance(weeks, list) or not weeks:
         raise ValueError("plan.md YAML 'weeks' must be a non-empty list")
+    for w in weeks:
+        for s in w.get("sessions", []):
+            tp = s.get("tp")
+            if tp:
+                for st in tp.get("steps", []):
+                    _normalize_step_keys(st)
     return start, weeks
+
+
+def _normalize_step_keys(step: dict) -> dict:
+    """YAML 1.1 turns bare on/off keys into booleans True/False — restore them."""
+    if True in step:
+        step["on"] = step.pop(True)
+    if False in step:
+        step["off"] = step.pop(False)
+    return step
