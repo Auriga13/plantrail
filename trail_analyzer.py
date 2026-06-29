@@ -99,17 +99,18 @@ def refresh_strava_token(creds):
         return json.loads(r.read())
 
 def get_token():
-    creds = load_strava_credentials()
     if TOKEN_FILE.exists():
         tok = json.loads(TOKEN_FILE.read_text())
         if tok.get("expires_at", 0) > time.time() + 60:
-            print("✓ Token Strava válido"); return tok
+            print("✓ Token Strava válido"); return tok   # valid token needs no client secret
         print("↻ Renovando token Strava...")
+        creds = load_strava_credentials()   # only needed to refresh
         refresh = tok.get("refresh_token") or creds.get("refresh_token")
         new = refresh_strava_token({**creds, "refresh_token": refresh})
         tok.update(new)               # keep client_secret + extra keys in the file
         TOKEN_FILE.write_text(json.dumps(tok)); return tok
-    # No token file: headless refresh if we have a refresh token (CI), else browser auth.
+    # No token file: need credentials to refresh headlessly (CI) or to browser-auth.
+    creds = load_strava_credentials()
     if creds.get("refresh_token"):
         print("↻ Refresh headless de Strava (sin token file)...")
         return refresh_strava_token(creds)
