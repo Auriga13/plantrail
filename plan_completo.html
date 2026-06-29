@@ -99,6 +99,9 @@ details[open] .week-summary{background:var(--surface3)}
 .sess-km{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
 .sess-date{font-size:10px;color:var(--muted);margin-left:auto}
 .sess-desc{font-size:13px;color:#94a3b8;line-height:1.5}
+.tp-label{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-transform:uppercase}
+.tp-block{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface3);
+  color:#94a3b8;padding:8px 10px;border-radius:4px;white-space:pre;overflow-x:auto;margin:4px 0 0;line-height:1.5}
 
 /* STRENGTH */
 .strength-phase{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px}
@@ -193,24 +196,6 @@ details[open] .week-summary{background:var(--surface3)}
 .z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
 .z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
 .z-pct{font-size:12px;color:var(--muted)}
-
-.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
-.zone-row:last-child{border-bottom:none}
-.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
-.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
-.z-pct{font-size:12px;color:var(--muted)}
-@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
-
-@media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
-
-
-.zone-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
-.zone-row:last-child{border-bottom:none}
-.z-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.z-name{flex:1;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px}
-.z-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:100px}
-.z-pct{font-size:12px;color:var(--muted)}
 @media(max-width:768px){.strat-grid,.sessions-grid{grid-template-columns:1fr}}
 
 @media(max-width:768px){
@@ -220,7 +205,6 @@ details[open] .week-summary{background:var(--surface3)}
   .sp-id-big{font-size:36px}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -236,14 +220,14 @@ details[open] .week-summary{background:var(--surface3)}
         <div class='race-card' style='border-color:#f97316'>
           <div class='rc-name' style='color:#f97316'>Maratón MTN Palencia</div>
           <div class='rc-info'>44km / 3,500m D+</div>
-          <div class='rc-days' style='color:#f97316'>75</div>
+          <div class='rc-days' style='color:#f97316'>74</div>
           <div class='rc-label'>dias</div>
           <div class='rc-date'>12 Sep 2026</div>
         </div>
         <div class='race-card' style='border-color:#22d3ee'>
           <div class='rc-name' style='color:#22d3ee'>TP60</div>
           <div class='rc-info'>63km / 2,500m D+</div>
-          <div class='rc-days' style='color:#22d3ee'>104</div>
+          <div class='rc-days' style='color:#22d3ee'>103</div>
           <div class='rc-label'>dias</div>
           <div class='rc-date'>11 Oct 2026</div>
         </div></div>
@@ -335,6 +319,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>29 Jun</span>
           </div>
           <p class='sess-desc'>Descanso / movilidad 15 min.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -344,6 +329,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>30 Jun</span>
           </div>
           <p class='sess-desc'>8km Z2 (≤152). Run first → GYM Fase A.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 (+GYM A)
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -353,6 +343,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>01 Jul</span>
           </div>
           <p class='sess-desc'>11km: 3km Z1 + 5×3min Z3 en cuesta (2min Z1 bajada) + 2km Z1.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Cuestas 5×3min Z3
+Sport: TrailRun
+- Warmup 3km z1
+- 5x(3:00 z3, 2:00 z1)  [en cuesta, trote bajada]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -362,6 +357,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>02 Jul</span>
           </div>
           <p class='sess-desc'>8km Z2 trail rolling.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 8km Z2 rolling
+Sport: TrailRun
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -371,6 +371,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>03 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -380,6 +381,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>04 Jul</span>
           </div>
           <p class='sess-desc'>13km Z1–Z2, busca 350m D+. 1 gel km10.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 13km Z1–Z2 +350m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 9km z2  [busca D+, power-hike &gt;15%; 1 gel km10]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -389,6 +395,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>05 Jul</span>
           </div>
           <p class='sess-desc'>6km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 6km Z1
+Sport: Run
+- Run 6km z1</pre>
         </div></div>
           </div>
         </details>
@@ -428,6 +437,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>06 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -437,6 +447,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>07 Jul</span>
           </div>
           <p class='sess-desc'>9km Z2. Run first → GYM Fase A.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 9km Z2 (+GYM A)
+Sport: Run
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -446,6 +461,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>08 Jul</span>
           </div>
           <p class='sess-desc'>13km: 3km Z1 + 2×12min Z3 (3min Z1) + 2km Z1 + 4×20s strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Tempo 2×12min Z3 + strides
+Sport: Run
+- Warmup 3km z1
+- 2x(12:00 z3, 3:00 z1)
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -455,6 +476,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>09 Jul</span>
           </div>
           <p class='sess-desc'>9km Z2 trail. Run first → GYM Fase A.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 9km Z2 (+GYM A)
+Sport: TrailRun
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -464,6 +490,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>10 Jul</span>
           </div>
           <p class='sess-desc'>Descanso / 30min movilidad.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -473,6 +500,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>11 Jul</span>
           </div>
           <p class='sess-desc'>18km Z1–Z2, máximo D+ disponible. 2 geles.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 18km Z1–Z2 máx D+
+Sport: TrailRun
+- Warmup 2km z1
+- Run 14km z2  [máximo D+ disponible; 2 geles]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -482,6 +514,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>12 Jul</span>
           </div>
           <p class='sess-desc'>5km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 5km Z1
+Sport: Run
+- Run 5km z1</pre>
         </div></div>
           </div>
         </details>
@@ -521,6 +556,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>13 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -530,6 +566,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>14 Jul</span>
           </div>
           <p class='sess-desc'>10km Z2. Run first → GYM Fase A.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 10km Z2 (+GYM A)
+Sport: Run
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -539,6 +580,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>15 Jul</span>
           </div>
           <p class='sess-desc'>14km: 2km Z1 + 3×15min Z3 en cuesta (3min Z1) + 2km Z1.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Cuestas 3×15min Z3
+Sport: TrailRun
+- Warmup 2km z1
+- 3x(15:00 z3, 3:00 z1)  [en cuesta]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -548,6 +594,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>16 Jul</span>
           </div>
           <p class='sess-desc'>10km Z2 trail. Run first → GYM Fase A.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 10km Z2 (+GYM A)
+Sport: TrailRun
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -557,6 +608,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>17 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -566,6 +618,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>18 Jul</span>
           </div>
           <p class='sess-desc'>20km Z1–Z2 trail ~800m. Power-hike &gt;15%. 50g CHO/h.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 20km Z1–Z2 trail +800m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 16km z2  [power-hike &gt;15%; 50g CHO/h]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -575,6 +632,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>19 Jul</span>
           </div>
           <p class='sess-desc'>6km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 6km Z1
+Sport: Run
+- Run 6km z1</pre>
         </div></div>
           </div>
         </details>
@@ -582,7 +642,7 @@ details[open] .week-summary{background:var(--surface3)}
           <summary class='week-summary'>
             <span class='wk-num' style='background:#f9731622;color:#f97316'>Sem 4</span>
             <span class='wk-dates'>20 Jul – 26 Jul</span>
-            <span class='wk-title'>DELOAD planificado</span>
+            <span class='wk-title'>DELOAD</span>
             <span class='wk-stats'>44km / ↑700m</span>
             <span class='wk-load' style='background:#22d3ee22;color:#22d3ee'>LOW</span>
           </summary>
@@ -614,6 +674,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>20 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -623,6 +684,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>21 Jul</span>
           </div>
           <p class='sess-desc'>8km Z2. GYM Fase A cargas −10%.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 (+GYM A −10%)
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -632,6 +698,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>22 Jul</span>
           </div>
           <p class='sess-desc'>10km Z2 + 6×20s strides (sin bloque duro).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 10km Z2 + strides
+Sport: Run
+- Warmup 1km z1
+- Run 7km z2
+- 6x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -641,6 +713,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>23 Jul</span>
           </div>
           <p class='sess-desc'>8km Z2 trail suave.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 8km Z2 suave
+Sport: TrailRun
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -650,6 +727,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>24 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -659,6 +737,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>25 Jul</span>
           </div>
           <p class='sess-desc'>14km Z1–Z2 relajado.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 14km Z1–Z2 relajado
+Sport: TrailRun
+- Warmup 2km z1
+- Run 10km z2
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -668,6 +751,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>26 Jul</span>
           </div>
           <p class='sess-desc'>4km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 4km Z1
+Sport: Run
+- Run 4km z1</pre>
         </div></div>
           </div>
         </details></div>
@@ -716,6 +802,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>27 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -725,6 +812,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>28 Jul</span>
           </div>
           <p class='sess-desc'>10km Z2. GYM Fase B (fuerza máxima).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 10km Z2 (+GYM B)
+Sport: Run
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
           <div class='sess-header'>
@@ -733,7 +825,13 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-km'>14km ↑450m</span>
             <span class='sess-date'>29 Jul</span>
           </div>
-          <p class='sess-desc'>14km: 4×8min Z3–Z4 baja en cuesta (3min rec) + strides.</p>
+          <p class='sess-desc'>14km: 4×8min Z3–Z4 en cuesta (3min rec) + strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Intervalos 4×8min Z3–Z4 cuesta
+Sport: TrailRun
+- Warmup 2km z1
+- 4x(8:00 z3, 3:00 z1)  [en cuesta, Z3–Z4 (apunta al suelo de Z3, puede tocar Z4)]
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -743,6 +841,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>30 Jul</span>
           </div>
           <p class='sess-desc'>10km Z2 trail. GYM Fase B.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 10km Z2 (+GYM B)
+Sport: TrailRun
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -752,6 +855,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>31 Jul</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -761,6 +865,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>01 Aug</span>
           </div>
           <p class='sess-desc'>22km Z1–Z2 ~800m. Ensayo fueling 60g CHO/h + electrolitos.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 22km Z1–Z2 +800m fueling
+Sport: TrailRun
+- Warmup 2km z1
+- Run 18km z2  [60g CHO/h + electrolitos; ensayo fueling]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -770,6 +879,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>02 Aug</span>
           </div>
           <p class='sess-desc'>4km Z1 shakeout.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Shakeout 4km Z1
+Sport: Run
+- Run 4km z1</pre>
         </div></div>
           </div>
         </details>
@@ -809,6 +921,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>03 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -818,6 +931,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>04 Aug</span>
           </div>
           <p class='sess-desc'>11km Z2. GYM Fase B.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 11km Z2 (+GYM B)
+Sport: Run
+- Warmup 1km z1
+- Run 9km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -827,6 +945,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>05 Aug</span>
           </div>
           <p class='sess-desc'>15km: 3×12min Z3 cuesta sostenida + 2km Z1.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Tempo 3×12min Z3 cuesta
+Sport: TrailRun
+- Warmup 3km z1
+- 3x(12:00 z3, 3:00 z1)  [cuesta sostenida]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -836,6 +959,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>06 Aug</span>
           </div>
           <p class='sess-desc'>9km Z2 trail.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 9km Z2
+Sport: TrailRun
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -845,6 +973,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>07 Aug</span>
           </div>
           <p class='sess-desc'>Descanso o 4km recovery.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -854,6 +983,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>08 Aug</span>
           </div>
           <p class='sess-desc'>22km Z1–Z2 trail ~900m. 70g CHO/h.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 22km Z1–Z2 +900m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 18km z2  [70g CHO/h]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
           <div class='sess-header'>
@@ -863,6 +997,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>09 Aug</span>
           </div>
           <p class='sess-desc'>11km Z2 trail con piernas cansadas (B2B real).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>B2B 11km Z2 tired legs
+Sport: TrailRun
+- Warmup 1km z1
+- Run 9km z2  [B2B; piernas cansadas]
+- Cooldown 1km z1</pre>
         </div></div>
           </div>
         </details>
@@ -902,6 +1041,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>10 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -911,6 +1051,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>11 Aug</span>
           </div>
           <p class='sess-desc'>11km Z2. GYM Fase B.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 11km Z2 (+GYM B)
+Sport: Run
+- Warmup 1km z1
+- Run 9km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#2d1a0f;border-left:3px solid #f97316'>
           <div class='sess-header'>
@@ -920,6 +1065,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>12 Aug</span>
           </div>
           <p class='sess-desc'>16km: 5×6min Z4 en cuesta (3min rec) + 2km Z1.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Intervalos 5×6min Z4 cuesta
+Sport: TrailRun
+- Warmup 2km z1
+- 5x(6:00 z4, 3:00 z1)  [en cuesta]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -929,6 +1079,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>13 Aug</span>
           </div>
           <p class='sess-desc'>11km Z2 trail + pliometría.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 11km Z2 + plyo
+Sport: TrailRun
+- Warmup 1km z1
+- Run 9km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -938,6 +1093,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>14 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -947,6 +1103,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>15 Aug</span>
           </div>
           <p class='sess-desc'>26km Z1–Z2 trail ~1100m. Ensayo completo de carrera (geles+bebida, 80g CHO/h).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 26km Z1–Z2 +1100m ensayo
+Sport: TrailRun
+- Warmup 2km z1
+- Run 22km z2  [ensayo completo: geles+bebida, 80g CHO/h]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#2d1010;border-left:3px solid #ef4444'>
           <div class='sess-header'>
@@ -956,6 +1117,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>16 Aug</span>
           </div>
           <p class='sess-desc'>8km Z2 trail B2B.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>B2B 8km Z2 trail
+Sport: TrailRun
+- Warmup 1km z1
+- Run 6km z2  [B2B; piernas cansadas]
+- Cooldown 1km z1</pre>
         </div></div>
           </div>
         </details>
@@ -995,6 +1161,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>17 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1004,6 +1171,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>18 Aug</span>
           </div>
           <p class='sess-desc'>9km Z2. GYM Fase B −10%.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 9km Z2 (+GYM B −10%)
+Sport: Run
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1013,6 +1185,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>19 Aug</span>
           </div>
           <p class='sess-desc'>12km Z2 + 6×20s strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 12km Z2 + strides
+Sport: Run
+- Warmup 1km z1
+- Run 9km z2
+- 6x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -1022,6 +1200,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>20 Aug</span>
           </div>
           <p class='sess-desc'>9km Z2 trail.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 9km Z2
+Sport: TrailRun
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1031,6 +1214,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>21 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1040,6 +1224,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>22 Aug</span>
           </div>
           <p class='sess-desc'>18km Z1–Z2 ~700m.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 18km Z1–Z2 +700m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 14km z2
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1049,6 +1238,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>23 Aug</span>
           </div>
           <p class='sess-desc'>4km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 4km Z1
+Sport: Run
+- Run 4km z1</pre>
         </div></div>
           </div>
         </details></div>
@@ -1097,6 +1289,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>24 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1106,6 +1299,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>25 Aug</span>
           </div>
           <p class='sess-desc'>10km Z2. GYM Fase C (potencia, bajo volumen).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 10km Z2 (+GYM C)
+Sport: Run
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -1115,6 +1313,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>26 Aug</span>
           </div>
           <p class='sess-desc'>14km: 40min Z3 sostenido en cuesta + técnica de bajada.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Tempo 40min Z3 cuesta + técnica bajada
+Sport: TrailRun
+- Warmup 2km z1
+- Run 40:00 z3  [sostenido en cuesta]
+- Run 2km z1  [técnica de bajada]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -1124,6 +1328,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>27 Aug</span>
           </div>
           <p class='sess-desc'>10km Z2 trail.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 10km Z2
+Sport: TrailRun
+- Warmup 1km z1
+- Run 8km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1133,6 +1342,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>28 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1142,6 +1352,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>29 Aug</span>
           </div>
           <p class='sess-desc'>26km de montaña ~1800m D+. Chaleco + fueling completo. Ensayo Palencia.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 26km +1800m montaña ensayo Palencia
+Sport: TrailRun
+- Warmup 2km z1
+- Run 22km z2  [chaleco + fueling completo; power-hike &gt;15%]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1151,6 +1366,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>30 Aug</span>
           </div>
           <p class='sess-desc'>6km Z1 recovery (piernas cansadas a propósito).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 6km Z1
+Sport: Run
+- Run 6km z1</pre>
         </div></div>
           </div>
         </details>
@@ -1190,6 +1408,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>31 Aug</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1199,6 +1418,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>01 Sep</span>
           </div>
           <p class='sess-desc'>9km Z2. GYM Fase C (última sesión de fuerza real).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 9km Z2 (+GYM C)
+Sport: Run
+- Warmup 1km z1
+- Run 7km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -1208,6 +1432,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>02 Sep</span>
           </div>
           <p class='sess-desc'>12km: 3×8min Z3 en cuesta (afinar, no vaciar).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Cuestas 3×8min Z3
+Sport: TrailRun
+- Warmup 2km z1
+- 3x(8:00 z3, 3:00 z1)  [en cuesta]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -1217,6 +1446,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>03 Sep</span>
           </div>
           <p class='sess-desc'>8km Z2 trail.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 8km Z2
+Sport: TrailRun
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1226,6 +1460,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>04 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1235,6 +1470,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>05 Sep</span>
           </div>
           <p class='sess-desc'>18km Z1–Z2 ~700m.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 18km Z1–Z2 +700m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 14km z2
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1244,6 +1484,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>06 Sep</span>
           </div>
           <p class='sess-desc'>3km Z1 recovery.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 3km Z1
+Sport: Run
+- Run 3km z1</pre>
         </div></div>
           </div>
         </details>
@@ -1283,6 +1526,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>07 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1292,6 +1536,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>08 Sep</span>
           </div>
           <p class='sess-desc'>8km Z2 + 4×20s strides (sin gym).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 + strides
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1301,6 +1551,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>09 Sep</span>
           </div>
           <p class='sess-desc'>6km Z1 + 3×2min Z3 (aperturas).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Aperturas 3×2min Z3
+Sport: Run
+- Warmup 2km z1
+- 3x(2:00 z3, 2:00 z1)  [aperturas pre-carrera]
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1310,6 +1565,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>10 Sep</span>
           </div>
           <p class='sess-desc'>5km Z1 muy suave + 4 strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Shakeout 5km Z1 + strides
+Sport: Run
+- Run 4km z1
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1318,7 +1578,8 @@ details[open] .week-summary{background:var(--surface3)}
             
             <span class='sess-date'>11 Sep</span>
           </div>
-          <p class='sess-desc'>Descanso. Viaje/prep, material, carga de carbohidratos.</p>
+          <p class='sess-desc'>Descanso. Viaje/prep, prepara material, carga de carbohidratos.</p>
+          
         </div>
         <div class='session-card' style='background:#2d1f00;border-left:3px solid #fbbf24'>
           <div class='sess-header'>
@@ -1327,7 +1588,10 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-km'>44km ↑3500m</span>
             <span class='sess-date'>12 Sep</span>
           </div>
-          <p class='sess-desc'>MARATÓN MTN PALENCIA (44km/3500m D+). Z2 cómodo primeros 10km. Power-hike &gt;15%. Gel c/35-40min. Baja con cabeza. OBJETIVO: finalizar fuerte y proteger piernas para TP60.</p>
+          <p class='sess-desc'>🌄 PALENCIA — 44km / 3500m D+. Z2 en subidas / power-hike &gt;15%, primera mitad controlada Z1–Z2, 60–90g CHO/h, baja con cabeza para proteger cuádriceps de cara a TP60.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>🏔 PALENCIA — 44km / 3500m (B-RACE)
+Sport: TrailRun
+- Run 44km z2  [Race: Z2 climbs / power-hike &gt;15%, controlled Z1-Z2 first half, 60-90g CHO/h, descend within limits to protect quads for TP60]</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1337,6 +1601,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>13 Sep</span>
           </div>
           <p class='sess-desc'>Descanso total o 20min caminando.</p>
+          
         </div></div>
           </div>
         </details></div>
@@ -1385,6 +1650,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>14 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1394,6 +1660,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>15 Sep</span>
           </div>
           <p class='sess-desc'>6km Z1 muy suave (evalúa cuádriceps).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 6km Z1 (evalúa cuádriceps)
+Sport: Run
+- Run 6km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1403,6 +1672,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>16 Sep</span>
           </div>
           <p class='sess-desc'>Descanso o 30min movilidad.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1412,6 +1682,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>17 Sep</span>
           </div>
           <p class='sess-desc'>8km Z1–Z2 llano.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z1–Z2 llano
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1421,6 +1696,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>18 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1430,6 +1706,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>19 Sep</span>
           </div>
           <p class='sess-desc'>12km Z1–Z2 suave, poco D+.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 12km Z1–Z2 suave +400m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 8km z2
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1439,6 +1720,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>20 Sep</span>
           </div>
           <p class='sess-desc'>4km Z1 + GYM mantenimiento ligero.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Recovery 4km Z1 (+GYM leve)
+Sport: Run
+- Run 4km z1</pre>
         </div></div>
           </div>
         </details>
@@ -1478,6 +1762,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>21 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1487,6 +1772,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>22 Sep</span>
           </div>
           <p class='sess-desc'>8km Z2. GYM mantenimiento ligero.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 (+GYM mantenimiento)
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -1496,6 +1786,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>23 Sep</span>
           </div>
           <p class='sess-desc'>9km: 2×15min Z3 en terreno rolling (TP60 es más llano que Palencia).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Tempo 2×15min Z3 rolling
+Sport: TrailRun
+- Warmup 2km z1
+- 2x(15:00 z3, 3:00 z1)  [terreno rolling; rec ~3min (asumido, no en desc)]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1505,6 +1800,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>24 Sep</span>
           </div>
           <p class='sess-desc'>5km Z2.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 5km Z2
+Sport: Run
+- Run 5km z2</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1514,6 +1812,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>25 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1523,6 +1822,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>26 Sep</span>
           </div>
           <p class='sess-desc'>38km / ~5h Z1–Z2, perfil tipo TP60. Ensayo completo de fueling y material.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 38km Z1–Z2 +1300m ensayo TP60
+Sport: TrailRun
+- Warmup 3km z1
+- Run 32km z2  [perfil TP60; ensayo completo fueling + material; 60-90g CHO/h]
+- Cooldown 3km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1532,6 +1836,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>27 Sep</span>
           </div>
           <p class='sess-desc'>Descanso o caminar suave.</p>
+          
         </div></div>
           </div>
         </details></div>
@@ -1580,6 +1885,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>28 Sep</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1589,6 +1895,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>29 Sep</span>
           </div>
           <p class='sess-desc'>8km Z2 + 4×20s strides. Última sesión de gym ligera, luego stop.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 + strides (último GYM)
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1a2f0f;border-left:3px solid #84cc16'>
           <div class='sess-header'>
@@ -1598,6 +1910,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>30 Sep</span>
           </div>
           <p class='sess-desc'>12km: 3×6min Z3 (mantener chispa).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Tempo 3×6min Z3 (chispa)
+Sport: TrailRun
+- Warmup 2km z1
+- 3x(6:00 z3, 3:00 z1)  [mantener chispa]
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1a1008;border-left:3px solid #d97706'>
           <div class='sess-header'>
@@ -1607,6 +1924,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>01 Oct</span>
           </div>
           <p class='sess-desc'>8km Z2 trail.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Trail 8km Z2
+Sport: TrailRun
+- Warmup 1km z1
+- Run 6km z2
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1616,6 +1938,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>02 Oct</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f1a2d;border-left:3px solid #6366f1'>
           <div class='sess-header'>
@@ -1625,6 +1948,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>03 Oct</span>
           </div>
           <p class='sess-desc'>14km Z1–Z2 ~300m.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Long 14km Z1–Z2 +300m
+Sport: TrailRun
+- Warmup 2km z1
+- Run 10km z2
+- Cooldown 2km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1634,6 +1962,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>04 Oct</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div></div>
           </div>
         </details>
@@ -1673,6 +2002,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>05 Oct</span>
           </div>
           <p class='sess-desc'>Descanso.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1682,6 +2012,12 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>06 Oct</span>
           </div>
           <p class='sess-desc'>8km Z2 + 4×20s strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 8km Z2 + strides
+Sport: Run
+- Warmup 1km z1
+- Run 6km z2
+- 4x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1691,6 +2027,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>07 Oct</span>
           </div>
           <p class='sess-desc'>6km Z1 + 3×90s Z3 (aperturas).</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Aperturas 3×90s Z3
+Sport: Run
+- Warmup 2km z1
+- 3x(1:30 z3, 2:00 z1)  [aperturas pre-carrera; rec ~2min (asumido, no en desc)]
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1700,6 +2041,9 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>08 Oct</span>
           </div>
           <p class='sess-desc'>5km Z1 muy suave.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Easy 5km Z1 muy suave
+Sport: Run
+- Run 5km z1</pre>
         </div>
         <div class='session-card' style='background:#1e293b;border-left:3px solid #334155'>
           <div class='sess-header'>
@@ -1709,6 +2053,7 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>09 Oct</span>
           </div>
           <p class='sess-desc'>Descanso. Carga de carbohidratos, material, plan de avituallamientos.</p>
+          
         </div>
         <div class='session-card' style='background:#0f2d2d;border-left:3px solid #22d3ee'>
           <div class='sess-header'>
@@ -1718,6 +2063,11 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-date'>10 Oct</span>
           </div>
           <p class='sess-desc'>4km Z1 shakeout + 3 strides.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>Shakeout 4km Z1 + strides
+Sport: Run
+- Run 3km z1
+- 3x(0:20 z4, 0:40 z1)
+- Cooldown 1km z1</pre>
         </div>
         <div class='session-card' style='background:#2d1f00;border-left:3px solid #fbbf24'>
           <div class='sess-header'>
@@ -1726,7 +2076,10 @@ details[open] .week-summary{background:var(--surface3)}
             <span class='sess-km'>63km ↑2500m</span>
             <span class='sess-date'>11 Oct</span>
           </div>
-          <p class='sess-desc'>TP60 (63km/2500m D+). Z2 cómodo primeros 20km. Power-hike &gt;15%. Gel c/35min, 60-90g CHO/h. Negative split. OBJETIVO A: completar fuerte en 7-8h.</p>
+          <p class='sess-desc'>🏁 TP60 — 63km / 2500m D+. Ritmo uniforme Z1–Z2, power-hike subidas, 60–90g CHO/h desde el inicio, electrolitos, estrategia de bolsa de avituallamiento. Intención de negative split.</p>
+          <div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>🏁 TP60 — 63km / 2500m (A-RACE)
+Sport: TrailRun
+- Run 63km z2  [Race: even Z1-Z2 pacing, power-hike climbs, 60-90g CHO/h from the gun, electrolytes, drop-bag fuel, negative-split intent]</pre>
         </div></div>
           </div>
         </details></div>
@@ -2560,126 +2913,6 @@ details[open] .week-summary{background:var(--surface3)}
 <div id="tab-strava" class="tab-panel">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px">
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Semanas analizadas</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km totales período</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">m D+ período</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">km / semana promedio</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">186</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">FC max registrada</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">0%</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">% trail avg</div>
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Volumen semanal — km</div>
-      <canvas id="chartKm" style="max-height:200px"></canvas>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Desnivel positivo — m</div>
-      <canvas id="chartD" style="max-height:200px"></canvas>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Tiempo carrera — min</div>
-      <canvas id="chartTime" style="max-height:200px"></canvas>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px">
-      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">% Sesiones Trail vs Road</div>
-      <canvas id="chartTrail" style="max-height:200px"></canvas>
-    </div>
-  </div>
-
-  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
-    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Zonas FC — FCmax: 186 bpm</div>
-    
-      <div class='zone-row'>
-        <span class='z-dot' style='background:#64748b'></span>
-        <span class='z-name'>Z1 Recuperación</span>
-        <span class='z-range'>0–142 bpm</span>
-        <span class='z-pct'>< 142 bpm — Regenerativo</span>
-      </div>
-      <div class='zone-row'>
-        <span class='z-dot' style='background:#22d3ee'></span>
-        <span class='z-name'>Z2 Aeróbico</span>
-        <span class='z-range'>142–152 bpm</span>
-        <span class='z-pct'>142–152 bpm — Justo debajo de VT1</span>
-      </div>
-      <div class='zone-row'>
-        <span class='z-dot' style='background:#84cc16'></span>
-        <span class='z-name'>Z3 Tempo</span>
-        <span class='z-range'>152–172 bpm</span>
-        <span class='z-pct'>152–172 bpm — Entre VT1 y VT2</span>
-      </div>
-      <div class='zone-row'>
-        <span class='z-dot' style='background:#f97316'></span>
-        <span class='z-name'>Z4 Umbral</span>
-        <span class='z-range'>172–180 bpm</span>
-        <span class='z-pct'>172–180 bpm — Por encima de VT2</span>
-      </div>
-      <div class='zone-row'>
-        <span class='z-dot' style='background:#ef4444'></span>
-        <span class='z-name'>Z5 VO2max</span>
-        <span class='z-range'>180–186 bpm</span>
-        <span class='z-pct'>180–186 bpm — Máximo esfuerzo</span>
-      </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:12px">Zonas 5-zonas Seiler/Coggan. 80% en Z1-Z2, 20% en Z3-Z5 (polarizada).</p>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- TAB: COMPLIANCE / SEGUIMIENTO                              -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-<div id="tab-compliance" class="tab-panel">
-  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px">
-    <p style="font-size:14px;color:#94a3b8;line-height:1.7">Compara lo planificado vs ejecutado usando datos de Strava. Ejecuta <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-size:12px">python trail_analyzer.py</code> semanalmente para actualizar.</p>
-    <p style="margin-top:8px;font-size:12px;color:var(--muted)">Verde: >90% | Ambar: 70-90% | Rojo: &lt;70%</p>
-  </div>
-  <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:13px">
-      <thead>
-        <tr>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Semana</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Periodo</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Fase</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan km</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real km</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Plan D+</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Real D+</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">%</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">FC avg</th>
-          <th style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);text-align:left">Runs</th>
-        </tr>
-      </thead>
-      <tbody id="compliance-body">
-        <tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">Cargando...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- TAB: STRAVA ANALYSIS (injected by trail_analyzer.py)      -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-<div id="tab-strava" class="tab-panel">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px">
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
       <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent">12</div>
       <div style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Semanas analizadas</div>
     </div>
@@ -2796,7 +3029,7 @@ details[open] .week-summary{background:var(--surface3)}
 </div><!-- end #app -->
 
 <script>
-const PLAN_DATA = [{"week": 1, "phase": 1, "km": 46, "d_plus": 800, "load": "LOW-MED", "title": "Re-entrada"}, {"week": 2, "phase": 1, "km": 54, "d_plus": 1100, "load": "MED", "title": "Volumen on"}, {"week": 3, "phase": 1, "km": 60, "d_plus": 1500, "load": "MED-HIGH", "title": "Primera carga de desnivel"}, {"week": 4, "phase": 1, "km": 44, "d_plus": 700, "load": "LOW", "title": "DELOAD planificado"}, {"week": 5, "phase": 2, "km": 60, "d_plus": 1500, "load": "HIGH", "title": "Reinicio build + fueling"}, {"week": 6, "phase": 2, "km": 68, "d_plus": 2000, "load": "HIGH", "title": "Intro back-to-back"}, {"week": 7, "phase": 2, "km": 72, "d_plus": 2400, "load": "HIGH", "title": "Pico de volumen"}, {"week": 8, "phase": 2, "km": 52, "d_plus": 1200, "load": "LOW-MED", "title": "DELOAD"}, {"week": 9, "phase": 3, "km": 66, "d_plus": 2800, "load": "HIGH", "title": "Simulaci\u00f3n Palencia (pico vertical)"}, {"week": 10, "phase": 3, "km": 50, "d_plus": 1400, "load": "MED", "title": "Bajada de carga"}, {"week": 11, "phase": 3, "km": 63, "d_plus": 3600, "load": "RACE", "title": "Mini-taper + PALENCIA"}, {"week": 12, "phase": 4, "km": 30, "d_plus": 500, "load": "LOW", "title": "Recuperaci\u00f3n post-Palencia"}, {"week": 13, "phase": 4, "km": 60, "d_plus": 1600, "load": "HIGH", "title": "Pico espec\u00edfico TP60 (distancia)"}, {"week": 14, "phase": 5, "km": 42, "d_plus": 900, "load": "MED", "title": "Taper 1"}, {"week": 15, "phase": 5, "km": 86, "d_plus": 2600, "load": "RACE", "title": "Taper 2 + TP60"}];
+const PLAN_DATA = [{"week": 1, "phase": 1, "km": 46, "d_plus": 800, "load": "LOW-MED", "title": "Re-entrada"}, {"week": 2, "phase": 1, "km": 54, "d_plus": 1100, "load": "MED", "title": "Volumen on"}, {"week": 3, "phase": 1, "km": 60, "d_plus": 1500, "load": "MED-HIGH", "title": "Primera carga de desnivel"}, {"week": 4, "phase": 1, "km": 44, "d_plus": 700, "load": "LOW", "title": "DELOAD"}, {"week": 5, "phase": 2, "km": 60, "d_plus": 1500, "load": "HIGH", "title": "Reinicio build + fueling"}, {"week": 6, "phase": 2, "km": 68, "d_plus": 2000, "load": "HIGH", "title": "Intro back-to-back"}, {"week": 7, "phase": 2, "km": 72, "d_plus": 2400, "load": "HIGH", "title": "Pico de volumen"}, {"week": 8, "phase": 2, "km": 52, "d_plus": 1200, "load": "LOW-MED", "title": "DELOAD"}, {"week": 9, "phase": 3, "km": 66, "d_plus": 2800, "load": "HIGH", "title": "Simulaci\u00f3n Palencia (pico vertical)"}, {"week": 10, "phase": 3, "km": 50, "d_plus": 1400, "load": "MED", "title": "Bajada de carga"}, {"week": 11, "phase": 3, "km": 63, "d_plus": 3600, "load": "RACE", "title": "Mini-taper + PALENCIA"}, {"week": 12, "phase": 4, "km": 30, "d_plus": 500, "load": "LOW", "title": "Recuperaci\u00f3n post-Palencia"}, {"week": 13, "phase": 4, "km": 60, "d_plus": 1600, "load": "HIGH", "title": "Pico espec\u00edfico TP60 (distancia)"}, {"week": 14, "phase": 5, "km": 42, "d_plus": 900, "load": "MED", "title": "Taper 1"}, {"week": 15, "phase": 5, "km": 86, "d_plus": 2600, "load": "RACE", "title": "Taper 2 + TP60"}];
 
 function switchTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));

@@ -13,6 +13,7 @@ import http.server, urllib.parse, urllib.request
 from datetime import datetime, date, timedelta
 from pathlib import Path
 from plan_loader import load_plan
+from tp_render import format_tp_block
 
 # Fix Windows console encoding for Unicode output
 if sys.platform == "win32":
@@ -347,6 +348,12 @@ def generate_html(strava_data, athlete_profile):
     chart_trail    = [w[1]["trail_pct"] for w in weekly_data[-12:]]
 
     # Plan phase colors for HTML
+    def _tp_html(s):
+        block = format_tp_block(s)
+        if not block:
+            return ""
+        return "<div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>" + block + "</pre>"
+
     def session_html(s, week_num, day_idx):
         cfg = SESSION_CONFIG.get(s["type"], SESSION_CONFIG["EASY"])
         date_str = fmt_date(week_num, ["L","M","X","J","V","S","D"].index(s["day"]))
@@ -360,6 +367,7 @@ def generate_html(strava_data, athlete_profile):
             <span class='sess-date'>{date_str}</span>
           </div>
           <p class='sess-desc'>{s["desc"]}</p>
+          {_tp_html(s)}
         </div>"""
 
     def week_html(w):
@@ -634,6 +642,9 @@ details[open] .week-summary{{background:var(--surface3)}}
 .sess-km{{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}}
 .sess-date{{font-size:10px;color:var(--muted);margin-left:auto}}
 .sess-desc{{font-size:13px;color:#94a3b8;line-height:1.5}}
+.tp-label{{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-transform:uppercase}}
+.tp-block{{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface3);
+  color:#94a3b8;padding:8px 10px;border-radius:4px;white-space:pre;overflow-x:auto;margin:4px 0 0;line-height:1.5}}
 
 /* FUERZA */
 .strength-phase{{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}}
