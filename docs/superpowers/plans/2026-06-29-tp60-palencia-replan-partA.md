@@ -85,8 +85,16 @@ def test_no_secret_raises(monkeypatch, tmp_path):
 
 
 def test_no_secret_literal_in_source():
-    src = open(ta.__file__, encoding="utf-8").read()
-    assert "0302315694f075ae1f6a061db7b4287d975c67f1" not in src
+    # Never hard-code the secret here. Read the real value from the gitignored
+    # token file and assert it does not appear in the tracked source.
+    import json, pathlib
+    src = pathlib.Path(ta.__file__).read_text(encoding="utf-8")
+    tok = pathlib.Path(ta.__file__).with_name("strava_token.json")
+    if not tok.exists():
+        return  # nothing to compare against locally
+    secret = json.loads(tok.read_text()).get("client_secret")
+    if secret:
+        assert secret not in src, "Strava client secret literal found in source"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -94,31 +102,28 @@ def test_no_secret_literal_in_source():
 Run: `python -m pytest tests/test_strava_auth.py -v`
 Expected: FAIL — `AttributeError: module 'trail_analyzer' has no attribute 'load_strava_credentials'` (and `test_no_secret_literal_in_source` fails because the literal is still present).
 
-- [ ] **Step 3: Preserve local dev — store the secret in the gitignored token file**
+- [ ] **Step 3: Preserve local dev — move the secret into the gitignored token file (extract, don't paste)**
 
-Before removing the literal, copy the current secret value into the gitignored token file so local runs keep working:
+Before removing the literal, *extract* the current secret from the existing source and write it into the gitignored token file — so the value is never typed into any tracked file:
 
 ```bash
 python - <<'PY'
-import json, pathlib
+import json, pathlib, re
+src = pathlib.Path("trail_analyzer.py").read_text(encoding="utf-8")
+m = re.search(r'CLIENT_SECRET\s*=\s*["\']([^"\']+)["\']', src)
+assert m, "CLIENT_SECRET literal not found in source — nothing to migrate"
+secret = m.group(1)
 p = pathlib.Path("strava_token.json")
 d = json.loads(p.read_text())
-d["client_secret"] = "0302315694f075ae1f6a061db7b4287d975c67f1"  # current literal, about to be removed from source
+d["client_secret"] = secret
 p.write_text(json.dumps(d))
-print("client_secret stored in gitignored strava_token.json")
+print("client_secret moved into gitignored strava_token.json")
 PY
 ```
 
 - [ ] **Step 4: Add the helper and remove the literal**
 
-In `trail_analyzer.py`, replace lines 24-25:
-
-```python
-CLIENT_ID     = "114720"
-CLIENT_SECRET = "0302315694f075ae1f6a061db7b4287d975c67f1"
-```
-
-with:
+In `trail_analyzer.py`, **delete the entire `CLIENT_SECRET = "..."` assignment line at `:25`** (do not retype its value anywhere), keep the `CLIENT_ID = "114720"` line at `:24`, and immediately after the `CLIENT_ID` line add the helper:
 
 ```python
 CLIENT_ID     = "114720"
