@@ -12,5 +12,6 @@ def test_each_week_has_seven_sessions_and_superset_keys():
     _, plan = plan_loader.load_plan("plan.md")
     for w in plan:
         assert len(w["sessions"]) == 7
-        for key in ("phase", "phase_name", "load", "title", "km", "d_plus", "notes"):
+        for key in ("phase", "phase_name", "load", "title", "km", "d_plus",
+                    "notes", "objective", "context", "key_session", "coaching"):
             assert key in w, f"week {w['week']} missing {key}"
