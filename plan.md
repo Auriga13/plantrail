@@ -604,16 +604,37 @@ weeks:
     km: 11
     d: 0
     desc: 11km Z2. GYM Fase B.
+    tp:
+      sport: Run
+      title: Easy 11km Z2 (+GYM B)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 15
     d: 400
     desc: '15km: 3×12min Z3 cuesta sostenida + 2km Z1.'
+    tp:
+      sport: TrailRun
+      title: Tempo 3×12min Z3 cuesta
+      steps:
+      - {kind: warmup, dist_km: 3, zone: z1}
+      - {kind: interval, reps: 3, on: '12:00', on_zone: z3, off: '3:00', off_zone: z1, note: cuesta sostenida}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 9
     d: 300
     desc: 9km Z2 trail.
+    tp:
+      sport: TrailRun
+      title: Trail 9km Z2
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -624,11 +645,25 @@ weeks:
     km: 22
     d: 900
     desc: 22km Z1–Z2 trail ~900m. 70g CHO/h.
+    tp:
+      sport: TrailRun
+      title: Long 22km Z1–Z2 +900m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 18, zone: z2, note: '70g CHO/h'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: B2B
     km: 11
     d: 400
     desc: 11km Z2 trail con piernas cansadas (B2B real).
+    tp:
+      sport: TrailRun
+      title: B2B 11km Z2 tired legs
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2, note: 'B2B; piernas cansadas'}
+      - {kind: cooldown, dist_km: 1, zone: z1}
 - week: 7
   phase: 2
   phase_name: Construcción específica
@@ -658,16 +693,37 @@ weeks:
     km: 11
     d: 0
     desc: 11km Z2. GYM Fase B.
+    tp:
+      sport: Run
+      title: Easy 11km Z2 (+GYM B)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: INTERVAL
     km: 16
     d: 500
     desc: '16km: 5×6min Z4 en cuesta (3min rec) + 2km Z1.'
+    tp:
+      sport: TrailRun
+      title: Intervalos 5×6min Z4 cuesta
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 5, on: '6:00', on_zone: z4, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 11
     d: 400
     desc: 11km Z2 trail + pliometría.
+    tp:
+      sport: TrailRun
+      title: Trail 11km Z2 + plyo
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -678,11 +734,25 @@ weeks:
     km: 26
     d: 1100
     desc: 26km Z1–Z2 trail ~1100m. Ensayo completo de carrera (geles+bebida, 80g CHO/h).
+    tp:
+      sport: TrailRun
+      title: Long 26km Z1–Z2 +1100m ensayo
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 22, zone: z2, note: 'ensayo completo: geles+bebida, 80g CHO/h'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: B2B
     km: 8
     d: 400
     desc: 8km Z2 trail B2B.
+    tp:
+      sport: TrailRun
+      title: B2B 8km Z2 trail
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2, note: 'B2B; piernas cansadas'}
+      - {kind: cooldown, dist_km: 1, zone: z1}
 - week: 8
   phase: 2
   phase_name: Construcción específica
@@ -710,16 +780,38 @@ weeks:
     km: 9
     d: 0
     desc: 9km Z2. GYM Fase B −10%.
+    tp:
+      sport: Run
+      title: Easy 9km Z2 (+GYM B −10%)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: EASY
     km: 12
     d: 100
     desc: 12km Z2 + 6×20s strides.
+    tp:
+      sport: Run
+      title: Easy 12km Z2 + strides
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2}
+      - {kind: strides, reps: 6, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: J
     type: TRAIL
     km: 9
     d: 300
     desc: 9km Z2 trail.
+    tp:
+      sport: TrailRun
+      title: Trail 9km Z2
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -730,11 +822,23 @@ weeks:
     km: 18
     d: 700
     desc: 18km Z1–Z2 ~700m.
+    tp:
+      sport: TrailRun
+      title: Long 18km Z1–Z2 +700m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 14, zone: z2}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 4
     d: 100
     desc: 4km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 4km Z1
+      steps:
+      - {kind: run, dist_km: 4, zone: z1}
 - week: 9
   phase: 3
   phase_name: Afinado Palencia
@@ -765,16 +869,38 @@ weeks:
     km: 10
     d: 0
     desc: 10km Z2. GYM Fase C (potencia, bajo volumen).
+    tp:
+      sport: Run
+      title: Easy 10km Z2 (+GYM C)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 14
     d: 600
     desc: '14km: 40min Z3 sostenido en cuesta + técnica de bajada.'
+    tp:
+      sport: TrailRun
+      title: 'Tempo 40min Z3 cuesta + técnica bajada'
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dur: '40:00', zone: z3, note: 'sostenido en cuesta'}
+      - {kind: run, dist_km: 2, zone: z1, note: técnica de bajada}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 10
     d: 400
     desc: 10km Z2 trail.
+    tp:
+      sport: TrailRun
+      title: Trail 10km Z2
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -785,11 +911,23 @@ weeks:
     km: 26
     d: 1800
     desc: 26km de montaña ~1800m D+. Chaleco + fueling completo. Ensayo Palencia.
+    tp:
+      sport: TrailRun
+      title: Long 26km +1800m montaña ensayo Palencia
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 22, zone: z2, note: 'chaleco + fueling completo; power-hike >15%'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 6
     d: 0
     desc: 6km Z1 recovery (piernas cansadas a propósito).
+    tp:
+      sport: Run
+      title: Recovery 6km Z1
+      steps:
+      - {kind: run, dist_km: 6, zone: z1}
 - week: 10
   phase: 3
   phase_name: Afinado Palencia
@@ -817,16 +955,37 @@ weeks:
     km: 9
     d: 0
     desc: 9km Z2. GYM Fase C (última sesión de fuerza real).
+    tp:
+      sport: Run
+      title: Easy 9km Z2 (+GYM C)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 12
     d: 400
     desc: '12km: 3×8min Z3 en cuesta (afinar, no vaciar).'
+    tp:
+      sport: TrailRun
+      title: Cuestas 3×8min Z3
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 3, on: '8:00', on_zone: z3, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 8
     d: 300
     desc: 8km Z2 trail.
+    tp:
+      sport: TrailRun
+      title: Trail 8km Z2
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -837,11 +996,23 @@ weeks:
     km: 18
     d: 700
     desc: 18km Z1–Z2 ~700m.
+    tp:
+      sport: TrailRun
+      title: Long 18km Z1–Z2 +700m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 14, zone: z2}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 3
     d: 0
     desc: 3km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 3km Z1
+      steps:
+      - {kind: run, dist_km: 3, zone: z1}
 - week: 11
   phase: 3
   phase_name: Afinado Palencia
