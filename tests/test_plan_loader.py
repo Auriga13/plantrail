@@ -55,3 +55,19 @@ def test_load_plan_raises_when_block_missing(tmp_path):
     p.write_text("# no yaml here\n", encoding="utf-8")
     with pytest.raises(ValueError):
         plan_loader.load_plan(str(p))
+
+
+def test_load_plan_raises_when_block_malformed(tmp_path):
+    p = tmp_path / "plan.md"
+    p.write_text("```yaml\nfoo: bar\n```\n", encoding="utf-8")
+    with pytest.raises(ValueError):
+        plan_loader.load_plan(str(p))
+
+
+def test_load_plan_coerces_datetime_plan_start(tmp_path):
+    import datetime
+    p = tmp_path / "plan.md"
+    p.write_text("```yaml\nplan_start: 2026-06-29T00:00:00\nweeks:\n  - {week: 1}\n```\n", encoding="utf-8")
+    start, plan = plan_loader.load_plan(str(p))
+    assert start == datetime.date(2026, 6, 29)
+    assert type(start) is datetime.date

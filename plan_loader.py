@@ -30,6 +30,10 @@ def load_plan(path: str = "plan.md") -> tuple[datetime.date, list[dict]]:
     start = data["plan_start"]
     if isinstance(start, str):
         start = datetime.date.fromisoformat(start)
+    elif isinstance(start, datetime.datetime):
+        start = start.date()
+    elif not isinstance(start, datetime.date):
+        raise ValueError(f"plan_start must be a date, got {type(start).__name__}")
     weeks = data["weeks"]
     if not isinstance(weeks, list) or not weeks:
         raise ValueError("plan.md YAML 'weeks' must be a non-empty list")
