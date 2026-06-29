@@ -12,6 +12,7 @@ import json, os, sys, math, time, webbrowser, threading
 import http.server, urllib.parse, urllib.request
 from datetime import datetime, date, timedelta
 from pathlib import Path
+from plan_loader import load_plan
 
 # Fix Windows console encoding for Unicode output
 if sys.platform == "win32":
@@ -64,7 +65,7 @@ ATHLETE = {
     ]
 }
 
-PLAN_START = date(2026, 6, 29)  # Monday — W1 of the TP60/Palencia block
+PLAN_START, PLAN = load_plan("plan.md")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STRAVA OAUTH
@@ -198,177 +199,6 @@ def analyze(acts, zones_data):
 #   Jeukendrup 2014: nutrición durante carrera 60-90g CHO/h
 #   Giovanelli 2016: power hiking eficiencia en pendientes >15%
 # ═══════════════════════════════════════════════════════════════════════════════
-PLAN = [
-  # ── FASE 1: RECONSTRUCCIÓN BASE + CLIMBING (W1-4 | 29 Jun – 26 Jul) ──
-  {"week":1,"phase":1,"phase_name":"Reconstrucción base","load":"LOW-MED","title":"Re-entrada","km":46,"d_plus":800,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso / movilidad 15 min."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2 (≤152). Run first → GYM Fase A."},
-    {"day":"X","type":"TEMPO","km":11,"d":250,"desc":"11km: 3km Z1 + 5×3min Z3 en cuesta (2min Z1 bajada) + 2km Z1."},
-    {"day":"J","type":"TRAIL","km":8,"d":200,"desc":"8km Z2 trail rolling."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":13,"d":350,"desc":"13km Z1–Z2, busca 350m D+. 1 gel km10."},
-    {"day":"D","type":"EASY","km":6,"d":0,"desc":"6km Z1 recovery."},
-   ],"notes":"Re-entrada controlada desde la base de junio. Registra FC reposo cada mañana."},
-
-  {"week":2,"phase":1,"phase_name":"Reconstrucción base","load":"MED","title":"Volumen on","km":54,"d_plus":1100,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":9,"d":0,"desc":"9km Z2. Run first → GYM Fase A."},
-    {"day":"X","type":"TEMPO","km":13,"d":100,"desc":"13km: 3km Z1 + 2×12min Z3 (3min Z1) + 2km Z1 + 4×20s strides."},
-    {"day":"J","type":"TRAIL","km":9,"d":200,"desc":"9km Z2 trail. Run first → GYM Fase A."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso / 30min movilidad."},
-    {"day":"S","type":"LONG","km":18,"d":800,"desc":"18km Z1–Z2, máximo D+ disponible. 2 geles."},
-    {"day":"D","type":"EASY","km":5,"d":0,"desc":"5km Z1 recovery."},
-   ],"notes":"FC media al mismo ritmo debería bajar 2-4 bpm vs sem 1."},
-
-  {"week":3,"phase":1,"phase_name":"Reconstrucción base","load":"MED-HIGH","title":"Primera carga de desnivel","km":60,"d_plus":1500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z2. Run first → GYM Fase A."},
-    {"day":"X","type":"TEMPO","km":14,"d":400,"desc":"14km: 2km Z1 + 3×15min Z3 en cuesta (3min Z1) + 2km Z1."},
-    {"day":"J","type":"TRAIL","km":10,"d":300,"desc":"10km Z2 trail. Run first → GYM Fase A."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":20,"d":800,"desc":"20km Z1–Z2 trail ~800m. Power-hike >15%. 50g CHO/h."},
-    {"day":"D","type":"EASY","km":6,"d":0,"desc":"6km Z1 recovery."},
-   ],"notes":"Primera semana con desnivel real. Acabar el largo controlado, no vaciado."},
-
-  {"week":4,"phase":1,"phase_name":"Reconstrucción base","load":"LOW","title":"DELOAD","km":44,"d_plus":700,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2. GYM Fase A cargas −10%."},
-    {"day":"X","type":"EASY","km":10,"d":100,"desc":"10km Z2 + 6×20s strides (sin bloque duro)."},
-    {"day":"J","type":"TRAIL","km":8,"d":200,"desc":"8km Z2 trail suave."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":14,"d":400,"desc":"14km Z1–Z2 relajado."},
-    {"day":"D","type":"EASY","km":4,"d":0,"desc":"4km Z1 recovery."},
-   ],"notes":"Semana de absorción planificada. Llegar fresco al domingo."},
-
-  # ── FASE 2: CONSTRUCCIÓN ESPECÍFICA (W5-8 | 27 Jul – 23 Ago) ──
-  {"week":5,"phase":2,"phase_name":"Construcción específica","load":"HIGH","title":"Reinicio build + fueling","km":60,"d_plus":1500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z2. GYM Fase B (fuerza máxima)."},
-    {"day":"X","type":"INTERVAL","km":14,"d":450,"desc":"14km: 4×8min Z3–Z4 en cuesta (3min rec) + strides."},
-    {"day":"J","type":"TRAIL","km":10,"d":250,"desc":"10km Z2 trail. GYM Fase B."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":800,"desc":"22km Z1–Z2 ~800m. Ensayo fueling 60g CHO/h + electrolitos."},
-    {"day":"D","type":"EASY","km":4,"d":0,"desc":"4km Z1 shakeout."},
-   ],"notes":"Desde aquí ensaya nutrición de carrera cada sábado."},
-
-  {"week":6,"phase":2,"phase_name":"Construcción específica","load":"HIGH","title":"Intro back-to-back","km":68,"d_plus":2000,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":11,"d":0,"desc":"11km Z2. GYM Fase B."},
-    {"day":"X","type":"TEMPO","km":15,"d":400,"desc":"15km: 3×12min Z3 cuesta sostenida + 2km Z1."},
-    {"day":"J","type":"TRAIL","km":9,"d":300,"desc":"9km Z2 trail."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso o 4km recovery."},
-    {"day":"S","type":"LONG","km":22,"d":900,"desc":"22km Z1–Z2 trail ~900m. 70g CHO/h."},
-    {"day":"D","type":"B2B","km":11,"d":400,"desc":"11km Z2 trail con piernas cansadas (B2B real)."},
-   ],"notes":"Fin de semana B2B = especificidad TP60/Palencia. Come y duerme para absorber."},
-
-  {"week":7,"phase":2,"phase_name":"Construcción específica","load":"HIGH","title":"Pico de volumen","km":72,"d_plus":2400,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":11,"d":0,"desc":"11km Z2. GYM Fase B."},
-    {"day":"X","type":"INTERVAL","km":16,"d":500,"desc":"16km: 5×6min Z4 en cuesta (3min rec) + 2km Z1."},
-    {"day":"J","type":"TRAIL","km":11,"d":400,"desc":"11km Z2 trail + pliometría."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":26,"d":1100,"desc":"26km Z1–Z2 trail ~1100m. Ensayo completo de carrera (geles+bebida, 80g CHO/h)."},
-    {"day":"D","type":"B2B","km":8,"d":400,"desc":"8km Z2 trail B2B."},
-   ],"notes":"Semana de mayor volumen del bloque. Si FC reposo +7 o mal sueño, recorta el domingo."},
-
-  {"week":8,"phase":2,"phase_name":"Construcción específica","load":"LOW-MED","title":"DELOAD","km":52,"d_plus":1200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":9,"d":0,"desc":"9km Z2. GYM Fase B −10%."},
-    {"day":"X","type":"EASY","km":12,"d":100,"desc":"12km Z2 + 6×20s strides."},
-    {"day":"J","type":"TRAIL","km":9,"d":300,"desc":"9km Z2 trail."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":18,"d":700,"desc":"18km Z1–Z2 ~700m."},
-    {"day":"D","type":"EASY","km":4,"d":100,"desc":"4km Z1 recovery."},
-   ],"notes":"Absorber la construcción antes de la semana pico de Palencia."},
-
-  # ── FASE 3: AFINADO PALENCIA (W9-11 | 24 Ago – 12 Sep) ──
-  {"week":9,"phase":3,"phase_name":"Afinado Palencia","load":"HIGH","title":"Simulación Palencia (pico vertical)","km":66,"d_plus":2800,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z2. GYM Fase C (potencia, bajo volumen)."},
-    {"day":"X","type":"TEMPO","km":14,"d":600,"desc":"14km: 40min Z3 sostenido en cuesta + técnica de bajada."},
-    {"day":"J","type":"TRAIL","km":10,"d":400,"desc":"10km Z2 trail."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":26,"d":1800,"desc":"26km de montaña ~1800m D+. Chaleco + fueling completo. Ensayo Palencia."},
-    {"day":"D","type":"EASY","km":6,"d":0,"desc":"6km Z1 recovery (piernas cansadas a propósito)."},
-   ],"notes":"Semana de mayor desnivel. Estímulo clave específico de Palencia."},
-
-  {"week":10,"phase":3,"phase_name":"Afinado Palencia","load":"MED","title":"Bajada de carga","km":50,"d_plus":1400,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":9,"d":0,"desc":"9km Z2. GYM Fase C (última sesión de fuerza real)."},
-    {"day":"X","type":"TEMPO","km":12,"d":400,"desc":"12km: 3×8min Z3 en cuesta (afinar, no vaciar)."},
-    {"day":"J","type":"TRAIL","km":8,"d":300,"desc":"8km Z2 trail."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":18,"d":700,"desc":"18km Z1–Z2 ~700m."},
-    {"day":"D","type":"EASY","km":3,"d":0,"desc":"3km Z1 recovery."},
-   ],"notes":"Empieza a soltar fatiga; piernas progresivamente más vivas."},
-
-  {"week":11,"phase":3,"phase_name":"Afinado Palencia","load":"RACE","title":"Mini-taper + PALENCIA","km":63,"d_plus":3600,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2 + 4×20s strides (sin gym)."},
-    {"day":"X","type":"EASY","km":6,"d":100,"desc":"6km Z1 + 3×2min Z3 (aperturas)."},
-    {"day":"J","type":"EASY","km":5,"d":0,"desc":"5km Z1 muy suave + 4 strides."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso. Viaje/prep, prepara material, carga de carbohidratos."},
-    {"day":"S","type":"RACE","km":44,"d":3500,"desc":"🌄 PALENCIA — 44km / 3500m D+. Z2 en subidas / power-hike >15%, primera mitad controlada Z1–Z2, 60–90g CHO/h, baja con cabeza para proteger cuádriceps de cara a TP60."},
-    {"day":"D","type":"REST","km":0,"d":0,"desc":"Descanso total o 20min caminando."},
-   ],"notes":"Sólo mini-taper: suficiente para rendir sin perder el bloque."},
-
-  # ── FASE 4: RECUPERAR + PUENTE TP60 (W12-13 | 14 Sep – 27 Sep) ──
-  {"week":12,"phase":4,"phase_name":"Recuperar + puente TP60","load":"LOW","title":"Recuperación post-Palencia","km":30,"d_plus":500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":6,"d":0,"desc":"6km Z1 muy suave (evalúa cuádriceps)."},
-    {"day":"X","type":"REST","km":0,"d":0,"desc":"Descanso o 30min movilidad."},
-    {"day":"J","type":"EASY","km":8,"d":100,"desc":"8km Z1–Z2 llano."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":12,"d":400,"desc":"12km Z1–Z2 suave, poco D+."},
-    {"day":"D","type":"EASY","km":4,"d":0,"desc":"4km Z1 + GYM mantenimiento ligero."},
-   ],"notes":"Prioriza recuperar tejido tras 3500m de bajada. Sin calidad hasta tener piernas limpias."},
-
-  {"week":13,"phase":4,"phase_name":"Recuperar + puente TP60","load":"HIGH","title":"Pico específico TP60 (distancia)","km":60,"d_plus":1600,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2. GYM mantenimiento ligero."},
-    {"day":"X","type":"TEMPO","km":9,"d":300,"desc":"9km: 2×15min Z3 en terreno rolling (TP60 es más llano que Palencia)."},
-    {"day":"J","type":"EASY","km":5,"d":0,"desc":"5km Z2."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":38,"d":1300,"desc":"38km / ~5h Z1–Z2, perfil tipo TP60. Ensayo completo de fueling y material."},
-    {"day":"D","type":"REST","km":0,"d":0,"desc":"Descanso o caminar suave."},
-   ],"notes":"Tirada más larga del bloque. Énfasis en distancia/tiempo en pie. Último estímulo grande antes del taper."},
-
-  # ── FASE 5: TAPER TP60 (W14-15 | 28 Sep – 11 Oct) ──
-  {"week":14,"phase":5,"phase_name":"Taper TP60","load":"MED","title":"Taper 1","km":42,"d_plus":900,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2 + 4×20s strides. Última sesión de gym ligera, luego stop."},
-    {"day":"X","type":"TEMPO","km":12,"d":300,"desc":"12km: 3×6min Z3 (mantener chispa)."},
-    {"day":"J","type":"TRAIL","km":8,"d":300,"desc":"8km Z2 trail."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":14,"d":300,"desc":"14km Z1–Z2 ~300m."},
-    {"day":"D","type":"REST","km":0,"d":0,"desc":"Descanso."},
-   ],"notes":"Volumen −40% vs W13, se mantienen toques de intensidad (Mujika)."},
-
-  {"week":15,"phase":5,"phase_name":"Taper TP60","load":"RACE","title":"Taper 2 + TP60","km":86,"d_plus":2600,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z2 + 4×20s strides."},
-    {"day":"X","type":"EASY","km":6,"d":100,"desc":"6km Z1 + 3×90s Z3 (aperturas)."},
-    {"day":"J","type":"EASY","km":5,"d":0,"desc":"5km Z1 muy suave."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso. Carga de carbohidratos, material, plan de avituallamientos."},
-    {"day":"S","type":"EASY","km":4,"d":0,"desc":"4km Z1 shakeout + 3 strides."},
-    {"day":"D","type":"RACE","km":63,"d":2500,"desc":"🏁 TP60 — 63km / 2500m D+. Ritmo uniforme Z1–Z2, power-hike subidas, 60–90g CHO/h desde el inicio, electrolitos, estrategia de bolsa de avituallamiento. Intención de negative split."},
-   ],"notes":"Llega fresco y confiado — el trabajo ya está hecho."},
-]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PLAN DE FUERZA
