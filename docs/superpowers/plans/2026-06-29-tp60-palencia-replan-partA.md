@@ -462,10 +462,35 @@ PLAN = [
 ]
 ```
 
+- [ ] **Step 4b: Fix the `phaseNames` JS map for 5 phases (both generators)**
+
+The compliance tables hard-code a 4-phase name map; the new plan has 5 phases, so phase-5 weeks render `undefined`. Both occurrences are identical f-string literals (note the `{{ }}` escaping). Replace **both** lines (`trail_analyzer.py:1317` in `generate_html` and `:1635` in `generate_plan_completo`):
+
+```javascript
+  const phaseNames = {{1:'Base',2:'Trail/Palencia',3:'Sierra',4:'Taper'}};
+```
+
+with:
+
+```javascript
+  const phaseNames = {{1:'Base',2:'Construcción',3:'Afinado Palencia',4:'Puente TP60',5:'Taper TP60'}};
+```
+
+Use `replace_all` (the two lines are byte-identical). Add a test to `tests/test_plan.py` that guards all five phase labels are present in the generated source:
+
+```python
+def test_phase_names_cover_all_5_phases():
+    src = pathlib.Path(ta.__file__).read_text(encoding="utf-8")
+    assert src.count("const phaseNames") == 2
+    assert "5:'Taper TP60'" in src
+    # no generator still ships the old 4-phase map
+    assert "4:'Taper'}}" not in src
+```
+
 - [ ] **Step 5: Run tests to verify they pass**
 
 Run: `python -m pytest tests/test_plan.py -v`
-Expected: PASS (all 8 tests). If a `test_week_totals_match_session_sums` assertion fails, the named week's `km`/`d_plus` header doesn't equal its session sum — fix the header to match.
+Expected: PASS (9 tests). If a `test_week_totals_match_session_sums` assertion fails, the named week's `km`/`d_plus` header doesn't equal its session sum — fix the header to match.
 
 - [ ] **Step 6: Commit**
 
@@ -485,10 +510,48 @@ git commit -m "feat: replace plan with 15-week TP60/Palencia block (W1=2026-06-2
 **Interfaces:**
 - Consumes: the updated `PLAN`, `PLAN_START`, and `load_strava_credentials()` from Tasks 1–2. The Strava token in `strava_token.json` was refreshed earlier this session, so `python trail_analyzer.py` can fetch live data and refresh headlessly via the token file.
 
-- [ ] **Step 1: Run the full generator**
+- [ ] **Step 0: Gate the auto-deploy so local runs never push**
 
-Run: `python trail_analyzer.py`
-Expected output includes `✓ Token Strava válido` (or `↻ Renovando…` then success), `✓ N actividades cargadas`, and that it writes `dashboard.html` and `plan_completo.html` with no traceback.
+`main()` (around `:1746-1769`) currently runs `git add` + `git commit` + `git push` on every run. We must not auto-push during local regeneration. Gate the whole deploy block behind an explicit env var. Replace the **entire** block — from the `# Auto-deploy to GitHub Pages` comment through its closing `except Exception as e:` / `print(...)` lines (the full `:1746-1769` range) — with:
+
+```python
+    # Auto-deploy to GitHub Pages — only when explicitly requested.
+    # (set PLANTRAIL_DEPLOY=1; Part B's GitHub Action sets this.) Local runs never push.
+    import subprocess
+    script_dir = str(Path(__file__).parent)
+    if not os.environ.get("PLANTRAIL_DEPLOY"):
+        print("  (Auto-deploy desactivado — exporta PLANTRAIL_DEPLOY=1 para publicar)")
+    else:
+        try:
+            r = subprocess.run(["git","remote"], capture_output=True, text=True, cwd=script_dir)
+            if r.returncode == 0 and r.stdout.strip():
+                print("⚙ Desplegando a GitHub Pages...")
+                subprocess.run(["git","add","plan_completo.html","dashboard.html","index.html"], cwd=script_dir)
+                result = subprocess.run(
+                    ["git","commit","-m",f"Update dashboard {date.today().isoformat()}"],
+                    capture_output=True, text=True, cwd=script_dir)
+                if "nothing to commit" in result.stdout:
+                    print("  ✓ Sin cambios — no se necesita deploy.")
+                else:
+                    push = subprocess.run(["git","push"], capture_output=True, text=True, cwd=script_dir)
+                    print("  ✓ Desplegado" if push.returncode == 0 else f"  ⚠ Push falló: {push.stderr.strip()}")
+            else:
+                print("  (Sin repositorio git — deploy manual necesario)")
+        except Exception as e:
+            print(f"  ⚠ Auto-deploy saltado: {e}")
+```
+
+Commit this gating change on its own:
+
+```bash
+git add trail_analyzer.py
+git commit -m "fix: gate dashboard auto-deploy behind PLANTRAIL_DEPLOY (no push on local runs)"
+```
+
+- [ ] **Step 1: Run the full generator (no deploy)**
+
+Run: `python trail_analyzer.py` (do NOT set `PLANTRAIL_DEPLOY`).
+Expected output includes `✓ Token Strava válido` (or `↻ Renovando…` then success), `✓ N actividades cargadas`, the line `(Auto-deploy desactivado …)`, and that it writes `dashboard.html` and `plan_completo.html` with no traceback and **no git push**.
 
 - [ ] **Step 2: Verify the plan rendered with 15 weeks and correct dates**
 
