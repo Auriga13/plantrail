@@ -11,7 +11,8 @@
 ## Global Constraints
 
 - Single source of the plan = `plan.md`; the hardcoded Python `PLAN`/`PLAN_START` lists MUST be deleted, not left dormant.
-- YAML block week schema (superset, exact keys): `week, phase, phase_name, load, title, km, d_plus, sessions:[{day, type, km, d, desc}], notes, objective, context, key_session, coaching`.
+- YAML block week schema (superset, exact keys): `week, phase, phase_name, load, title, km, d_plus, sessions:[{day, type, km, d, desc, tp?}], notes, objective, context, key_session, coaching`.
+- Each non-REST session carries a `tp` block for manual TrainingPeaks transfer: `tp: {sport: Run|TrailRun, title: str, steps: [step,...]}`. A step is one of: `{kind: warmup|run|cooldown, dist_km|dur: <km or M:SS>, zone: z1..z5, note?}` or `{kind: interval|strides, reps: int, on: M:SS, on_zone: zN, off: M:SS, off_zone: zN, note?}`. REST sessions omit `tp`. (`tp` is new data; the existing renderers ignore it so the parity gate still holds — it is rendered by Task 4b.)
 - `plan_start` in the YAML = `2026-06-29`; weeks numbered 1–15 contiguously.
 - Loader MUST raise on missing/malformed block — no silent fallback to a stale plan.
 - Dashboard plan content after the refactor MUST be byte-identical to before (parity diff is the gate).
@@ -346,6 +347,141 @@ Expected: PASS.
 ```bash
 git add plan_completo.py plan_completo.html
 git commit -m "refactor: plan_completo reads PLAN from plan.md via loader"
+```
+
+---
+
+### Task 4a: Author `tp` structured steps for all 15 weeks in `plan.md`
+
+Adds TrainingPeaks-ready structured steps to every non-REST session, derived from the existing `desc` text (which already encodes the structure) + coaching judgment. Content task (no TDD); correctness reviewed per phase against the `desc`. Parity is unaffected (renderers ignore `tp` until Task 4b).
+
+**Files:**
+- Modify: `plan.md` (add `tp:` to each non-REST session in the YAML block)
+- Test: extend `tests/test_plan_md_block.py`
+
+**Step rules (apply consistently):**
+- `tp.sport`: `TrailRun` if the session is trail/mountain/has notable `d`, else `Run`.
+- `tp.title`: short label (e.g. "Cuestas 5×3min Z3", "Long Z1–Z2 +D", "Recovery Z1").
+- Convert the `desc` into ordered `steps`. Distances → `dist_km`; durations → `dur` as `M:SS`. Interval blocks like `5×3min Z3 (2min Z1)` → `{kind: interval, reps: 5, on: "3:00", on_zone: z3, off: "2:00", off_zone: z1, note: "<terrain cue>"}`. Strides like `4×20s` → `{kind: strides, reps: 4, on: "0:20", on_zone: z4, off: "0:40", off_zone: z1}`. Plain easy distance → `{kind: warmup|run|cooldown, dist_km: N, zone: zX}`.
+- Zones map to the plan's VT-anchored model (z1<142, z2 142–152, z3 152–172, z4 >172).
+- REST sessions: no `tp`.
+
+- [ ] **Step 1: Add the `tp` validation test**
+
+```python
+# append to tests/test_plan_md_block.py
+def test_non_rest_sessions_have_tp_with_steps():
+    import plan_loader
+    _, plan = plan_loader.load_plan("plan.md")
+    for w in plan:
+        for s in w["sessions"]:
+            if s["type"] == "REST":
+                assert "tp" not in s, f"week {w['week']} {s['day']} REST should have no tp"
+                continue
+            tp = s.get("tp")
+            assert tp and tp.get("sport") in ("Run", "TrailRun"), f"week {w['week']} {s['day']} bad tp.sport"
+            assert tp.get("title"), f"week {w['week']} {s['day']} missing tp.title"
+            assert isinstance(tp.get("steps"), list) and tp["steps"], f"week {w['week']} {s['day']} missing tp.steps"
+            for st in tp["steps"]:
+                assert st.get("kind") in ("warmup", "run", "cooldown", "interval", "strides"), st
+```
+
+- [ ] **Step 2: Author `tp` blocks phase by phase**
+
+Edit `plan.md`, adding `tp` to each non-REST session, one phase at a time (W1–4, W5–8, W9–11, W12–13, W14–15). After each phase, run the test below and eyeball the steps vs the `desc` for that phase.
+
+- [ ] **Step 3: Run the validation test**
+
+Run: `python -m pytest tests/test_plan_md_block.py -v`
+Expected: PASS (existing parity tests + the new `tp` test).
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add plan.md tests/test_plan_md_block.py
+git commit -m "feat: add TrainingPeaks-ready structured steps (tp) to all sessions in plan.md"
+```
+
+---
+
+### Task 4b: Render `tp` paste-ready blocks in the dashboard
+
+Renders each session's `tp.steps` as a copy-pasteable TrainingPeaks block in the dashboard (format mirrors `sample_week2_tp_structured.txt`). This intentionally changes dashboard output, so it runs AFTER the parity gates (Tasks 3–4) and replaces the parity expectation for the affected section.
+
+**Files:**
+- Modify: `trail_analyzer.py` (HTML generation for the per-week session view)
+- Modify: `plan_completo.py` (the richer per-session view)
+- Test: `tests/test_tp_render.py`
+
+**Interfaces:**
+- Consumes: `PLAN` (now with `tp`) from the loader.
+- Produces: a `format_tp_block(session) -> str` helper (in a shared spot, e.g. `plan_loader.py` or a small `tp_render.py`) returning the paste text, reused by both generators (DRY).
+
+- [ ] **Step 1: Write the failing test for the formatter**
+
+```python
+# tests/test_tp_render.py
+from tp_render import format_tp_block
+
+def test_format_tp_block_intervals():
+    s = {"type": "TEMPO", "tp": {"sport": "Run", "title": "Cuestas 5×3min Z3",
+        "steps": [
+            {"kind": "warmup", "dist_km": 3, "zone": "z1"},
+            {"kind": "interval", "reps": 5, "on": "3:00", "on_zone": "z3", "off": "2:00", "off_zone": "z1", "note": "en cuesta"},
+            {"kind": "cooldown", "dist_km": 2, "zone": "z1"},
+        ]}}
+    out = format_tp_block(s)
+    assert "Cuestas 5×3min Z3" in out
+    assert "Warmup 3km z1" in out
+    assert "5x(3:00 z3, 2:00 z1)" in out
+    assert "Cooldown 2km z1" in out
+
+def test_format_tp_block_rest_returns_empty():
+    assert format_tp_block({"type": "REST"}) == ""
+```
+
+- [ ] **Step 2: Run it to verify it fails**
+
+Run: `python -m pytest tests/test_tp_render.py -v`
+Expected: FAIL (`ModuleNotFoundError: No module named 'tp_render'`).
+
+- [ ] **Step 3: Implement `tp_render.py`**
+
+```python
+# tp_render.py
+"""Format a session's tp.steps into a TrainingPeaks-pasteable text block."""
+
+def _step_line(st):
+    kind = st["kind"]
+    if kind in ("interval", "strides"):
+        return f"- {st['reps']}x({st['on']} {st['on_zone']}, {st['off']} {st['off_zone']})" + (f"  [{st['note']}]" if st.get("note") else "")
+    label = {"warmup": "Warmup", "run": "Run", "cooldown": "Cooldown"}[kind]
+    amount = f"{st['dist_km']}km" if "dist_km" in st else st["dur"]
+    return f"- {label} {amount} {st['zone']}" + (f"  [{st['note']}]" if st.get("note") else "")
+
+def format_tp_block(session):
+    tp = session.get("tp")
+    if session.get("type") == "REST" or not tp:
+        return ""
+    lines = [tp["title"], f"Sport: {tp['sport']}"]
+    lines += [_step_line(st) for st in tp["steps"]]
+    return "\n".join(lines)
+```
+
+- [ ] **Step 4: Run the test to verify it passes**
+
+Run: `python -m pytest tests/test_tp_render.py -v`
+Expected: PASS.
+
+- [ ] **Step 5: Wire into both generators**
+
+In the per-session rendering of `trail_analyzer.py` and `plan_completo.py`, import `from tp_render import format_tp_block` and render its output inside a `<pre class="tp-block">…</pre>` (with a small "Copiar a TrainingPeaks" label) for non-REST sessions. Add minimal CSS for `.tp-block` (monospace, subtle background). Regenerate both HTML files and visually confirm a TP block appears under a session.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add tp_render.py tests/test_tp_render.py trail_analyzer.py plan_completo.py dashboard.html plan_completo.html
+git commit -m "feat: render TrainingPeaks-pasteable step blocks per session in dashboards"
 ```
 
 ---
