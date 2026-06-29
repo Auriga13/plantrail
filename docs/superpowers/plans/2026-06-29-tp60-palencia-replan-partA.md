@@ -548,6 +548,41 @@ git add trail_analyzer.py
 git commit -m "fix: gate dashboard auto-deploy behind PLANTRAIL_DEPLOY (no push on local runs)"
 ```
 
+- [ ] **Step 0b: Fix the hardcoded compliance start date + stale comment**
+
+`generate_plan_completo`'s `initCompliance()` derives the compliance table's start from `PLAN_START` (correct), but `generate_html`'s `buildCompliance()` hardcodes the old March date, so `dashboard.html`'s plan-vs-actual would align to the wrong week. Fix `trail_analyzer.py:1131`:
+
+```python
+  const planStart = new Date('2026-03-24');
+```
+
+→
+
+```python
+  const planStart = new Date('{PLAN_START.isoformat()}');
+```
+
+(This is inside an f-string — `{PLAN_START.isoformat()}` injects `2026-06-29`, tracking `PLAN_START` automatically. Leave the `generate_plan_completo` version at `:1450` as-is; it already uses `PLAN_START`.)
+
+Also fix the stale comment at `trail_analyzer.py:173`:
+
+```python
+# PLAN DE ENTRENAMIENTO COMPLETO (28 semanas)
+```
+
+→
+
+```python
+# PLAN DE ENTRENAMIENTO COMPLETO (15 semanas)
+```
+
+Commit these two fixes:
+
+```bash
+git add trail_analyzer.py
+git commit -m "fix: dashboard.html compliance uses PLAN_START; correct stale week-count comment"
+```
+
 - [ ] **Step 1: Run the full generator (no deploy)**
 
 Run: `python trail_analyzer.py` (do NOT set `PLANTRAIL_DEPLOY`).
@@ -579,12 +614,14 @@ Run:
 
 ```bash
 python - <<'PY'
-html = open("plan_completo.html", encoding="utf-8").read()
-print("W1 Monday key present in Strava data:", "2026-06-29" in html)
+for f in ("plan_completo.html", "dashboard.html"):
+    html = open(f, encoding="utf-8").read()
+    print(f, "-> has 2026-06-29:", "2026-06-29" in html,
+          "| no stale 2026-03-24:", "2026-03-24" not in html)
 PY
 ```
 
-Expected: `True` (your Jun 29 week has Strava activity, so plan-vs-actual lines up). If `False`, the week-key mapping in `generate_plan_completo` needs review — but it should be true given the data pulled this session.
+Expected: both files `has 2026-06-29: True` and `no stale 2026-03-24: True`. The Jun 29 week has Strava activity, so plan-vs-actual lines up. If `dashboard.html` still shows `2026-03-24`, Step 0b's fix didn't take — re-check `:1131`.
 
 - [ ] **Step 4: Open the dashboard and eyeball it**
 
