@@ -62,3 +62,10 @@ def test_phase_names_cover_all_5_phases():
     assert "5:'Taper TP60'" in src
     # no generator still ships the old 4-phase map
     assert "4:'Taper'}}" not in src
+
+
+def test_no_stale_25week_strings_in_source():
+    src = pathlib.Path(ta.__file__).read_text(encoding="utf-8")
+    for bad in ("25 semanas", "24 Mar 2026", "24 de marzo", "23 de marzo",
+                "(Sem 18)", "(Sem 25)", "(Sem 12)", "4500m D+"):
+        assert bad not in src, f"stale string still in source: {bad}"

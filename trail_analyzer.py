@@ -945,23 +945,23 @@ details[open] .week-summary{{background:var(--surface3)}}
 <!-- ═══ TAB: PLAN ═══ -->
 <div id="tab-plan" class="tab-panel">
   <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px">
-    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Resumen del Plan — 25 semanas</h3>
+    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Resumen del Plan — 15 semanas</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Inicio plan</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">24 Mar 2026</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">29 Jun 2026</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Palencia MTN</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f97316">14 Jun 2026 (Sem 12)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f97316">12 Sep 2026 (Sem 11)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">TP60</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#22d3ee">10 Oct 2026 (Sem 25)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#22d3ee">11 Oct 2026 (Sem 15)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Volumen pico</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f59e0b">80km / 4500m D+ (Sem 18)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f59e0b">72km / 2400m D+ (Sem 7)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Metodología</div>
@@ -1169,7 +1169,7 @@ function buildCompliance() {{
   }}
   
   if (rows.length === 0) {{
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 24 de marzo 2026. Ejecuta el script la próxima semana para ver tu primer seguimiento.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 29 de junio 2026. Ejecuta el script la próxima semana para ver tu primer seguimiento.</td></tr>';
   }} else {{
     tbody.innerHTML = rows.join('');
   }}
@@ -1490,7 +1490,7 @@ function initCompliance() {{
   }}
 
   if (rows.length === 0) {{
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 23 de marzo 2026. Ejecuta el script cada lunes para ver seguimiento.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 29 de junio 2026. Ejecuta el script cada lunes para ver seguimiento.</td></tr>';
   }} else {{
     tbody.innerHTML = rows.join('');
   }}
