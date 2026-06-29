@@ -641,6 +641,139 @@ git commit -m "build: regenerate dashboards for 15-week TP60/Palencia plan"
 
 ---
 
+## Task 4: Rewrite `plan_completo.py` to the 15-week plan (richer dashboard)
+
+**Why:** `plan_completo.html` (the site's served dashboard, via `index.html` redirect) gets its week cards from `plan_completo.py`, a separate generator with its own 25-week plan and a richer per-week schema (`objective`/`context`/`key_session`/`coaching`). Tasks 1–3 only fixed `dashboard.html` and the injected tabs. This task ports the 15-week plan into `plan_completo.py` so the served dashboard shows the correct plan.
+
+**Files:**
+- Modify: `plan_completo.py` — `PLAN_START` (`:20`), header comment (`:36`), and the whole `PLAN = [ ... ]` list (weeks 1–25 → 15).
+- Source of the new PLAN content (authored, validated): `C:\Users\jbelloso\AppData\Local\Temp\claude\C--VMSOS-PlanTrail\f9df88cb-f433-49e6-be67-8d111a3d21a6\scratchpad\plan_completo_PLAN_15wk.py` — its `PLAN = [...]` literal is exact; paste it verbatim.
+- Test: `tests/test_plan_completo.py`
+- Regenerate: `plan_completo.html` (by running `plan_completo.py`), then `dashboard.html` + `plan_completo.html` tabs (by running `trail_analyzer.py`).
+- `plan_completo.py` is currently untracked — this task adds it to git (it is source, not a secret).
+
+**Interfaces:**
+- `plan_completo.py` exposes module globals `PLAN_START: date` and `PLAN: list[dict]`; importing it is side-effect-free (the HTML write is under `if __name__ == "__main__"`).
+- `ATHLETE["races"]` in `plan_completo.py` already has correct dates (Palencia 2026-09-12, TP60 2026-10-11) — do not change.
+
+- [ ] **Step 1: Write the failing test**
+
+Create `tests/test_plan_completo.py`:
+
+```python
+import importlib
+from datetime import date
+
+pc = importlib.import_module("plan_completo")
+DAYS = ["L", "M", "X", "J", "V", "S", "D"]
+NARRATIVE = ("objective", "context", "key_session", "coaching")
+
+
+def test_plan_start():
+    assert pc.PLAN_START == date(2026, 6, 29)
+
+
+def test_15_weeks_numbered_1_to_15():
+    assert [w["week"] for w in pc.PLAN] == list(range(1, 16))
+
+
+def test_every_week_has_7_days_and_narrative():
+    for w in pc.PLAN:
+        assert [s["day"] for s in w["sessions"]] == DAYS, f"week {w['week']} days"
+        for k in NARRATIVE:
+            assert w.get(k, "").strip(), f"week {w['week']} missing {k}"
+
+
+def test_week_totals_match_session_sums():
+    for w in pc.PLAN:
+        assert w["km"] == sum(s["km"] for s in w["sessions"]), f"week {w['week']} km"
+        assert w["d_plus"] == sum(s["d"] for s in w["sessions"]), f"week {w['week']} d+"
+
+
+def test_race_weeks():
+    w11 = next(w for w in pc.PLAN if w["week"] == 11)
+    assert any(s["type"] == "RACE" and "PALENCIA" in s["desc"].upper() for s in w11["sessions"])
+    w15 = next(w for w in pc.PLAN if w["week"] == 15)
+    assert any(s["type"] == "RACE" and "TP60" in s["desc"].upper() for s in w15["sessions"])
+```
+
+- [ ] **Step 2: Run to verify it fails**
+
+Run: `python -m pytest tests/test_plan_completo.py -v`
+Expected: FAIL — `test_plan_start` (still 2026-03-23) and `test_15_weeks...` (25 weeks).
+
+- [ ] **Step 3: Set PLAN_START**
+
+Change `plan_completo.py:20`:
+
+```python
+PLAN_START = date(2026, 6, 29)  # Lunes — W1 del bloque TP60/Palencia
+```
+
+- [ ] **Step 4: Update the header comment**
+
+Change `plan_completo.py:36`:
+
+```python
+# PLAN DE ENTRENAMIENTO — 25 SEMANAS DETALLADO
+```
+
+→
+
+```python
+# PLAN DE ENTRENAMIENTO — 15 SEMANAS DETALLADO
+```
+
+- [ ] **Step 5: Replace the PLAN list**
+
+Open the source artifact (`...\scratchpad\plan_completo_PLAN_15wk.py`), copy its `PLAN = [ ... ]` literal (everything from `PLAN = [` to the closing `]`), and replace the entire existing `PLAN = [ ... ]` list in `plan_completo.py` with it. Do not alter any other section (STRENGTH, NUTRITION, ATHLETE, rendering, main).
+
+- [ ] **Step 6: Run tests to verify they pass**
+
+Run: `python -m pytest tests/test_plan_completo.py -v`
+Expected: PASS (5 tests).
+
+- [ ] **Step 7: Regenerate both dashboards (no deploy)**
+
+Run in order (do NOT set `PLANTRAIL_DEPLOY`):
+
+```bash
+python plan_completo.py        # regenerates the plan_completo.html BASE with 15 weeks
+python trail_analyzer.py       # injects Strava/compliance tabs into it; also writes dashboard.html
+```
+
+`plan_completo.py` may open a browser tab (harmless). Expected: no tracebacks, both write successfully.
+
+- [ ] **Step 8: Verify the served dashboard now shows 15 weeks**
+
+Run:
+
+```bash
+python - <<'PY'
+h = open("plan_completo.html", encoding="utf-8").read()
+print("Sem 1:", "Sem 1" in h, "| Sem 15:", "Sem 15" in h,
+      "| Sem 16 absent:", "Sem 16" not in h, "| Sem 29 absent:", "Sem 29" not in h)
+print("PALENCIA:", "PALENCIA" in h.upper(), "| TP60:", "TP60" in h.upper(),
+      "| 2026-06-29:", "2026-06-29" in h, "| no 2026-03-2:", "2026-03-2" not in h)
+PY
+```
+
+Expected: every value `True`.
+
+- [ ] **Step 9: Confirm the token is not staged**
+
+Run: `git status --short`
+Expected: shows `plan_completo.py` (new), `tests/test_plan_completo.py` (new), modified `plan_completo.html` / `dashboard.html` — NOT `strava_token.json`.
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add plan_completo.py tests/test_plan_completo.py plan_completo.html dashboard.html
+git commit -m "feat: rewrite plan_completo.py to 15-week TP60/Palencia plan; regenerate served dashboard"
+```
+
+---
+
 ## Self-Review
 
 **1. Spec coverage (Part A):**
