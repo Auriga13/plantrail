@@ -169,16 +169,37 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2 (≤152). Run first → GYM Fase A.
+    tp:
+      sport: Run
+      title: Easy 8km Z2 (+GYM A)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 11
     d: 250
     desc: '11km: 3km Z1 + 5×3min Z3 en cuesta (2min Z1 bajada) + 2km Z1.'
+    tp:
+      sport: TrailRun
+      title: Cuestas 5×3min Z3
+      steps:
+      - {kind: warmup, dist_km: 3, zone: z1}
+      - {kind: interval, reps: 5, on: '3:00', on_zone: z3, off: '2:00', off_zone: z1, note: 'en cuesta, trote bajada'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 8
     d: 200
     desc: 8km Z2 trail rolling.
+    tp:
+      sport: TrailRun
+      title: Trail 8km Z2 rolling
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -189,11 +210,23 @@ weeks:
     km: 13
     d: 350
     desc: 13km Z1–Z2, busca 350m D+. 1 gel km10.
+    tp:
+      sport: TrailRun
+      title: Long 13km Z1–Z2 +350m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 9, zone: z2, note: 'busca D+, power-hike >15%; 1 gel km10'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 6
     d: 0
     desc: 6km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 6km Z1
+      steps:
+      - {kind: run, dist_km: 6, zone: z1}
 - week: 2
   phase: 1
   phase_name: Reconstrucción base
@@ -222,16 +255,38 @@ weeks:
     km: 9
     d: 0
     desc: 9km Z2. Run first → GYM Fase A.
+    tp:
+      sport: Run
+      title: Easy 9km Z2 (+GYM A)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 13
     d: 100
     desc: '13km: 3km Z1 + 2×12min Z3 (3min Z1) + 2km Z1 + 4×20s strides.'
+    tp:
+      sport: Run
+      title: Tempo 2×12min Z3 + strides
+      steps:
+      - {kind: warmup, dist_km: 3, zone: z1}
+      - {kind: interval, reps: 2, on: '12:00', on_zone: z3, off: '3:00', off_zone: z1}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 9
     d: 200
     desc: 9km Z2 trail. Run first → GYM Fase A.
+    tp:
+      sport: TrailRun
+      title: Trail 9km Z2 (+GYM A)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -242,11 +297,23 @@ weeks:
     km: 18
     d: 800
     desc: 18km Z1–Z2, máximo D+ disponible. 2 geles.
+    tp:
+      sport: TrailRun
+      title: Long 18km Z1–Z2 máx D+
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 14, zone: z2, note: 'máximo D+ disponible; 2 geles'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 5
     d: 0
     desc: 5km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 5km Z1
+      steps:
+      - {kind: run, dist_km: 5, zone: z1}
 - week: 3
   phase: 1
   phase_name: Reconstrucción base
@@ -276,16 +343,37 @@ weeks:
     km: 10
     d: 0
     desc: 10km Z2. Run first → GYM Fase A.
+    tp:
+      sport: Run
+      title: Easy 10km Z2 (+GYM A)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
     km: 14
     d: 400
     desc: '14km: 2km Z1 + 3×15min Z3 en cuesta (3min Z1) + 2km Z1.'
+    tp:
+      sport: TrailRun
+      title: Cuestas 3×15min Z3
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 3, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 10
     d: 300
     desc: 10km Z2 trail. Run first → GYM Fase A.
+    tp:
+      sport: TrailRun
+      title: Trail 10km Z2 (+GYM A)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -296,11 +384,23 @@ weeks:
     km: 20
     d: 800
     desc: 20km Z1–Z2 trail ~800m. Power-hike >15%. 50g CHO/h.
+    tp:
+      sport: TrailRun
+      title: Long 20km Z1–Z2 trail +800m
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 16, zone: z2, note: 'power-hike >15%; 50g CHO/h'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 6
     d: 0
     desc: 6km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 6km Z1
+      steps:
+      - {kind: run, dist_km: 6, zone: z1}
 - week: 4
   phase: 1
   phase_name: Reconstrucción base
@@ -328,16 +428,38 @@ weeks:
     km: 8
     d: 0
     desc: 8km Z2. GYM Fase A cargas −10%.
+    tp:
+      sport: Run
+      title: Easy 8km Z2 (+GYM A −10%)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: EASY
     km: 10
     d: 100
     desc: 10km Z2 + 6×20s strides (sin bloque duro).
+    tp:
+      sport: Run
+      title: Easy 10km Z2 + strides
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 7, zone: z2}
+      - {kind: strides, reps: 6, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: J
     type: TRAIL
     km: 8
     d: 200
     desc: 8km Z2 trail suave.
+    tp:
+      sport: TrailRun
+      title: Trail 8km Z2 suave
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -348,11 +470,23 @@ weeks:
     km: 14
     d: 400
     desc: 14km Z1–Z2 relajado.
+    tp:
+      sport: TrailRun
+      title: Long 14km Z1–Z2 relajado
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 10, zone: z2}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 4
     d: 0
     desc: 4km Z1 recovery.
+    tp:
+      sport: Run
+      title: Recovery 4km Z1
+      steps:
+      - {kind: run, dist_km: 4, zone: z1}
 - week: 5
   phase: 2
   phase_name: Construcción específica
@@ -383,16 +517,38 @@ weeks:
     km: 10
     d: 0
     desc: 10km Z2. GYM Fase B (fuerza máxima).
+    tp:
+      sport: Run
+      title: Easy 10km Z2 (+GYM B)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: INTERVAL
     km: 14
     d: 450
     desc: '14km: 4×8min Z3–Z4 en cuesta (3min rec) + strides.'
+    tp:
+      sport: TrailRun
+      title: Intervalos 4×8min Z3–Z4 cuesta
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: interval, reps: 4, on: '8:00', on_zone: z4, off: '3:00', off_zone: z1, note: 'en cuesta, Z3–Z4'}
+      - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
     km: 10
     d: 250
     desc: 10km Z2 trail. GYM Fase B.
+    tp:
+      sport: TrailRun
+      title: Trail 10km Z2 (+GYM B)
+      steps:
+      - {kind: warmup, dist_km: 1, zone: z1}
+      - {kind: run, dist_km: 8, zone: z2}
+      - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
     km: 0
@@ -403,11 +559,23 @@ weeks:
     km: 22
     d: 800
     desc: 22km Z1–Z2 ~800m. Ensayo fueling 60g CHO/h + electrolitos.
+    tp:
+      sport: TrailRun
+      title: Long 22km Z1–Z2 +800m fueling
+      steps:
+      - {kind: warmup, dist_km: 2, zone: z1}
+      - {kind: run, dist_km: 18, zone: z2, note: '60g CHO/h + electrolitos; ensayo fueling'}
+      - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
     km: 4
     d: 0
     desc: 4km Z1 shakeout.
+    tp:
+      sport: Run
+      title: Shakeout 4km Z1
+      steps:
+      - {kind: run, dist_km: 4, zone: z1}
 - week: 6
   phase: 2
   phase_name: Construcción específica
