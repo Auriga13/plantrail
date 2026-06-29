@@ -115,7 +115,7 @@ def get_token():
         return refresh_strava_token(creds)
     global _auth_code
     url = (f"https://www.strava.com/oauth/authorize?client_id={creds['client_id']}"
-           f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=auto")
+           f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=force")
     srv = http.server.HTTPServer(("localhost", 8888), _CB)
     t = threading.Thread(target=srv.handle_request); t.daemon = True; t.start()
     print("\n🔑 Abriendo Strava en el navegador..."); webbrowser.open(url); t.join(timeout=120)
