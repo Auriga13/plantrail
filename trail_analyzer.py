@@ -1391,7 +1391,7 @@ def generate_plan_completo(strava_data, athlete_profile):
 const CHART_DATA = {chart_data};
 const PLAN_DATA = {plan_data_json};
 const STRAVA_WEEKS = {strava_weeks_json};
-const PLAN_START = '2026-03-23';
+const PLAN_START = '{PLAN_START.isoformat()}';
 
 function switchTab(id) {{
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1497,7 +1497,7 @@ function initCompliance() {{
 }}
 </script>"""
 
-    # Replace old script block
+    # Replace old script block (first run only — subsequent runs skip this no-op)
     static_html = static_html.replace(
         """<script>
 function switchTab(id){
@@ -1508,6 +1508,15 @@ function switchTab(id){
 }
 </script>""",
         new_script
+    )
+
+    # Idempotent PLAN_START refresh: on re-runs the old script is already replaced,
+    # so update the date literal directly (handles both first and subsequent runs).
+    import re as _re
+    static_html = _re.sub(
+        r"const PLAN_START = '\d{4}-\d{2}-\d{2}';",
+        f"const PLAN_START = '{PLAN_START.isoformat()}';",
+        static_html
     )
 
     return static_html
