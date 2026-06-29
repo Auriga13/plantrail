@@ -360,7 +360,7 @@ weeks:
       title: Cuestas 3×15min Z3
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 3, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: interval, reps: 3, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'en cuesta'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
@@ -534,7 +534,7 @@ weeks:
       title: Intervalos 4×8min Z3–Z4 cuesta
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 4, on: '8:00', on_zone: z4, off: '3:00', off_zone: z1, note: 'en cuesta, Z3–Z4'}
+      - {kind: interval, reps: 4, on: '8:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'en cuesta, Z3–Z4 (apunta al suelo de Z3, puede tocar Z4)'}
       - {kind: strides, reps: 4, on: '0:20', on_zone: z4, off: '0:40', off_zone: z1}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
@@ -710,7 +710,7 @@ weeks:
       title: Intervalos 5×6min Z4 cuesta
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 5, on: '6:00', on_zone: z4, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: interval, reps: 5, on: '6:00', on_zone: z4, off: '3:00', off_zone: z1, note: 'en cuesta'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
@@ -887,7 +887,7 @@ weeks:
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
       - {kind: run, dur: '40:00', zone: z3, note: 'sostenido en cuesta'}
-      - {kind: run, dist_km: 2, zone: z1, note: técnica de bajada}
+      - {kind: run, dist_km: 2, zone: z1, note: 'técnica de bajada'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
@@ -972,7 +972,7 @@ weeks:
       title: Cuestas 3×8min Z3
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 3, on: '8:00', on_zone: z3, off: '3:00', off_zone: z1, note: en cuesta}
+      - {kind: interval, reps: 3, on: '8:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'en cuesta'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
@@ -1220,7 +1220,7 @@ weeks:
       title: Tempo 2×15min Z3 rolling
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 2, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'terreno rolling'}
+      - {kind: interval, reps: 2, on: '15:00', on_zone: z3, off: '3:00', off_zone: z1, note: 'terreno rolling; rec ~3min (asumido, no en desc)'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: EASY
@@ -1383,7 +1383,7 @@ weeks:
       title: Aperturas 3×90s Z3
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: interval, reps: 3, on: '1:30', on_zone: z3, off: '2:00', off_zone: z1, note: 'aperturas pre-carrera'}
+      - {kind: interval, reps: 3, on: '1:30', on_zone: z3, off: '2:00', off_zone: z1, note: 'aperturas pre-carrera; rec ~2min (asumido, no en desc)'}
       - {kind: cooldown, dist_km: 1, zone: z1}
   - day: J
     type: EASY
