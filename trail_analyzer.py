@@ -80,33 +80,51 @@ class _CB(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h2 style='font-family:monospace;padding:40px'>OK - puedes cerrar esta pesta\xc3\xb1a</h2>")
     def log_message(self,*a): pass
 
+def build_refresh_payload(creds):
+    return {"client_id": creds["client_id"], "client_secret": creds["client_secret"],
+            "grant_type": "refresh_token", "refresh_token": creds["refresh_token"]}
+
+def detect_refresh_rotation(old_refresh, new_token):
+    """Return the new refresh token iff Strava rotated it, else None."""
+    new_refresh = new_token.get("refresh_token")
+    return new_refresh if (new_refresh and new_refresh != old_refresh) else None
+
+def refresh_strava_token(creds):
+    """Headless refresh: POST the refresh grant, return Strava's token dict."""
+    if not creds.get("refresh_token"):
+        raise RuntimeError("No refresh token available for headless refresh.")
+    data = urllib.parse.urlencode(build_refresh_payload(creds)).encode()
+    with urllib.request.urlopen(urllib.request.Request(
+            "https://www.strava.com/oauth/token", data=data, method="POST")) as r:
+        return json.loads(r.read())
+
 def get_token():
     creds = load_strava_credentials()
     if TOKEN_FILE.exists():
         tok = json.loads(TOKEN_FILE.read_text())
-        if tok.get("expires_at",0) > time.time()+60:
+        if tok.get("expires_at", 0) > time.time() + 60:
             print("✓ Token Strava válido"); return tok
         print("↻ Renovando token Strava...")
-        data = urllib.parse.urlencode({"client_id":creds["client_id"],"client_secret":creds["client_secret"],
-            "grant_type":"refresh_token","refresh_token":tok.get("refresh_token") or creds["refresh_token"]}).encode()
-        with urllib.request.urlopen(urllib.request.Request(
-                "https://www.strava.com/oauth/token",data=data,method="POST")) as r:
-            new = json.loads(r.read())
-        tok.update(new)               # keep client_secret + any extra keys already in the file
+        refresh = tok.get("refresh_token") or creds.get("refresh_token")
+        new = refresh_strava_token({**creds, "refresh_token": refresh})
+        tok.update(new)               # keep client_secret + extra keys in the file
         TOKEN_FILE.write_text(json.dumps(tok)); return tok
-    # first-time browser auth path
+    # No token file: headless refresh if we have a refresh token (CI), else browser auth.
+    if creds.get("refresh_token"):
+        print("↻ Refresh headless de Strava (sin token file)...")
+        return refresh_strava_token(creds)
     global _auth_code
-    url=(f"https://www.strava.com/oauth/authorize?client_id={creds['client_id']}"
-         f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=auto")
-    srv = http.server.HTTPServer(("localhost",8888),_CB)
-    t = threading.Thread(target=srv.handle_request); t.daemon=True; t.start()
+    url = (f"https://www.strava.com/oauth/authorize?client_id={creds['client_id']}"
+           f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=auto")
+    srv = http.server.HTTPServer(("localhost", 8888), _CB)
+    t = threading.Thread(target=srv.handle_request); t.daemon = True; t.start()
     print("\n🔑 Abriendo Strava en el navegador..."); webbrowser.open(url); t.join(timeout=120)
     srv.server_close()
     if not _auth_code: raise RuntimeError("No se recibió código de autorización")
-    data = urllib.parse.urlencode({"client_id":creds["client_id"],"client_secret":creds["client_secret"],
-        "code":_auth_code,"grant_type":"authorization_code"}).encode()
+    data = urllib.parse.urlencode({"client_id": creds["client_id"], "client_secret": creds["client_secret"],
+        "code": _auth_code, "grant_type": "authorization_code"}).encode()
     with urllib.request.urlopen(urllib.request.Request(
-            "https://www.strava.com/oauth/token",data=data,method="POST")) as r:
+            "https://www.strava.com/oauth/token", data=data, method="POST")) as r:
         tok = json.loads(r.read())
     TOKEN_FILE.write_text(json.dumps(tok)); print("✓ Autenticado con Strava"); return tok
 

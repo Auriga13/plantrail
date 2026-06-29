@@ -42,3 +42,25 @@ def test_no_secret_literal_in_source():
     secret = json.loads(tok.read_text()).get("client_secret")
     if secret:
         assert secret not in src, "Strava client secret literal found in source"
+
+
+def test_build_refresh_payload():
+    creds = {"client_id": "114720", "client_secret": "s", "refresh_token": "r"}
+    p = ta.build_refresh_payload(creds)
+    assert p == {"client_id": "114720", "client_secret": "s",
+                 "grant_type": "refresh_token", "refresh_token": "r"}
+
+
+def test_detect_refresh_rotation_changed():
+    assert ta.detect_refresh_rotation("old", {"refresh_token": "new"}) == "new"
+
+
+def test_detect_refresh_rotation_unchanged():
+    assert ta.detect_refresh_rotation("same", {"refresh_token": "same"}) is None
+    assert ta.detect_refresh_rotation("old", {}) is None
+
+
+def test_refresh_strava_token_requires_refresh_token():
+    import pytest
+    with pytest.raises(RuntimeError):
+        ta.refresh_strava_token({"client_id": "x", "client_secret": "y", "refresh_token": None})
