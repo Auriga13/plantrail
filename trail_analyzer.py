@@ -12,6 +12,8 @@ import json, os, sys, math, time, webbrowser, threading
 import http.server, urllib.parse, urllib.request
 from datetime import datetime, date, timedelta
 from pathlib import Path
+from plan_loader import load_plan
+from tp_render import format_tp_block
 
 # Fix Windows console encoding for Unicode output
 if sys.platform == "win32":
@@ -22,7 +24,23 @@ if sys.platform == "win32":
 # CONFIGURACIÓN — ⚠ ACTUALIZA FECHAS DE CARRERA SI ES NECESARIO
 # ═══════════════════════════════════════════════════════════════════════════════
 CLIENT_ID     = "114720"
-CLIENT_SECRET = ""
+
+def load_strava_credentials():
+    """Resolve Strava credentials: env vars first, then gitignored token file.
+    Raises RuntimeError if no client secret is available."""
+    cid     = os.environ.get("STRAVA_CLIENT_ID", CLIENT_ID)
+    secret  = os.environ.get("STRAVA_CLIENT_SECRET")
+    refresh = os.environ.get("STRAVA_REFRESH_TOKEN")
+    if (not secret or not refresh) and TOKEN_FILE.exists():
+        data = json.loads(TOKEN_FILE.read_text())
+        secret  = secret  or data.get("client_secret")
+        refresh = refresh or data.get("refresh_token")
+    if not secret:
+        raise RuntimeError(
+            "Strava client secret not found. Set STRAVA_CLIENT_SECRET env var "
+            "or add a 'client_secret' key to strava_token.json.")
+    return {"client_id": cid, "client_secret": secret, "refresh_token": refresh}
+
 REDIRECT_URI  = "http://localhost:8888/callback"
 TOKEN_FILE    = Path("strava_token.json")
 OUTPUT_FILE   = Path("dashboard.html")
@@ -36,6 +54,10 @@ ATHLETE = {
     "vdot": 57,
     "best_10k_sec": 2340,
     "best_half_sec": 5700,
+    # ── Datos de laboratorio (prueba de esfuerzo) ──
+    "hr_max_lab": 194,   # FC máxima real
+    "vt1": 152,          # Umbral ventilatorio 1 (aeróbico) — techo Z2
+    "vt2": 172,          # Umbral ventilatorio 2 (anaeróbico) — techo Z3/inicio Z4
     "races": [
         {"id":"palencia","name":"Maratón MTN Palencia",
          "date":"2026-09-12","km":44,"d_plus":3500,"accent":"#f97316"},
@@ -44,7 +66,7 @@ ATHLETE = {
     ]
 }
 
-PLAN_START = date(2026, 3, 23)  # Monday
+PLAN_START, PLAN = load_plan("plan.md")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STRAVA OAUTH
@@ -60,30 +82,52 @@ class _CB(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h2 style='font-family:monospace;padding:40px'>OK - puedes cerrar esta pesta\xc3\xb1a</h2>")
     def log_message(self,*a): pass
 
+def build_refresh_payload(creds):
+    return {"client_id": creds["client_id"], "client_secret": creds["client_secret"],
+            "grant_type": "refresh_token", "refresh_token": creds["refresh_token"]}
+
+def detect_refresh_rotation(old_refresh, new_token):
+    """Return the new refresh token iff Strava rotated it, else None."""
+    new_refresh = new_token.get("refresh_token")
+    return new_refresh if (new_refresh and new_refresh != old_refresh) else None
+
+def refresh_strava_token(creds):
+    """Headless refresh: POST the refresh grant, return Strava's token dict."""
+    if not creds.get("refresh_token"):
+        raise RuntimeError("No refresh token available for headless refresh.")
+    data = urllib.parse.urlencode(build_refresh_payload(creds)).encode()
+    with urllib.request.urlopen(urllib.request.Request(
+            "https://www.strava.com/oauth/token", data=data, method="POST")) as r:
+        return json.loads(r.read())
+
 def get_token():
     if TOKEN_FILE.exists():
         tok = json.loads(TOKEN_FILE.read_text())
-        if tok.get("expires_at",0) > time.time()+60:
-            print("✓ Token Strava válido"); return tok
+        if tok.get("expires_at", 0) > time.time() + 60:
+            print("✓ Token Strava válido"); return tok   # valid token needs no client secret
         print("↻ Renovando token Strava...")
-        data = urllib.parse.urlencode({"client_id":CLIENT_ID,"client_secret":CLIENT_SECRET,
-            "grant_type":"refresh_token","refresh_token":tok["refresh_token"]}).encode()
-        with urllib.request.urlopen(urllib.request.Request(
-                "https://www.strava.com/oauth/token",data=data,method="POST")) as r:
-            tok = json.loads(r.read())
+        creds = load_strava_credentials()   # only needed to refresh
+        refresh = tok.get("refresh_token") or creds.get("refresh_token")
+        new = refresh_strava_token({**creds, "refresh_token": refresh})
+        tok.update(new)               # keep client_secret + extra keys in the file
         TOKEN_FILE.write_text(json.dumps(tok)); return tok
+    # No token file: need credentials to refresh headlessly (CI) or to browser-auth.
+    creds = load_strava_credentials()
+    if creds.get("refresh_token"):
+        print("↻ Refresh headless de Strava (sin token file)...")
+        return refresh_strava_token(creds)
     global _auth_code
-    url=(f"https://www.strava.com/oauth/authorize?client_id={CLIENT_ID}"
-         f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=auto")
-    srv = http.server.HTTPServer(("localhost",8888),_CB)
-    t = threading.Thread(target=srv.handle_request); t.daemon=True; t.start()
+    url = (f"https://www.strava.com/oauth/authorize?client_id={creds['client_id']}"
+           f"&redirect_uri={REDIRECT_URI}&response_type=code&scope=activity:read_all&approval_prompt=force")
+    srv = http.server.HTTPServer(("localhost", 8888), _CB)
+    t = threading.Thread(target=srv.handle_request); t.daemon = True; t.start()
     print("\n🔑 Abriendo Strava en el navegador..."); webbrowser.open(url); t.join(timeout=120)
     srv.server_close()
     if not _auth_code: raise RuntimeError("No se recibió código de autorización")
-    data = urllib.parse.urlencode({"client_id":CLIENT_ID,"client_secret":CLIENT_SECRET,
-        "code":_auth_code,"grant_type":"authorization_code"}).encode()
+    data = urllib.parse.urlencode({"client_id": creds["client_id"], "client_secret": creds["client_secret"],
+        "code": _auth_code, "grant_type": "authorization_code"}).encode()
     with urllib.request.urlopen(urllib.request.Request(
-            "https://www.strava.com/oauth/token",data=data,method="POST")) as r:
+            "https://www.strava.com/oauth/token", data=data, method="POST")) as r:
         tok = json.loads(r.read())
     TOKEN_FILE.write_text(json.dumps(tok)); print("✓ Autenticado con Strava"); return tok
 
@@ -134,8 +178,12 @@ def analyze(acts, zones_data):
         del w["hr_avg_list"]
         w["trail_pct"] = round(100*w["types"].count("Trail")/max(w["runs"],1))
     sorted_weeks = sorted(weeks.items())
-    # Estimate hrmax from data or fallback
-    if hr_max < 150: hr_max = 186  # fallback for VDOT57 runner
+    # Use lab-tested HR max if available, else Strava, else fallback
+    lab_max = ATHLETE.get("hr_max_lab", 0)
+    if lab_max > 0:
+        hr_max = lab_max
+    elif hr_max < 150:
+        hr_max = 194  # fallback
     # Build zone names from Strava if available
     hr_zones = None
     if zones_data and "heart_rate" in zones_data:
@@ -143,7 +191,7 @@ def analyze(acts, zones_data):
     return {"weeks": sorted_weeks, "hr_max": hr_max, "hr_zones": hr_zones}
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# PLAN DE ENTRENAMIENTO COMPLETO (28 semanas)
+# PLAN DE ENTRENAMIENTO COMPLETO (15 semanas)
 # Base científica:
 #   Seiler 2010: distribución polarizada 80/20
 #   Koop 2016: back-to-back specificity trail
@@ -152,318 +200,13 @@ def analyze(acts, zones_data):
 #   Jeukendrup 2014: nutrición durante carrera 60-90g CHO/h
 #   Giovanelli 2016: power hiking eficiencia en pendientes >15%
 # ═══════════════════════════════════════════════════════════════════════════════
-PLAN = [
-  # ─── FASE 1: BASE AERÓBICA (Sem 1-7 | 24 Mar – 10 May) ────────────────────
-  {"week":1,"phase":1,"phase_name":"Base Aeróbica","load":"LOW",
-   "title":"Recuperación activa post-media","km":42,"d_plus":500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso total. Crioterapia si tienes acceso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z1 (<130bpm). Cadencia >170spm. GYM FASE A después."},
-    {"day":"X","type":"EASY","km":12,"d":0,"desc":"12km Z1–Z2 (<140bpm). Plano. Foco en relajación y cadencia."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM FASE A (45min). Sin rodaje hoy."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso. Movilidad 15min (hip flexors, gemelos)."},
-    {"day":"S","type":"LONG","km":16,"d":300,"desc":"16km Z1–Z2 suave. Busca alguna subida. Sin geles (fomenta oxidación de grasas)."},
-    {"day":"D","type":"EASY","km":10,"d":200,"desc":"10km Z1 recovery. Si hay agujetas reduce a 8km."},
-   ],"notes":"⚠ Prioridad absoluta: regeneración. No superes Z2 en ningún momento."},
-
-  {"week":2,"phase":1,"phase_name":"Base Aeróbica","load":"LOW-MED",
-   "title":"Reactivación aeróbica","km":55,"d_plus":700,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1–Z2 + GYM FASE A."},
-    {"day":"X","type":"TEMPO","km":14,"d":100,"desc":"14km progresivos: 3km Z1 → 6km Z2–Z3 progresivo (↑10s/km cada 2km) → 3km Z2 → 2km Z1 + 4×20s strides."},
-    {"day":"J","type":"EASY","km":10,"d":200,"desc":"10km Z1–Z2 con cuestas suaves. GYM FASE A después."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso o 30min movilidad/yoga runner."},
-    {"day":"S","type":"LONG","km":20,"d":400,"desc":"20km Z1–Z2. Máximo D+ disponible. 1 gel en km12. <5:50/km en llano."},
-    {"day":"D","type":"EASY","km":12,"d":0,"desc":"12km Z1 recovery."},
-   ],"notes":"Reintroduce volumen progresivamente. FC media debería bajar 3-5bpm vs sem1 al mismo ritmo."},
-
-  {"week":3,"phase":1,"phase_name":"Base Aeróbica","load":"MED",
-   "title":"Primera carga + tempo real","km":60,"d_plus":900,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1–Z2 + GYM FASE A. Foco squat búlgaro y step-up."},
-    {"day":"X","type":"TEMPO","km":15,"d":200,"desc":"15km: 2km Z1 → 3×15min @Z3 (RPE 7/10) con 3min Z1 recuperación → 2km Z1. Un bloque en cuesta si posible."},
-    {"day":"J","type":"EASY","km":12,"d":300,"desc":"12km Z1–Z2 con 3×5min subida Z3. GYM FASE A después."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":400,"desc":"22km Z1–Z2. 2 geles (km12, km18). Objetivo: finalizar sin fatiga severa."},
-    {"day":"D","type":"EASY","km":12,"d":0,"desc":"12km Z1. Recovery. Evalúa sensaciones para semana 4."},
-   ],"notes":"Primera semana con carga real. Monitoriza FC reposo cada mañana."},
-
-  {"week":4,"phase":1,"phase_name":"Base Aeróbica","load":"LOW",
-   "title":"Deload planificado — sem 4","km":45,"d_plus":500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z1 + GYM FASE A cargas −10%."},
-    {"day":"X","type":"EASY","km":12,"d":100,"desc":"12km Z1–Z2 suave. Sin calidad. Técnica y cadencia."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM FASE A (40min). Solo fuerza."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":18,"d":400,"desc":"18km Z1–Z2. Long reducido. Prueba equipo trail."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1 recovery."},
-   ],"notes":"🔄 DELOAD: −25% volumen. Evidencia: Meeusen 2013 — deload cada 3-4 semanas previene sobreentrenamiento."},
-
-  {"week":5,"phase":1,"phase_name":"Base Aeróbica","load":"MED",
-   "title":"Aeróbico + intro colinas","km":62,"d_plus":1200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1–Z2 + GYM FASE B (intro). Primera sesión con más carga fuerza."},
-    {"day":"X","type":"INTERVAL","km":14,"d":400,"desc":"Hill reps: 2km Z1 warm-up → 6×3min subida Z4 (RPE 8/10, bajada trote Z1) → 2km Z1. Evidencia: Patoz 2020 — hill reps mejoran economía trail."},
-    {"day":"J","type":"EASY","km":12,"d":300,"desc":"12km Z2 con subidas. GYM FASE B después."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":24,"d":500,"desc":"24km Z1–Z2. Busca Pedriza/Navacerrada si puedes. 2-3 geles. Practica nutrition race-day."},
-    {"day":"D","type":"EASY","km":12,"d":0,"desc":"12km Z1. Recovery. Cadencia >172spm."},
-   ],"notes":"Inicio de colinas. FC en hill reps debería llegar a Z4–Z5."},
-
-  {"week":6,"phase":1,"phase_name":"Base Aeróbica","load":"MED-HIGH",
-   "title":"Carga alta + primer B2B trail","km":65,"d_plus":1500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":12,"d":0,"desc":"12km Z1–Z2 + GYM FASE B. Squat pesado 4×5@80%1RM."},
-    {"day":"X","type":"TEMPO","km":16,"d":300,"desc":"16km: 3km Z1 → 2×20min @Z3 con 5min Z1 recuperación → 3km Z1. Si posible, 2ª parte en subida larga."},
-    {"day":"J","type":"EASY","km":12,"d":300,"desc":"12km Z1–Z2 trail o parque. GYM FASE B."},
-    {"day":"V","type":"REC","km":8,"d":0,"desc":"8km regenerativo Z1. Decisión según HRV Coros."},
-    {"day":"S","type":"LONG","km":26,"d":900,"desc":"26km Z1–Z2 trail. Pedriza o Manzanares si posible. D+>800m. 3 geles. Prueba bastones si los llevas en Palencia."},
-    {"day":"D","type":"TRAIL","km":14,"d":300,"desc":"14km Z1–Z2 trail B2B. Piernas cargadas. Simula segunda jornada de carrera. Evidencia: Hoffman 2016 — B2B weekends mejoran tolerancia fatiga acumulada."},
-   ],"notes":"Primera sesión B2B real. Nota sensaciones del segundo día."},
-
-  {"week":7,"phase":1,"phase_name":"Base Aeróbica","load":"LOW",
-   "title":"Deload + evaluación FC","km":48,"d_plus":600,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1 + GYM FASE B 50% carga."},
-    {"day":"X","type":"EASY","km":12,"d":200,"desc":"12km Z1–Z2. Sin calidad. Técnica bajada trail: zancada corta, peso atrás."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM FASE B (40min)."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":18,"d":400,"desc":"18km Z1–Z2. TEST: anota FC media y ritmo, compara con semana 1 → muestra progreso base aeróbica."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1."},
-   ],"notes":"🔄 DELOAD + EVALUACIÓN. Compara Strava: misma ruta, ¿FC media bajó 3-5bpm? → adaptación verificada."},
-
-  # ─── FASE 2: DESARROLLO TRAIL / PALENCIA PREP (Sem 8-12 | 11 May – 14 Jun) ─
-  {"week":8,"phase":2,"phase_name":"Desarrollo Trail — Palencia Prep","load":"MED",
-   "title":"Intro Fase 2 — Trail específico","km":65,"d_plus":1800,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1–Z2 + GYM FASE B."},
-    {"day":"X","type":"INTERVAL","km":14,"d":600,"desc":"Hill reps Palencia-specific: 2km Z1 → 8×3min subida >8% pendiente Z4–Z5 con bajada activa → 2km Z1. RPE 8-9 en subidas."},
-    {"day":"J","type":"TRAIL","km":12,"d":500,"desc":"12km trail técnico Z2. Power hiking rampas >15%. GYM FASE B."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":28,"d":1200,"desc":"28km Z1–Z2 trail. D+>1000m. Nutrition: gel c/40min, 60g CHO/h. Equipa como Palencia."},
-    {"day":"D","type":"B2B","km":16,"d":500,"desc":"16km trail Z1–Z2 B2B. RPE ≤6/10. Registra sensaciones."},
-   ],"notes":"Evidencia power hiking: Giovanelli 2016 — power hiking eficiente en pendientes >15% vs correr."},
-
-  {"week":9,"phase":2,"phase_name":"Desarrollo Trail — Palencia Prep","load":"HIGH",
-   "title":"VK simulado + volumen alto","km":70,"d_plus":2500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1 + GYM FASE B (squat pesado, hip thrust, nordic curl)."},
-    {"day":"X","type":"VK","km":12,"d":1000,"desc":"VK simulado: 6km subida continua apuntando 1000m D+ total, Z4–Z5. Bajada trote Z1. Tiempo objetivo <65min. Sin montaña: 5×8min cinta al 10%."},
-    {"day":"J","type":"TRAIL","km":14,"d":600,"desc":"14km trail técnico Z2–Z3 con bajadas técnicas. GYM FASE B."},
-    {"day":"V","type":"REC","km":8,"d":0,"desc":"8km Z1 o descanso según HRV."},
-    {"day":"S","type":"LONG","km":30,"d":1500,"desc":"30km Z1–Z2 trail. Primera vez 30km esta temporada. D+>1200m. Nutrition completa. Simula equipación Palencia."},
-    {"day":"D","type":"B2B","km":18,"d":900,"desc":"18km trail B2B Z1–Z2. Segunda jornada crucial."},
-   ],"notes":"⚠ Semana alta carga. Monitoriza HRV Coros cada mañana. Drop >10%: reduce siguiente sesión."},
-
-  {"week":10,"phase":2,"phase_name":"Desarrollo Trail — Palencia Prep","load":"HIGH",
-   "title":"Pico carga pre-Palencia","km":72,"d_plus":3000,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1 + GYM FASE B (última sesión pesada antes de taper)."},
-    {"day":"X","type":"INTERVAL","km":15,"d":800,"desc":"Umbral trail: 3km Z1 → 3×20min @Z3–Z4 (RPE 7-8) con 5min Z1, incluye subidas y bajadas → 3km Z1."},
-    {"day":"J","type":"TRAIL","km":15,"d":700,"desc":"15km trail técnico Z2–Z3. Máximo terreno irregular disponible."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":32,"d":1800,"desc":"32km Z1–Z2 trail. SESIÓN CLAVE PRE-PALENCIA. Simula esfuerzo carrera. Nutrition: 0.8g CHO/kg/h ≈ 66g CHO/h. Bastones si los llevas."},
-    {"day":"D","type":"B2B","km":18,"d":700,"desc":"18km Z1–Z2 B2B piernas cargadas."},
-   ],"notes":"Semana pico. Señales sobreentrenamiento: FC reposo +5bpm, insomnio, falta de motivación."},
-
-  {"week":11,"phase":2,"phase_name":"Taper Palencia","load":"MED-LOW",
-   "title":"TAPER Palencia — 1/2","km":52,"d_plus":1200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1. Sin gym, solo activación 15min."},
-    {"day":"X","type":"TEMPO","km":12,"d":300,"desc":"12km: 3km Z1 → 4×8min @Z3 con 3min Z1 → 2km Z1. Mantén intensidad, baja volumen."},
-    {"day":"J","type":"TRAIL","km":10,"d":400,"desc":"10km trail Z1–Z2 suave. Piernas ágiles."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":20,"d":500,"desc":"20km Z1–Z2 trail. Long reducido −38% vs pico. 3-4 aceleraciones 2min @pace carrera."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1 recovery."},
-   ],"notes":"Evidencia taper: Mujika & Padilla 2003 — 2 semanas, −40-50% volumen, mantener intensidad."},
-
-  {"week":12,"phase":2,"phase_name":"Race Week Palencia","load":"RACE",
-   "title":"🏁 RACE WEEK — Maratón MTN Palencia","km":69,"d_plus":4200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso. Carga CHO día 1/3: 8g CHO/kg ≈ 656g. Arroz, pasta, plátano, pan blanco. Evita fibra."},
-    {"day":"M","type":"EASY","km":8,"d":0,"desc":"8km Z1. 4×20s strides. Repasa estrategia y plan nutricional."},
-    {"day":"X","type":"EASY","km":6,"d":100,"desc":"6km Z1 + 3×1min @pace objetivo. Activación neuromuscular."},
-    {"day":"J","type":"REST","km":0,"d":0,"desc":"Descanso. Prepara mochila, bastones, geles (1 c/40min). Cena: 150g arroz + 120g pollo."},
-    {"day":"V","type":"REC","km":3,"d":0,"desc":"3km activación muy suave. Viaje si aplica."},
-    {"day":"S","type":"RACE","km":44,"d":3500,"desc":"🏁 MARATÓN MTN PALENCIA (44km/3500m D+). Estrategia: Z2 cómodo primeros 10km, power hike >15%, gel c/35-40min desde km10. OBJETIVO: finalizar fuerte y aprender para TP60."},
-    {"day":"D","type":"REC","km":4,"d":0,"desc":"Caminata suave. Proteína 2g/kg en las primeras 24h."},
-   ],"notes":"⚠ Palencia es objetivo B — sirve de test para TP60. No la corras como carrera A."},
-
-  # ─── FASE 3: RECUPERACIÓN + SIERRA (Sem 13-24 | 15 Jun – 6 Sep) ────────────
-  {"week":13,"phase":3,"phase_name":"Recuperación Palencia","load":"LOW",
-   "title":"Recuperación post-Palencia","km":35,"d_plus":400,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso total."},
-    {"day":"M","type":"REC","km":6,"d":0,"desc":"6km caminata/trote Z1. Masaje si tienes acceso."},
-    {"day":"X","type":"EASY","km":8,"d":0,"desc":"8km Z1 muy suave."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM Fase B mantenimiento (50% carga). Movilidad 20min."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"EASY","km":14,"d":300,"desc":"14km Z1–Z2 trail suave. Sin exigencia."},
-    {"day":"D","type":"EASY","km":10,"d":100,"desc":"10km Z1."},
-   ],"notes":"Evidencia post-maratón montaña: Burt 2011 — daño muscular persiste 5-7 días. Mínimo 10-14 días regeneración."},
-
-  {"week":14,"phase":3,"phase_name":"Rebuild + Sierra Prep","load":"MED",
-   "title":"Rebuild aeróbico","km":58,"d_plus":1400,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1–Z2 + GYM FASE C (inicio bloque TP60)."},
-    {"day":"X","type":"TEMPO","km":14,"d":400,"desc":"14km: 2km Z1 → 3×15min @Z3 con 4min Z1 → 2km Z1. Primera calidad post-Palencia."},
-    {"day":"J","type":"TRAIL","km":12,"d":500,"desc":"12km trail Z2. GYM FASE C."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":500,"desc":"22km Z1–Z2. Long moderado en rebuild."},
-    {"day":"D","type":"EASY","km":12,"d":0,"desc":"12km Z1 recovery."},
-   ],"notes":"Cambia el mindset: de carrera de montaña a ultra (63km). Mayor énfasis en D+ sostenido."},
-
-  {"week":15,"phase":3,"phase_name":"Rebuild + Sierra Prep","load":"MED-HIGH",
-   "title":"Carga media-alta + inicio sierra semanal","km":65,"d_plus":2000,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":0,"desc":"10km Z1 + GYM FASE C."},
-    {"day":"X","type":"INTERVAL","km":14,"d":700,"desc":"Hill repeats TP60-spec: 10×3min subida Z4 con bajada activa. Foco en técnica de bajada (frena excéntrico)."},
-    {"day":"J","type":"TRAIL","km":14,"d":600,"desc":"14km trail Z2. GYM FASE C."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":27,"d":1100,"desc":"27km Z1–Z2 trail. Primer long TP60 del ciclo."},
-    {"day":"D","type":"B2B","km":16,"d":600,"desc":"16km trail B2B Z1–Z2."},
-   ],"notes":"Si tienes fin de semana en sierra, ambas sesiones allí."},
-
-  {"week":16,"phase":3,"phase_name":"Bloque Sierra","load":"HIGH",
-   "title":"🏔 SIERRA — sem 1 (julio)","km":70,"d_plus":3500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"VK","km":10,"d":1000,"desc":"VK Sierra: subida continua 6km / 1000m D+. Pedriza o Manzanares. Z4–Z5. Tiempo objetivo <65min."},
-    {"day":"X","type":"TRAIL","km":16,"d":800,"desc":"16km técnico Z2–Z3 en sierra. Incluye bajada técnica en roca/tierra."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM FASE C o sesión peso corporal sierra: pistols, step-ups, jump squats."},
-    {"day":"V","type":"REC","km":8,"d":200,"desc":"8km Z1 suave."},
-    {"day":"S","type":"LONG","km":30,"d":2000,"desc":"30km Z1–Z2 sierra. D+>1800m. Bastones + mochila hidratación. Nutrition race-simulation completa."},
-    {"day":"D","type":"B2B","km":18,"d":1000,"desc":"18km trail B2B Z1–Z2. Objetivo: terminar bien, no rápido."},
-   ],"notes":"🏔 Inicio bloque sierra (La Ponderosa / Manzanares). Aprovecha el acceso directo desde casa."},
-
-  {"week":17,"phase":3,"phase_name":"Bloque Sierra","load":"MED",
-   "title":"🏔 SIERRA — deload","km":52,"d_plus":2200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":300,"desc":"10km Z1 sierra suave + GYM FASE C reducido."},
-    {"day":"X","type":"TEMPO","km":12,"d":500,"desc":"12km con 2×15min @Z3 en terreno ondulado sierra."},
-    {"day":"J","type":"TRAIL","km":10,"d":400,"desc":"10km trail Z1–Z2 técnico."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":1200,"desc":"22km deload long. D+ reducido."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1 recovery."},
-   ],"notes":"🔄 DELOAD en bloque sierra. La montaña añade estrés sistémico extra (calor, terreno, altitud)."},
-
-  {"week":18,"phase":3,"phase_name":"Bloque Sierra","load":"HIGH",
-   "title":"🏔 SIERRA — pico carga agosto","km":80,"d_plus":4500,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"VK","km":12,"d":1200,"desc":"VK avanzado: 7km / 1200m D+ continuo. Z4–Z5. Objetivo tiempo < sem16. GYM FASE C si posible."},
-    {"day":"X","type":"TRAIL","km":18,"d":1000,"desc":"18km técnico Z2–Z3. Máxima dificultad de terreno. Foco bajadas: cadencia >180spm, peso atrás, zancada corta."},
-    {"day":"J","type":"TRAIL","km":14,"d":600,"desc":"14km Z2. Recovery activo con D+."},
-    {"day":"V","type":"REC","km":8,"d":200,"desc":"8km Z1 suave."},
-    {"day":"S","type":"LONG","km":35,"d":2500,"desc":"35km Z1–Z2. SESIÓN REINA del ciclo. D+>2200m. Simula primer 55km TP60. Nutrition completa c/35-40min. Todo el equipo de carrera."},
-    {"day":"D","type":"B2B","km":20,"d":1000,"desc":"20km trail B2B Z1–Z2. Segunda jornada dura. RPE máx 7/10."},
-   ],"notes":"⚠ SEMANA PICO máximo del ciclo. D+ total ~4500m. HRV, sueño y apetito son semáforos de carga."},
-
-  {"week":19,"phase":3,"phase_name":"Bloque Sierra","load":"LOW-MED",
-   "title":"🏔 SIERRA — deload agosto","km":50,"d_plus":2000,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":300,"desc":"10km Z1 + movilidad 20min."},
-    {"day":"X","type":"TRAIL","km":12,"d":500,"desc":"12km Z2 técnico suave."},
-    {"day":"J","type":"GYM","km":0,"d":0,"desc":"GYM FASE C mantenimiento."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":1200,"desc":"22km Z1–Z2 deload long."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1."},
-   ],"notes":"Supercompensación requiere 10-14 días post-semana pico. Este deload es tan importante como el pico."},
-
-  {"week":20,"phase":3,"phase_name":"Bloque Sierra","load":"HIGH",
-   "title":"🏔 SIERRA — segundo bloque TP60","km":75,"d_plus":4000,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"VK","km":12,"d":1200,"desc":"VK race-pace TP60: simula esfuerzo sostenible 6-7h. No Z5 total, Z4 controlado."},
-    {"day":"X","type":"INTERVAL","km":16,"d":800,"desc":"TP60-specific: 4×10min @Z4 en subidas con 5min bajada activa. Simula repechos TP60."},
-    {"day":"J","type":"TRAIL","km":14,"d":600,"desc":"14km Z2 técnico. GYM FASE C."},
-    {"day":"V","type":"REC","km":8,"d":200,"desc":"8km Z1."},
-    {"day":"S","type":"LONG","km":34,"d":2200,"desc":"34km Z1–Z2 sierra. Race-conditions TP60 completas. Objetivo: terminar en Z2 cómodo."},
-    {"day":"D","type":"B2B","km":18,"d":1000,"desc":"18km B2B Z1–Z2."},
-   ],"notes":"Segundo bloque pico TP60. Semanas 18 y 20 son las más importantes del ciclo."},
-
-  {"week":21,"phase":3,"phase_name":"Bloque Sierra","load":"MED",
-   "title":"🏔 SIERRA — deload septiembre","km":55,"d_plus":2200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":300,"desc":"10km Z1 + GYM FASE C última sesión pesada."},
-    {"day":"X","type":"TEMPO","km":14,"d":600,"desc":"14km: 3×15min @Z3 en ondulado. Fresco y controlado."},
-    {"day":"J","type":"TRAIL","km":12,"d":500,"desc":"12km Z2 técnico."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":22,"d":1200,"desc":"22km Z1–Z2. Deload long."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1."},
-   ],"notes":"Último deload antes del taper TP60. Baja gym a mantenimiento."},
-
-  {"week":22,"phase":3,"phase_name":"Pre-Taper","load":"MED-HIGH",
-   "title":"Pre-taper — última carga","km":68,"d_plus":3200,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"VK","km":10,"d":900,"desc":"VK final: 5km / 900m D+. Último estímulo de alta intensidad antes del taper."},
-    {"day":"X","type":"TRAIL","km":15,"d":700,"desc":"15km Z2–Z3 técnico. GYM FASE C mantenimiento."},
-    {"day":"J","type":"EASY","km":10,"d":300,"desc":"10km Z1–Z2."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":28,"d":1800,"desc":"28km Z1–Z2. Último long run serio antes taper. D+>1500m."},
-    {"day":"D","type":"B2B","km":15,"d":500,"desc":"15km trail B2B suave."},
-   ],"notes":"Última semana de carga alta. A partir de aquí solo bajamos."},
-
-  # ─── FASE 4: TAPER TP60 (Sem 23-25 | 7 Sep – 10 Oct) ──────────────────────
-  {"week":23,"phase":4,"phase_name":"Taper TP60","load":"MED-LOW",
-   "title":"TAPER TP60 — 1/3","km":55,"d_plus":1800,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":10,"d":200,"desc":"10km Z1–Z2. Solo mantenimiento."},
-    {"day":"X","type":"INTERVAL","km":12,"d":500,"desc":"12km: 4×6min @Z4 con 4min Z1. Mantén intensidad, reduce volumen."},
-    {"day":"J","type":"TRAIL","km":10,"d":400,"desc":"10km trail Z2."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":24,"d":1000,"desc":"24km Z1–Z2 trail −30% vs pico. 4 aceleraciones 3min @pace TP60."},
-    {"day":"D","type":"EASY","km":10,"d":0,"desc":"10km Z1 recovery."},
-   ],"notes":"Taper inicio. Evidencia: Bosquet 2007 — reducción volumen 41-60% óptima. Intensidad: mantener."},
-
-  {"week":24,"phase":4,"phase_name":"Taper TP60","load":"LOW",
-   "title":"TAPER TP60 — 2/3","km":40,"d_plus":900,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"M","type":"EASY","km":8,"d":100,"desc":"8km Z1. Sin presión."},
-    {"day":"X","type":"TEMPO","km":10,"d":300,"desc":"10km: 2km Z1 → 3×8min @Z3 con 3min Z1 → 2km Z1. Siente el cuerpo reactivo."},
-    {"day":"J","type":"EASY","km":8,"d":200,"desc":"8km Z1–Z2 trail suave."},
-    {"day":"V","type":"REST","km":0,"d":0,"desc":"Descanso."},
-    {"day":"S","type":"LONG","km":16,"d":400,"desc":"16km Z1–Z2. Long muy reducido. 2-3 aceleraciones 2min @pace TP60."},
-    {"day":"D","type":"EASY","km":8,"d":0,"desc":"8km Z1."},
-   ],"notes":"Sensaciones de piernas pesadas normales y transitorias. No añadas km extra aunque tengas energía."},
-
-  {"week":25,"phase":4,"phase_name":"Race Week TP60","load":"RACE",
-   "title":"🏁 RACE WEEK — TP60","km":83,"d_plus":3400,
-   "sessions":[
-    {"day":"L","type":"REST","km":0,"d":0,"desc":"Descanso. CHO loading día 1/3: 8g CHO/kg ≈ 656g. Arroz, pasta, plátano. Sin fibra ni grasas."},
-    {"day":"M","type":"EASY","km":6,"d":0,"desc":"6km Z1. 4×30s strides. CHO loading día 2/3: 9g CHO/kg."},
-    {"day":"X","type":"EASY","km":4,"d":0,"desc":"4km activación + 3×1min @pace TP60. CHO loading día 3/3: 10g CHO/kg."},
-    {"day":"J","type":"REST","km":0,"d":0,"desc":"Descanso. Prepara material completo: mochila, bastones, 10 geles (1 c/35min), electrolitos, frontales, drop bag si aplica."},
-    {"day":"V","type":"REC","km":2,"d":0,"desc":"2km caminata o descanso total. Cena 18:30-19:00h: 180g arroz + 150g pollo + plátano."},
-    {"day":"S","type":"RACE","km":63,"d":2500,"desc":"🏁 TP60 (63km/2500m D+). Estrategia: Z2 cómodo primeros 20km, power hike >15%, gel c/35min desde km15, electrolitos en cada CP. OBJETIVO A: completar en 7-8h sintiéndote bien."},
-    {"day":"D","type":"REC","km":2,"d":0,"desc":"Caminata suave. Proteína 2g/kg. CHO 1.2g/kg c/hora × 4h. Descanso total."},
-   ],"notes":"🎯 OBJETIVO PRINCIPAL del ciclo. Estrategia conservadora primeros 30km → negativa split última parte."},
-]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PLAN DE FUERZA
 # Base científica: Beattie 2017, Blagrove 2018, Petersen 2011, Mikkola 2007
 # ═══════════════════════════════════════════════════════════════════════════════
 STRENGTH = [
-  {"id":"A","name":"FASE A — Adaptación Anatómica","weeks":"1–7",
+  {"id":"A","name":"FASE A — Adaptación Anatómica","weeks":"1–8",
    "goal":"Construir base tendinosa y muscular. Prevenir lesiones. Activar glúteo y core.",
    "freq":"2×/semana (Mar+Jue)","intensity":"3×12-15 reps | 60-70% 1RM | RIR 3-4",
    "ref":"Blagrove 2018 — HST reduce lesiones 50% y mejora economía +3% en fondistas",
@@ -478,7 +221,7 @@ STRENGTH = [
     {"name":"Banded Clamshells","sets":3,"reps":"20/lado","focus":"Abductor cadera","notes":"Prevención IT band y rodilla corredor."},
     {"name":"Farmer Carries","sets":3,"reps":"30m","focus":"Core + trapecio","notes":"Simula mochila trail. Estabilidad lumbar en carga."},
    ]},
-  {"id":"B","name":"FASE B — Fuerza Máxima","weeks":"8–16",
+  {"id":"B","name":"FASE B — Fuerza Máxima","weeks":"9–16",
    "goal":"Aumentar fuerza máxima y potencia neuromuscular. Mejora directa de economía de carrera.",
    "freq":"2×/semana (Mar+Jue)","intensity":"4×4-6 reps | 80-85% 1RM | RIR 1-2",
    "ref":"Beattie 2017 — HST 16 sem: economía de carrera +4.6%, potencia +8.6%",
@@ -493,7 +236,7 @@ STRENGTH = [
     {"name":"Paloff Press","sets":3,"reps":"10/lado","focus":"Anti-rotación core","notes":"Estabilidad en terreno irregular."},
     {"name":"Single-leg RDL con mancuerna","sets":3,"reps":"8/lado","focus":"Isquio+glúteo+equilibrio","notes":"Propiocepción trail. Imprescindible."},
    ]},
-  {"id":"C","name":"FASE C — Potencia + Específica Trail","weeks":"17–25",
+  {"id":"C","name":"FASE C — Potencia + Específica Trail","weeks":"17–22",
    "goal":"Potencia explosiva, tolerancia excéntrica bajadas, mantenimiento fuerza bloque alto volumen.",
    "freq":"2×/sem (o 1× en semanas pico de volumen)","intensity":"3×4-6 fuerza + 3×8 plyométrico",
    "ref":"Heisten 2021 — plyometría+fuerza mejoran rendimiento ultra-trail en corredores experimentados",
@@ -573,7 +316,7 @@ NUTRITION = {
 # ═══════════════════════════════════════════════════════════════════════════════
 # GENERADOR HTML
 # ═══════════════════════════════════════════════════════════════════════════════
-PHASE_COLORS = {1:"#f97316",2:"#f59e0b",3:"#22d3ee",4:"#a78bfa"}
+PHASE_COLORS = {1:"#f97316",2:"#f59e0b",3:"#22d3ee",4:"#a78bfa",5:"#34d399"}
 SESSION_CONFIG = {
     "REST":    {"bg":"#1e293b","border":"#334155","label":"REST"},
     "EASY":    {"bg":"#0f2d2d","border":"#22d3ee","label":"EASY Z1-Z2"},
@@ -605,6 +348,12 @@ def generate_html(strava_data, athlete_profile):
     chart_trail    = [w[1]["trail_pct"] for w in weekly_data[-12:]]
 
     # Plan phase colors for HTML
+    def _tp_html(s):
+        block = format_tp_block(s)
+        if not block:
+            return ""
+        return "<div class='tp-label'>📋 Copiar a TrainingPeaks</div><pre class='tp-block'>" + block + "</pre>"
+
     def session_html(s, week_num, day_idx):
         cfg = SESSION_CONFIG.get(s["type"], SESSION_CONFIG["EASY"])
         date_str = fmt_date(week_num, ["L","M","X","J","V","S","D"].index(s["day"]))
@@ -618,6 +367,7 @@ def generate_html(strava_data, athlete_profile):
             <span class='sess-date'>{date_str}</span>
           </div>
           <p class='sess-desc'>{s["desc"]}</p>
+          {_tp_html(s)}
         </div>"""
 
     def week_html(w):
@@ -651,8 +401,8 @@ def generate_html(strava_data, athlete_profile):
         if p not in phases: phases[p] = []
         phases[p].append(w)
 
-    phase_names = {1:"BASE AERÓBICA",2:"DESARROLLO TRAIL — PALENCIA PREP",
-                   3:"RECUPERACIÓN + BLOQUE SIERRA",4:"TAPER + TP60"}
+    phase_names = {1:"BASE AERÓBICA",2:"DESARROLLO TRAIL",
+                   3:"BLOQUE SIERRA",4:"TAPER + PALENCIA",5:"RECOVERY + TP60"}
 
     phases_html = ""
     for pid, weeks in phases.items():
@@ -760,24 +510,24 @@ def generate_html(strava_data, athlete_profile):
         "hr_max": hr_max
     })
 
-    zones_ref = []
-    for lo, hi, zname, zcolor in [
-        (0,65,"Z1 Regenerativo","#64748b"),
-        (65,75,"Z2 Aeróbico","#22d3ee"),
-        (75,85,"Z3 Tempo","#84cc16"),
-        (85,92,"Z4 Umbral","#f97316"),
-        (92,100,"Z5 VO2max","#ef4444"),
-    ]:
-        zones_ref.append({"lo":round(hr_max*lo/100),"hi":round(hr_max*hi/100),
-                          "name":zname,"color":zcolor})
+    # Zones based on VT1/VT2 lab data (not generic % FCmax)
+    vt1 = ATHLETE.get("vt1", 152)
+    vt2 = ATHLETE.get("vt2", 172)
+    zones_ref = [
+        {"lo": 0,       "hi": vt1-10, "name":"Z1 Recuperación",  "color":"#64748b", "desc":f"< {vt1-10} bpm — Regenerativo, conversación fácil"},
+        {"lo": vt1-10,  "hi": vt1,    "name":"Z2 Aeróbico",      "color":"#22d3ee", "desc":f"{vt1-10}–{vt1} bpm — Base aeróbica, justo debajo de VT1"},
+        {"lo": vt1,     "hi": vt2,    "name":"Z3 Tempo",         "color":"#84cc16", "desc":f"{vt1}–{vt2} bpm — Entre umbrales, frases cortas"},
+        {"lo": vt2,     "hi": vt2+8,  "name":"Z4 Umbral",        "color":"#f97316", "desc":f"{vt2}–{vt2+8} bpm — Por encima de VT2, insostenible >20min"},
+        {"lo": vt2+8,   "hi": hr_max, "name":"Z5 VO2max",        "color":"#ef4444", "desc":f"{vt2+8}–{hr_max} bpm — Máximo esfuerzo"},
+    ]
 
     zones_html = "".join(f"""
       <div class='zone-row'>
         <span class='z-dot' style='background:{z["color"]}'></span>
         <span class='z-name'>{z["name"]}</span>
         <span class='z-range'>{z["lo"]}–{z["hi"]} bpm</span>
-        <span class='z-pct'>{["0-65","65-75","75-85","85-92","92-100"][i]}% FCmax</span>
-      </div>""" for i,z in enumerate(zones_ref))
+        <span class='z-pct'>{z["desc"]}</span>
+      </div>""" for z in zones_ref)
 
     html = f"""<!DOCTYPE html>
 <html lang="es">
@@ -892,6 +642,9 @@ details[open] .week-summary{{background:var(--surface3)}}
 .sess-km{{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}}
 .sess-date{{font-size:10px;color:var(--muted);margin-left:auto}}
 .sess-desc{{font-size:13px;color:#94a3b8;line-height:1.5}}
+.tp-label{{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-transform:uppercase}}
+.tp-block{{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface3);
+  color:#94a3b8;padding:8px 10px;border-radius:4px;white-space:pre;overflow-x:auto;margin:4px 0 0;line-height:1.5}}
 
 /* FUERZA */
 .strength-phase{{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}}
@@ -1052,23 +805,23 @@ details[open] .week-summary{{background:var(--surface3)}}
 <!-- ═══ TAB: PLAN ═══ -->
 <div id="tab-plan" class="tab-panel">
   <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px">
-    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Resumen del Plan — 25 semanas</h3>
+    <h3 style="font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Resumen del Plan — 15 semanas</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Inicio plan</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">24 Mar 2026</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">29 Jun 2026</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Palencia MTN</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f97316">14 Jun 2026 (Sem 12)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f97316">12 Sep 2026 (Sem 11)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">TP60</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#22d3ee">10 Oct 2026 (Sem 25)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#22d3ee">11 Oct 2026 (Sem 15)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Volumen pico</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f59e0b">80km / 4500m D+ (Sem 18)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#f59e0b">72km / 2400m D+ (Sem 7)</div>
       </div>
       <div style="background:var(--surface3);border-radius:8px;padding:12px">
         <div style="font-size:11px;color:var(--muted)">Metodología</div>
@@ -1235,11 +988,11 @@ window.addEventListener('DOMContentLoaded', () => {{
 
 function buildCompliance() {{
   const today = new Date();
-  const planStart = new Date('2026-03-24');
+  const planStart = new Date('{PLAN_START.isoformat()}');
   const tbody = document.getElementById('compliance-body');
   const rows = [];
-  const phaseNames = {{1:'Base',2:'Trail/Palencia',3:'Sierra',4:'Taper'}};
-  const phaseColors = {{1:'#f97316',2:'#f59e0b',3:'#22d3ee',4:'#a78bfa'}};
+  const phaseNames = {{1:'Base',2:'Construcción',3:'Afinado Palencia',4:'Puente TP60',5:'Taper TP60'}};
+  const phaseColors = {{1:'#f97316',2:'#f59e0b',3:'#22d3ee',4:'#a78bfa',5:'#34d399'}};
   
   for (const pw of PLAN_DATA) {{
     const wStart = new Date(planStart.getTime() + (pw.week-1)*7*86400000);
@@ -1276,7 +1029,7 @@ function buildCompliance() {{
   }}
   
   if (rows.length === 0) {{
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 24 de marzo 2026. Ejecuta el script la próxima semana para ver tu primer seguimiento.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 29 de junio 2026. Ejecuta el script la próxima semana para ver tu primer seguimiento.</td></tr>';
   }} else {{
     tbody.innerHTML = rows.join('');
   }}
@@ -1313,24 +1066,24 @@ def generate_plan_completo(strava_data, athlete_profile):
         "trail_pct": w[1]["trail_pct"]} for w in weekly_data})
 
     # Build zones
-    zones_ref = []
-    for lo, hi, zname, zcolor in [
-        (0,65,"Z1 Regenerativo","#64748b"),
-        (65,75,"Z2 Aeróbico","#22d3ee"),
-        (75,85,"Z3 Tempo","#84cc16"),
-        (85,92,"Z4 Umbral","#f97316"),
-        (92,100,"Z5 VO2max","#ef4444"),
-    ]:
-        zones_ref.append({"lo":round(hr_max*lo/100),"hi":round(hr_max*hi/100),
-                          "name":zname,"color":zcolor})
+    # Zones based on VT1/VT2 lab data
+    vt1 = ATHLETE.get("vt1", 152)
+    vt2 = ATHLETE.get("vt2", 172)
+    zones_ref = [
+        {"lo": 0,       "hi": vt1-10, "name":"Z1 Recuperación",  "color":"#64748b", "desc":f"< {vt1-10} bpm — Regenerativo"},
+        {"lo": vt1-10,  "hi": vt1,    "name":"Z2 Aeróbico",      "color":"#22d3ee", "desc":f"{vt1-10}–{vt1} bpm — Justo debajo de VT1"},
+        {"lo": vt1,     "hi": vt2,    "name":"Z3 Tempo",         "color":"#84cc16", "desc":f"{vt1}–{vt2} bpm — Entre VT1 y VT2"},
+        {"lo": vt2,     "hi": vt2+8,  "name":"Z4 Umbral",        "color":"#f97316", "desc":f"{vt2}–{vt2+8} bpm — Por encima de VT2"},
+        {"lo": vt2+8,   "hi": hr_max, "name":"Z5 VO2max",        "color":"#ef4444", "desc":f"{vt2+8}–{hr_max} bpm — Máximo esfuerzo"},
+    ]
 
     zones_html = "".join(f"""
       <div class='zone-row'>
         <span class='z-dot' style='background:{z["color"]}'></span>
         <span class='z-name'>{z["name"]}</span>
         <span class='z-range'>{z["lo"]}–{z["hi"]} bpm</span>
-        <span class='z-pct'>{["0-65","65-75","75-85","85-92","92-100"][i]}% FCmax</span>
-      </div>""" for i,z in enumerate(zones_ref))
+        <span class='z-pct'>{z["desc"]}</span>
+      </div>""" for z in zones_ref)
 
     # Race countdown
     today = date.today()
@@ -1498,7 +1251,7 @@ def generate_plan_completo(strava_data, athlete_profile):
 const CHART_DATA = {chart_data};
 const PLAN_DATA = {plan_data_json};
 const STRAVA_WEEKS = {strava_weeks_json};
-const PLAN_START = '2026-03-23';
+const PLAN_START = '{PLAN_START.isoformat()}';
 
 function switchTab(id) {{
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1556,8 +1309,8 @@ function initCompliance() {{
   const today = new Date();
   const planStart = new Date(PLAN_START);
   const tbody = document.getElementById('compliance-body');
-  const phaseNames = {{1:'Base',2:'Trail/Palencia',3:'Sierra',4:'Taper'}};
-  const phaseColors = {{1:'#f97316',2:'#f59e0b',3:'#22d3ee',4:'#a78bfa'}};
+  const phaseNames = {{1:'Base',2:'Construcción',3:'Afinado Palencia',4:'Puente TP60',5:'Taper TP60'}};
+  const phaseColors = {{1:'#f97316',2:'#f59e0b',3:'#22d3ee',4:'#a78bfa',5:'#34d399'}};
   const rows = [];
 
   for (const pw of PLAN_DATA) {{
@@ -1597,14 +1350,14 @@ function initCompliance() {{
   }}
 
   if (rows.length === 0) {{
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 23 de marzo 2026. Ejecuta el script cada lunes para ver seguimiento.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#64748b;font-style:italic">El plan comienza el 29 de junio 2026. Ejecuta el script cada lunes para ver seguimiento.</td></tr>';
   }} else {{
     tbody.innerHTML = rows.join('');
   }}
 }}
 </script>"""
 
-    # Replace old script block
+    # Replace old script block (first run only — subsequent runs skip this no-op)
     static_html = static_html.replace(
         """<script>
 function switchTab(id){
@@ -1615,6 +1368,15 @@ function switchTab(id){
 }
 </script>""",
         new_script
+    )
+
+    # Idempotent PLAN_START refresh: on re-runs the old script is already replaced,
+    # so update the date literal directly (handles both first and subsequent runs).
+    import re as _re
+    static_html = _re.sub(
+        r"const PLAN_START = '\d{4}-\d{2}-\d{2}';",
+        f"const PLAN_START = '{PLAN_START.isoformat()}';",
+        static_html
     )
 
     return static_html
@@ -1666,7 +1428,33 @@ def main():
     print(f"  • {OUTPUT_PLAN} — Plan detallado + Gym + Supps + Strava + Seguimiento")
     print(f"  • {len(PLAN)} semanas · {sum(len(s['exercises']) for s in STRENGTH)} ejercicios · HSN products")
     print("═"*60 + "\n")
-    print("  Ejecuta 'python trail_analyzer.py' cada lunes para actualizar.\n")
+
+    # Auto-deploy to GitHub Pages — only when explicitly requested.
+    # (set PLANTRAIL_DEPLOY=1; Part B's GitHub Action sets this.) Local runs never push.
+    import subprocess
+    script_dir = str(Path(__file__).parent)
+    if not os.environ.get("PLANTRAIL_DEPLOY"):
+        print("  (Auto-deploy desactivado — exporta PLANTRAIL_DEPLOY=1 para publicar)")
+    else:
+        try:
+            r = subprocess.run(["git","remote"], capture_output=True, text=True, cwd=script_dir)
+            if r.returncode == 0 and r.stdout.strip():
+                print("⚙ Desplegando a GitHub Pages...")
+                subprocess.run(["git","add","plan_completo.html","dashboard.html","index.html"], cwd=script_dir)
+                result = subprocess.run(
+                    ["git","commit","-m",f"Update dashboard {date.today().isoformat()}"],
+                    capture_output=True, text=True, cwd=script_dir)
+                if "nothing to commit" in result.stdout:
+                    print("  ✓ Sin cambios — no se necesita deploy.")
+                else:
+                    push = subprocess.run(["git","push"], capture_output=True, text=True, cwd=script_dir)
+                    print("  ✓ Desplegado" if push.returncode == 0 else f"  ⚠ Push falló: {push.stderr.strip()}")
+            else:
+                print("  (Sin repositorio git — deploy manual necesario)")
+        except Exception as e:
+            print(f"  ⚠ Auto-deploy saltado: {e}")
+
+    print("\n  Ejecuta 'python trail_analyzer.py' cada lunes para actualizar.\n")
 
 if __name__ == "__main__":
     main()
