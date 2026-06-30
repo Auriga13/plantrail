@@ -132,6 +132,13 @@ clean structured quality session (Wed). Hold the macro map unchanged.
 **Next review:** after W1 (≈ Jul 6) — pull HR streams to verify the 80/20 split and long-run
 decoupling, then set W2.
 
+### 2026-06-30 — Applied W1 reconciliation
+
+Structured plan W1 set to **41 km / 700 m** (was 46/800) to match the conservative-ramp
+decision logged 2026-06-29 (avoid +28% jump on the ~36 km/wk June base; ACWR ~1.1).
+Trimmed: X 11→10 km, J 8→7 km (D+ 200→150), S 13→12 km (D+ 350→300), D 6→4 km. Quality
+session (Wed 5×3min Z3 cuestas) preserved. Weeks 2–15 unchanged.
+
 ---
 
 ## Plan data (single source — edited per re-plan)
@@ -144,9 +151,9 @@ weeks:
   phase_name: Reconstrucción base
   load: LOW-MED
   title: Re-entrada
-  km: 46
-  d_plus: 800
-  notes: Re-entrada controlada desde la base de junio. Registra FC reposo cada mañana.
+  km: 41
+  d_plus: 700
+  notes: Re-entrada conservadora ~41 km / 700 m (recortado de 46 para no saltar +28% sobre la base de junio; ACWR ~1.1). Easy = easy. Registra FC reposo cada mañana.
   objective: Re-anclar la rutina de entrenamiento desde la base de junio sin estrés. Reactivar fuerza
     (GYM Fase A) y cadencia.
   context: 'Semana 1 del bloque de 15 hacia TP60. Vienes de un junio irregular (~36 km/sem) pero sin lesión,
@@ -178,27 +185,27 @@ weeks:
       - {kind: cooldown, dist_km: 1, zone: z1}
   - day: X
     type: TEMPO
-    km: 11
+    km: 10
     d: 250
-    desc: '11km: 3km Z1 + 5×3min Z3 en cuesta (2min Z1 bajada) + 2km Z1.'
+    desc: '10km: 2km Z1 + 5×3min Z3 en cuesta (2min Z1 bajada) + 2km Z1.'
     tp:
       sport: TrailRun
       title: Cuestas 5×3min Z3
       steps:
-      - {kind: warmup, dist_km: 3, zone: z1}
+      - {kind: warmup, dist_km: 2, zone: z1}
       - {kind: interval, reps: 5, on: '3:00', on_zone: z3, off: '2:00', off_zone: z1, note: 'en cuesta, trote bajada'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: J
     type: TRAIL
-    km: 8
-    d: 200
-    desc: 8km Z2 trail rolling.
+    km: 7
+    d: 150
+    desc: 7km Z2 trail rolling.
     tp:
       sport: TrailRun
-      title: Trail 8km Z2 rolling
+      title: Trail 7km Z2 rolling
       steps:
       - {kind: warmup, dist_km: 1, zone: z1}
-      - {kind: run, dist_km: 6, zone: z2}
+      - {kind: run, dist_km: 5, zone: z2}
       - {kind: cooldown, dist_km: 1, zone: z1}
   - day: V
     type: REST
@@ -207,26 +214,26 @@ weeks:
     desc: Descanso.
   - day: S
     type: LONG
-    km: 13
-    d: 350
-    desc: 13km Z1–Z2, busca 350m D+. 1 gel km10.
+    km: 12
+    d: 300
+    desc: 12km Z1–Z2, busca 300m D+. 1 gel km10.
     tp:
       sport: TrailRun
-      title: Long 13km Z1–Z2 +350m
+      title: Long 12km Z1–Z2 +300m
       steps:
       - {kind: warmup, dist_km: 2, zone: z1}
-      - {kind: run, dist_km: 9, zone: z2, note: 'busca D+, power-hike >15%; 1 gel km10'}
+      - {kind: run, dist_km: 8, zone: z2, note: 'busca D+, power-hike >15%; 1 gel km10'}
       - {kind: cooldown, dist_km: 2, zone: z1}
   - day: D
     type: EASY
-    km: 6
+    km: 4
     d: 0
-    desc: 6km Z1 recovery.
+    desc: 4km Z1 recovery.
     tp:
       sport: Run
-      title: Recovery 6km Z1
+      title: Recovery 4km Z1
       steps:
-      - {kind: run, dist_km: 6, zone: z1}
+      - {kind: run, dist_km: 4, zone: z1}
 - week: 2
   phase: 1
   phase_name: Reconstrucción base
