@@ -1,0 +1,2161 @@
+{
+"ascension-al-pico-murcia.gpx": {
+"n": 758,
+"start": [
+42.97024,
+-4.75714
+],
+"end": [
+42.97075,
+-4.75756
+],
+"km": 11.8,
+"up": 947,
+"emin": 1410,
+"emax": 2345,
+"loop_m": 66,
+"wpts": []
+},
+"ascension-pena-fraile.gpx": {
+"n": 229,
+"start": [
+42.80945,
+-4.72989
+],
+"end": [
+42.80945,
+-4.72989
+],
+"km": 11.81,
+"up": 3173,
+"emin": 1120,
+"emax": 2002,
+"loop_m": 0,
+"wpts": []
+},
+"ascension-pico-espiguete-por-la-cara-norte.gpx": {
+"n": 896,
+"start": [
+42.95139,
+-4.76164
+],
+"end": [
+42.95139,
+-4.76164
+],
+"km": 9.18,
+"up": 1197,
+"emin": 1344,
+"emax": 2444,
+"loop_m": 0,
+"wpts": []
+},
+"ascension-pico-espiguete-por-la-cara-sur.gpx": {
+"n": 349,
+"start": [
+42.92153,
+-4.76374
+],
+"end": [
+42.94459,
+-4.7962
+],
+"km": 6.18,
+"up": 1137,
+"emin": 1323,
+"emax": 2444,
+"loop_m": 3683,
+"wpts": []
+},
+"bocaron-de-casavegas.gpx": {
+"n": 230,
+"start": [
+43.02222,
+-4.51268
+],
+"end": [
+43.03105,
+-4.54289
+],
+"km": 4.23,
+"up": 334,
+"emin": 1221,
+"emax": 1529,
+"loop_m": 2645,
+"wpts": []
+},
+"calzada-de-los-blendios-etapa-1.gpx": {
+"n": 628,
+"start": [
+42.59624,
+-4.32911
+],
+"end": [
+42.72267,
+-4.27517
+],
+"km": 21.32,
+"up": 187,
+"emin": 833,
+"emax": 1012,
+"loop_m": 14734,
+"wpts": []
+},
+"calzada-de-los-blendios-etapa-2.gpx": {
+"n": 310,
+"start": [
+42.72281,
+-4.27515
+],
+"end": [
+42.79251,
+-4.26272
+],
+"km": 10.37,
+"up": 141,
+"emin": 871,
+"emax": 949,
+"loop_m": 7817,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-6-alar-del-rey-perazancas-de-ojeda.gpx": {
+"n": 7228,
+"start": [
+42.00874,
+-4.53674
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 223.56,
+"up": 3117,
+"emin": 287,
+"emax": 1454,
+"loop_m": 127263,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-6-alar-del-rey-perazancas-de-ojeda_1.gpx": {
+"n": 659,
+"start": [
+42.65864,
+-4.30915
+],
+"end": [
+42.78485,
+-4.4213
+],
+"km": 24.76,
+"up": 483,
+"emin": 847,
+"emax": 1066,
+"loop_m": 16760,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-7-perazancas-de-ojeda-cervera-de-pisuerga.gpx": {
+"n": 7228,
+"start": [
+42.00874,
+-4.53674
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 223.56,
+"up": 3117,
+"emin": 287,
+"emax": 1454,
+"loop_m": 127263,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-7-perazancas-de-ojeda-cervera-de-pisuerga_1.gpx": {
+"n": 654,
+"start": [
+42.78522,
+-4.42115
+],
+"end": [
+42.86389,
+-4.49794
+],
+"km": 18.26,
+"up": 352,
+"emin": 987,
+"emax": 1163,
+"loop_m": 10758,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-8-cervera-de-pisuerga-san-salvador-de-cantamuda.gpx": {
+"n": 7228,
+"start": [
+42.00874,
+-4.53674
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 223.56,
+"up": 3117,
+"emin": 287,
+"emax": 1454,
+"loop_m": 127263,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-8-cervera-de-pisuerga-san-salvador-de-cantamuda_1.gpx": {
+"n": 959,
+"start": [
+42.86391,
+-4.49793
+],
+"end": [
+42.96494,
+-4.4984
+],
+"km": 18.07,
+"up": 459,
+"emin": 995,
+"emax": 1297,
+"loop_m": 11234,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-9-san-salvador-de-cantamuda-camasobres.gpx": {
+"n": 7228,
+"start": [
+42.00874,
+-4.53674
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 223.56,
+"up": 3117,
+"emin": 287,
+"emax": 1454,
+"loop_m": 127263,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapa-9-san-salvador-de-cantamuda-camasobres_1.gpx": {
+"n": 703,
+"start": [
+42.96493,
+-4.4979
+],
+"end": [
+43.01521,
+-4.48818
+],
+"km": 12.42,
+"up": 524,
+"emin": 1106,
+"emax": 1401,
+"loop_m": 5646,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapas-10-11-camasobres-monasterio-santo-toribio.gpx": {
+"n": 7228,
+"start": [
+42.00874,
+-4.53674
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 223.56,
+"up": 3117,
+"emin": 287,
+"emax": 1454,
+"loop_m": 127263,
+"wpts": []
+},
+"camino-lebaniego-castellano-etapas-10-11-camasobres-monasterio-santo-toribio_1.gpx": {
+"n": 2331,
+"start": [
+43.01507,
+-4.48749
+],
+"end": [
+43.14995,
+-4.65439
+],
+"km": 41.84,
+"up": 1076,
+"emin": 287,
+"emax": 1454,
+"loop_m": 20216,
+"wpts": []
+},
+"camino-olvidado-en-leon-etapa-8.gpx": {
+"n": 5087,
+"start": [
+42.78428,
+-4.85658
+],
+"end": [
+42.78804,
+-4.9693
+],
+"km": 58.76,
+"up": 1029,
+"emin": 969,
+"emax": 1584,
+"loop_m": 9208,
+"wpts": []
+},
+"camino-olvidado-en-palencia-etapa-5.gpx": {
+"n": 1483,
+"start": [
+42.93862,
+-4.17917
+],
+"end": [
+42.79282,
+-4.2591
+],
+"km": 24.61,
+"up": 715,
+"emin": 719,
+"emax": 1025,
+"loop_m": 17472,
+"wpts": []
+},
+"camino-olvidado-en-palencia-etapa-6.gpx": {
+"n": 1141,
+"start": [
+42.79282,
+-4.2591
+],
+"end": [
+42.8621,
+-4.49855
+],
+"km": 28.7,
+"up": 369,
+"emin": 884,
+"emax": 1007,
+"loop_m": 20992,
+"wpts": []
+},
+"camino-olvidado-en-palencia-etapa-7.gpx": {
+"n": 1795,
+"start": [
+42.86202,
+-4.49835
+],
+"end": [
+42.78388,
+-4.85674
+],
+"km": 38.88,
+"up": 626,
+"emin": 990,
+"emax": 1199,
+"loop_m": 30493,
+"wpts": []
+},
+"cyclope-palencia-road-bike.gpx": {
+"n": 7688,
+"start": [
+42.26629,
+-4.40029
+],
+"end": [
+42.26717,
+-4.40749
+],
+"km": 489.32,
+"up": 3217,
+"emin": 710,
+"emax": 1425,
+"loop_m": 600,
+"wpts": []
+},
+"de-camporredondo-de-alba-a-valsurbio.gpx": {
+"n": 443,
+"start": [
+42.89507,
+-4.74557
+],
+"end": [
+42.89507,
+-4.74557
+],
+"km": 11.3,
+"up": 469,
+"emin": 1224,
+"emax": 1648,
+"loop_m": 0,
+"wpts": []
+},
+"el-arroyo-de-manzobres-y-sima-del-anillo.gpx": {
+"n": 748,
+"start": [
+42.9298,
+-4.75852
+],
+"end": [
+42.9298,
+-4.75852
+],
+"km": 12.97,
+"up": 549,
+"emin": 1296,
+"emax": 1794,
+"loop_m": 0,
+"wpts": []
+},
+"el-pozo-de-las-lomas.gpx": {
+"n": 332,
+"start": [
+42.97106,
+-4.75758
+],
+"end": [
+43.0107,
+-4.74271
+],
+"km": 6.19,
+"up": 671,
+"emin": 1414,
+"emax": 2078,
+"loop_m": 4571,
+"wpts": []
+},
+"el-roblon-de-estalaya.gpx": {
+"n": 201,
+"start": [
+42.92417,
+-4.47207
+],
+"end": [
+42.92411,
+-4.47208
+],
+"km": 4.51,
+"up": 147,
+"emin": 1079,
+"emax": 1227,
+"loop_m": 7,
+"wpts": []
+},
+"el-valle-de-pineda-y-el-pozo-curavacas.gpx": {
+"n": 878,
+"start": [
+42.94177,
+-4.66229
+],
+"end": [
+42.99035,
+-4.68658
+],
+"km": 18.98,
+"up": 487,
+"emin": 1327,
+"emax": 1785,
+"loop_m": 5752,
+"wpts": []
+},
+"gr-1-palencia-etapa-1-cantabria-branosera.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr-1-palencia-etapa-1-cantabria-branosera_1.gpx": {
+"n": 197,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.9359,
+-4.30814
+],
+"km": 8.1,
+"up": 319,
+"emin": 1058,
+"emax": 1375,
+"loop_m": 5430,
+"wpts": []
+},
+"gr1-palencia-etapa-2-branosera-estalaya.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr1-palencia-etapa-2-branosera-estalaya_1.gpx": {
+"n": 716,
+"start": [
+42.93568,
+-4.30814
+],
+"end": [
+42.92696,
+-4.47475
+],
+"km": 24.29,
+"up": 710,
+"emin": 1050,
+"emax": 1619,
+"loop_m": 13599,
+"wpts": []
+},
+"gr1-palencia-etapa-3-estalaya-cervera-de-pisuerga.gpx": {
+"n": 386,
+"start": [
+42.92696,
+-4.47475
+],
+"end": [
+42.8666,
+-4.49882
+],
+"km": 11.07,
+"up": 139,
+"emin": 998,
+"emax": 1161,
+"loop_m": 6992,
+"wpts": []
+},
+"gr1-palencia-etapa-3-estalaya-cervera-de-pisuerga_1.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr1-palencia-etapa-4-cervera-de-pisuerga-triollo.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr1-palencia-etapa-4-cervera-de-pisuerga-triollo_1.gpx": {
+"n": 580,
+"start": [
+42.8666,
+-4.49884
+],
+"end": [
+42.9239,
+-4.67993
+],
+"km": 22.35,
+"up": 577,
+"emin": 998,
+"emax": 1432,
+"loop_m": 16069,
+"wpts": []
+},
+"gr1-palencia-etapa-5-triollo-camporredondo-de-alba.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr1-palencia-etapa-5-triollo-camporredondo-de-alba_1.gpx": {
+"n": 130,
+"start": [
+42.92395,
+-4.68
+],
+"end": [
+42.89554,
+-4.74429
+],
+"km": 10.48,
+"up": 153,
+"emin": 1224,
+"emax": 1407,
+"loop_m": 6115,
+"wpts": []
+},
+"gr1-palencia-etapa-6-camporredondo-de-alba-cruz-armada.gpx": {
+"n": 2350,
+"start": [
+42.93557,
+-4.24144
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 85.22,
+"up": 2377,
+"emin": 998,
+"emax": 1621,
+"loop_m": 46320,
+"wpts": []
+},
+"gr1-palencia-etapa-6-camporredondo-de-alba-cruz-armada_1.gpx": {
+"n": 363,
+"start": [
+42.89551,
+-4.74427
+],
+"end": [
+42.92916,
+-4.81033
+],
+"km": 9.0,
+"up": 486,
+"emin": 1227,
+"emax": 1621,
+"loop_m": 6554,
+"wpts": []
+},
+"integral-espacio-natural-de-covalagua.gpx": {
+"n": 1695,
+"start": [
+42.77094,
+-4.1518
+],
+"end": [
+42.77094,
+-4.1518
+],
+"km": 19.75,
+"up": 480,
+"emin": 956,
+"emax": 1226,
+"loop_m": 0,
+"wpts": []
+},
+"la-fuente-del-cobre.gpx": {
+"n": 266,
+"start": [
+42.99156,
+-4.42803
+],
+"end": [
+42.99157,
+-4.42799
+],
+"km": 11.61,
+"up": 440,
+"emin": 1224,
+"emax": 1604,
+"loop_m": 3,
+"wpts": []
+},
+"la-senda-del-bosque-fosil.gpx": {
+"n": 156,
+"start": [
+42.94297,
+-4.46199
+],
+"end": [
+42.94298,
+-4.46203
+],
+"km": 3.13,
+"up": 110,
+"emin": 1183,
+"emax": 1297,
+"loop_m": 3,
+"wpts": []
+},
+"la-senda-pena-del-oso.gpx": {
+"n": 350,
+"start": [
+42.87209,
+-4.50276
+],
+"end": [
+42.8719,
+-4.5028
+],
+"km": 11.7,
+"up": 346,
+"emin": 999,
+"emax": 1267,
+"loop_m": 21,
+"wpts": []
+},
+"la-tejeda-de-tosande.gpx": {
+"n": 581,
+"start": [
+42.82574,
+-4.51656
+],
+"end": [
+42.82574,
+-4.51656
+],
+"km": 9.45,
+"up": 429,
+"emin": 1073,
+"emax": 1410,
+"loop_m": 0,
+"wpts": []
+},
+"las-tuerces-ruta-amarilla.gpx": {
+"n": 401,
+"start": [
+42.73542,
+-4.27509
+],
+"end": [
+42.75402,
+-4.25725
+],
+"km": 8.26,
+"up": 336,
+"emin": 872,
+"emax": 1062,
+"loop_m": 2530,
+"wpts": []
+},
+"las-tuerces-ruta-azul.gpx": {
+"n": 457,
+"start": [
+42.73563,
+-4.27225
+],
+"end": [
+42.74775,
+-4.20811
+],
+"km": 9.22,
+"up": 231,
+"emin": 887,
+"emax": 1069,
+"loop_m": 5408,
+"wpts": []
+},
+"las-tuerces-ruta-roja.gpx": {
+"n": 431,
+"start": [
+42.73644,
+-4.27328
+],
+"end": [
+42.75402,
+-4.25722
+],
+"km": 5.55,
+"up": 248,
+"emin": 883,
+"emax": 1062,
+"loop_m": 2353,
+"wpts": []
+},
+"las-tuerces-ruta-rosa.gpx": {
+"n": 354,
+"start": [
+42.74776,
+-4.20809
+],
+"end": [
+42.75399,
+-4.25717
+],
+"km": 6.89,
+"up": 180,
+"emin": 953,
+"emax": 1086,
+"loop_m": 4067,
+"wpts": []
+},
+"las-tuerces-ruta-verde.gpx": {
+"n": 312,
+"start": [
+42.78994,
+-4.25874
+],
+"end": [
+42.75398,
+-4.25719
+],
+"km": 7.24,
+"up": 183,
+"emin": 883,
+"emax": 1069,
+"loop_m": 4001,
+"wpts": []
+},
+"monte-ciruelo-desde-la-muneca.gpx": {
+"n": 392,
+"start": [
+42.91746,
+-4.36875
+],
+"end": [
+42.91743,
+-4.36867
+],
+"km": 11.22,
+"up": 303,
+"emin": 1035,
+"emax": 1335,
+"loop_m": 7,
+"wpts": []
+},
+"pena-tremaya.gpx": {
+"n": 325,
+"start": [
+42.97937,
+-4.46532
+],
+"end": [
+42.9794,
+-4.46539
+],
+"km": 6.87,
+"up": 301,
+"emin": 1126,
+"emax": 1424,
+"loop_m": 7,
+"wpts": []
+},
+"por-el-despoblado-de-valsurbio.gpx": {
+"n": 588,
+"start": [
+42.85679,
+-4.80806
+],
+"end": [
+42.89507,
+-4.74562
+],
+"km": 15.49,
+"up": 496,
+"emin": 1224,
+"emax": 1690,
+"loop_m": 6633,
+"wpts": []
+},
+"ruta-btt-alto-valle-de-muda.gpx": {
+"n": 377,
+"start": [
+42.89712,
+-4.38624
+],
+"end": [
+42.89704,
+-4.38624
+],
+"km": 12.15,
+"up": 200,
+"emin": 993,
+"emax": 1143,
+"loop_m": 8,
+"wpts": []
+},
+"ruta-btt-barruelo-de-santullan-cervera-de-pisuerga.gpx": {
+"n": 906,
+"start": [
+42.90167,
+-4.28789
+],
+"end": [
+42.86207,
+-4.49865
+],
+"km": 30.57,
+"up": 341,
+"emin": 951,
+"emax": 1106,
+"loop_m": 17728,
+"wpts": []
+},
+"ruta-btt-cervera-de-pisuerga-triollo.gpx": {
+"n": 572,
+"start": [
+42.86211,
+-4.4987
+],
+"end": [
+42.92491,
+-4.681
+],
+"km": 23.68,
+"up": 548,
+"emin": 996,
+"emax": 1446,
+"loop_m": 16411,
+"wpts": []
+},
+"ruta-btt-del-carbon.gpx": {
+"n": 462,
+"start": [
+42.8485,
+-4.37923
+],
+"end": [
+42.8485,
+-4.37937
+],
+"km": 19.09,
+"up": 150,
+"emin": 943,
+"emax": 1053,
+"loop_m": 11,
+"wpts": []
+},
+"ruta-btt-el-ferrocarril-de-la-robla.gpx": {
+"n": 1977,
+"start": [
+42.80015,
+-4.73802
+],
+"end": [
+42.80008,
+-4.73793
+],
+"km": 33.96,
+"up": 411,
+"emin": 1071,
+"emax": 1211,
+"loop_m": 10,
+"wpts": []
+},
+"ruta-btt-gotico-y-romanico-en-la-pena.gpx": {
+"n": 401,
+"start": [
+42.80801,
+-4.5989
+],
+"end": [
+42.80805,
+-4.59897
+],
+"km": 17.57,
+"up": 111,
+"emin": 1106,
+"emax": 1179,
+"loop_m": 7,
+"wpts": []
+},
+"ruta-btt-guardo-puente-almuhey.gpx": {
+"n": 451,
+"start": [
+42.79768,
+-4.84809
+],
+"end": [
+42.78479,
+-4.97764
+],
+"km": 21.39,
+"up": 293,
+"emin": 972,
+"emax": 1205,
+"loop_m": 10668,
+"wpts": []
+},
+"ruta-btt-la-despensa-del-abad.gpx": {
+"n": 900,
+"start": [
+42.86263,
+-4.27773
+],
+"end": [
+42.86258,
+-4.27773
+],
+"km": 25.36,
+"up": 293,
+"emin": 918,
+"emax": 993,
+"loop_m": 5,
+"wpts": []
+},
+"ruta-btt-la-horca-de-la-ojeda.gpx": {
+"n": 882,
+"start": [
+42.70195,
+-4.38255
+],
+"end": [
+42.702,
+-4.38262
+],
+"km": 22.02,
+"up": 275,
+"emin": 901,
+"emax": 1021,
+"loop_m": 8,
+"wpts": []
+},
+"ruta-btt-las-ermitas-del-embalse-de-aguilar.gpx": {
+"n": 454,
+"start": [
+42.77399,
+-4.36764
+],
+"end": [
+42.77403,
+-4.36767
+],
+"km": 21.41,
+"up": 316,
+"emin": 946,
+"emax": 1106,
+"loop_m": 5,
+"wpts": []
+},
+"ruta-btt-las-fuentes-tamaricas.gpx": {
+"n": 789,
+"start": [
+42.82771,
+-4.844
+],
+"end": [
+42.82768,
+-4.84404
+],
+"km": 13.47,
+"up": 87,
+"emin": 1113,
+"emax": 1161,
+"loop_m": 5,
+"wpts": []
+},
+"ruta-btt-las-ranas-del-rio-valdavia.gpx": {
+"n": 459,
+"start": [
+42.76368,
+-4.68649
+],
+"end": [
+42.76364,
+-4.68649
+],
+"km": 19.93,
+"up": 209,
+"emin": 991,
+"emax": 1144,
+"loop_m": 5,
+"wpts": []
+},
+"ruta-btt-los-valles-de-burejo.gpx": {
+"n": 390,
+"start": [
+42.81944,
+-4.50994
+],
+"end": [
+42.81941,
+-4.50992
+],
+"km": 20.07,
+"up": 233,
+"emin": 977,
+"emax": 1112,
+"loop_m": 3,
+"wpts": []
+},
+"ruta-btt-monumentos-karsticos.gpx": {
+"n": 590,
+"start": [
+42.75905,
+-4.25095
+],
+"end": [
+42.75908,
+-4.25107
+],
+"km": 17.73,
+"up": 254,
+"emin": 884,
+"emax": 1044,
+"loop_m": 10,
+"wpts": []
+},
+"ruta-btt-pedaleando-por-el-romanico-palentino.gpx": {
+"n": 434,
+"start": [
+42.79632,
+-4.27297
+],
+"end": [
+42.79629,
+-4.2729
+],
+"km": 56.15,
+"up": 722,
+"emin": 899,
+"emax": 1086,
+"loop_m": 6,
+"wpts": []
+},
+"ruta-btt-por-la-vega-del-carrion.gpx": {
+"n": 879,
+"start": [
+42.79109,
+-4.84814
+],
+"end": [
+42.79108,
+-4.84814
+],
+"km": 20.03,
+"up": 100,
+"emin": 1041,
+"emax": 1103,
+"loop_m": 1,
+"wpts": []
+},
+"ruta-btt-por-las-ventas-de-la-pernia.gpx": {
+"n": 292,
+"start": [
+42.96864,
+-4.49503
+],
+"end": [
+42.96867,
+-4.49498
+],
+"km": 9.27,
+"up": 107,
+"emin": 1083,
+"emax": 1181,
+"loop_m": 6,
+"wpts": []
+},
+"ruta-btt-por-valle-estrecho.gpx": {
+"n": 233,
+"start": [
+42.86402,
+-4.52766
+],
+"end": [
+42.8915,
+-4.59322
+],
+"km": 8.55,
+"up": 91,
+"emin": 1034,
+"emax": 1081,
+"loop_m": 6154,
+"wpts": []
+},
+"ruta-btt-romanico-en-tierras-de-santullan.gpx": {
+"n": 565,
+"start": [
+42.8979,
+-4.28264
+],
+"end": [
+42.89795,
+-4.28259
+],
+"km": 16.91,
+"up": 273,
+"emin": 949,
+"emax": 1087,
+"loop_m": 7,
+"wpts": []
+},
+"ruta-btt-senda-del-pisuerga.gpx": {
+"n": 395,
+"start": [
+42.86289,
+-4.49639
+],
+"end": [
+42.86292,
+-4.49645
+],
+"km": 19.18,
+"up": 66,
+"emin": 955,
+"emax": 997,
+"loop_m": 6,
+"wpts": []
+},
+"ruta-btt-tras-las-huellas-de-jano.gpx": {
+"n": 1211,
+"start": [
+42.7964,
+-4.84771
+],
+"end": [
+42.79668,
+-4.84788
+],
+"km": 27.33,
+"up": 799,
+"emin": 1092,
+"emax": 1373,
+"loop_m": 34,
+"wpts": []
+},
+"ruta-btt-triollo-guardo.gpx": {
+"n": 762,
+"start": [
+42.92486,
+-4.6809
+],
+"end": [
+42.79771,
+-4.84822
+],
+"km": 29.87,
+"up": 560,
+"emin": 1098,
+"emax": 1693,
+"loop_m": 19644,
+"wpts": []
+},
+"ruta-btt-vuelta-al-monte-bernorio.gpx": {
+"n": 434,
+"start": [
+42.77484,
+-4.16699
+],
+"end": [
+42.7748,
+-4.1671
+],
+"km": 20.55,
+"up": 220,
+"emin": 899,
+"emax": 1062,
+"loop_m": 10,
+"wpts": []
+},
+"ruta-btt.gpx": {
+"n": 362,
+"start": [
+42.79577,
+-4.27137
+],
+"end": [
+42.79575,
+-4.27134
+],
+"km": 13.4,
+"up": 22,
+"emin": 883,
+"emax": 910,
+"loop_m": 4,
+"wpts": []
+},
+"ruta-circular-alrededores-de-guardo.gpx": {
+"n": 855,
+"start": [
+42.7904,
+-4.84468
+],
+"end": [
+42.78513,
+-4.8397
+],
+"km": 21.93,
+"up": 487,
+"emin": 1093,
+"emax": 1291,
+"loop_m": 713,
+"wpts": []
+},
+"ruta-de-las-merendillas-guardo.gpx": {
+"n": 321,
+"start": [
+42.78956,
+-4.84324
+],
+"end": [
+42.78959,
+-4.84318
+],
+"km": 9.83,
+"up": 256,
+"emin": 1094,
+"emax": 1281,
+"loop_m": 6,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-1.gpx": {
+"n": 769,
+"start": [
+42.65863,
+-4.30906
+],
+"end": [
+42.92933,
+-4.39066
+],
+"km": 131.62,
+"up": 2007,
+"emin": 851,
+"emax": 1330,
+"loop_m": 30828,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-1_1.gpx": {
+"n": 136,
+"start": [
+42.65863,
+-4.30906
+],
+"end": [
+42.75541,
+-4.3928
+],
+"km": 16.86,
+"up": 333,
+"emin": 851,
+"emax": 1065,
+"loop_m": 12753,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-2.gpx": {
+"n": 769,
+"start": [
+42.65863,
+-4.30906
+],
+"end": [
+42.92933,
+-4.39066
+],
+"km": 131.62,
+"up": 2007,
+"emin": 851,
+"emax": 1330,
+"loop_m": 30828,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-2_1.gpx": {
+"n": 191,
+"start": [
+42.75541,
+-4.39281
+],
+"end": [
+42.85415,
+-4.48349
+],
+"km": 27.8,
+"up": 569,
+"emin": 990,
+"emax": 1229,
+"loop_m": 13238,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-3.gpx": {
+"n": 769,
+"start": [
+42.65863,
+-4.30906
+],
+"end": [
+42.92933,
+-4.39066
+],
+"km": 131.62,
+"up": 2007,
+"emin": 851,
+"emax": 1330,
+"loop_m": 30828,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-etapa-3_1.gpx": {
+"n": 172,
+"start": [
+42.85415,
+-4.48349
+],
+"end": [
+42.92933,
+-4.39066
+],
+"km": 21.01,
+"up": 444,
+"emin": 951,
+"emax": 1330,
+"loop_m": 11273,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-variante-2.gpx": {
+"n": 769,
+"start": [
+42.65863,
+-4.30906
+],
+"end": [
+42.92933,
+-4.39066
+],
+"km": 131.62,
+"up": 2007,
+"emin": 851,
+"emax": 1330,
+"loop_m": 30828,
+"wpts": []
+},
+"ruta-del-carbon-de-cok-variante-2_1.gpx": {
+"n": 175,
+"start": [
+42.76432,
+-4.39716
+],
+"end": [
+42.81855,
+-4.50581
+],
+"km": 22.3,
+"up": 397,
+"emin": 978,
+"emax": 1101,
+"loop_m": 10721,
+"wpts": []
+},
+"ruta-golobar-valdecebollas-sel-de-la-fuente.gpx": {
+"n": 1131,
+"start": [
+42.96747,
+-4.337
+],
+"end": [
+42.96736,
+-4.3373
+],
+"km": 11.26,
+"up": 862,
+"emin": 1610,
+"emax": 2135,
+"loop_m": 28,
+"wpts": []
+},
+"ruta-lores-pico-lezna.gpx": {
+"n": 498,
+"start": [
+42.99656,
+-4.53308
+],
+"end": [
+43.00699,
+-4.64642
+],
+"km": 10.83,
+"up": 1071,
+"emin": 1205,
+"emax": 2202,
+"loop_m": 9289,
+"wpts": []
+},
+"senda-de-la-cascada-de-manzobre.gpx": {
+"n": 229,
+"start": [
+42.9512,
+-4.76168
+],
+"end": [
+42.95119,
+-4.76169
+],
+"km": 5.86,
+"up": 276,
+"emin": 1343,
+"emax": 1613,
+"loop_m": 1,
+"wpts": []
+},
+"senda-de-la-pedrosa.gpx": {
+"n": 76,
+"start": [
+42.91139,
+-4.28831
+],
+"end": [
+42.93529,
+-4.30771
+],
+"km": 3.72,
+"up": 171,
+"emin": 1048,
+"emax": 1211,
+"loop_m": 3092,
+"wpts": []
+},
+"senda-de-las-doncellas-del-hoyal.gpx": {
+"n": 385,
+"start": [
+42.79202,
+-4.80148
+],
+"end": [
+42.79201,
+-4.80152
+],
+"km": 11.97,
+"up": 391,
+"emin": 1130,
+"emax": 1372,
+"loop_m": 3,
+"wpts": []
+},
+"senda-de-los-pescadores-en-la-ribera-del-rio-carrion.gpx": {
+"n": 195,
+"start": [
+42.82602,
+-4.84857
+],
+"end": [
+42.82631,
+-4.84851
+],
+"km": 6.35,
+"up": 17,
+"emin": 1115,
+"emax": 1140,
+"loop_m": 33,
+"wpts": []
+},
+"senda-del-escultor-ursi.gpx": {
+"n": 324,
+"start": [
+42.89342,
+-4.3106
+],
+"end": [
+42.89337,
+-4.31058
+],
+"km": 11.28,
+"up": 385,
+"emin": 1063,
+"emax": 1380,
+"loop_m": 6,
+"wpts": []
+},
+"senda-el-gigante-del-valle-estrecho.gpx": {
+"n": 124,
+"start": [
+42.90549,
+-4.62794
+],
+"end": [
+42.90548,
+-4.62792
+],
+"km": 4.25,
+"up": 157,
+"emin": 1335,
+"emax": 1444,
+"loop_m": 2,
+"wpts": []
+},
+"senda-la-venganza-del-conde.gpx": {
+"n": 883,
+"start": [
+42.96686,
+-4.49547
+],
+"end": [
+42.97645,
+-4.47701
+],
+"km": 9.55,
+"up": 641,
+"emin": 1102,
+"emax": 1424,
+"loop_m": 1842,
+"wpts": []
+},
+"senda-la-venganza-del-conde_1.gpx": {
+"n": 830,
+"start": [
+42.96686,
+-4.49547
+],
+"end": [
+42.96756,
+-4.49407
+],
+"km": 7.66,
+"up": 323,
+"emin": 1102,
+"emax": 1424,
+"loop_m": 138,
+"wpts": []
+},
+"sendero-al-valle-de-las-brujas.gpx": {
+"n": 337,
+"start": [
+42.78995,
+-4.84311
+],
+"end": [
+42.78993,
+-4.84312
+],
+"km": 6.22,
+"up": 212,
+"emin": 1095,
+"emax": 1242,
+"loop_m": 2,
+"wpts": []
+},
+"sendero-campos-de-menaza.gpx": {
+"n": 452,
+"start": [
+42.83134,
+-4.21617
+],
+"end": [
+42.83118,
+-4.21608
+],
+"km": 6.12,
+"up": 87,
+"emin": 914,
+"emax": 991,
+"loop_m": 20,
+"wpts": []
+},
+"sendero-canduela-villanueva-de-henares.gpx": {
+"n": 460,
+"start": [
+42.83439,
+-4.18623
+],
+"end": [
+42.8344,
+-4.18618
+],
+"km": 8.53,
+"up": 269,
+"emin": 926,
+"emax": 1012,
+"loop_m": 4,
+"wpts": []
+},
+"sendero-cardano-de-abajo-a-la-cruz-armada.gpx": {
+"n": 1229,
+"start": [
+42.92073,
+-4.76413
+],
+"end": [
+42.9208,
+-4.76406
+],
+"km": 12.11,
+"up": 512,
+"emin": 1252,
+"emax": 1727,
+"loop_m": 9,
+"wpts": []
+},
+"sendero-cascada-de-covalagua.gpx": {
+"n": 219,
+"start": [
+42.77071,
+-4.15124
+],
+"end": [
+42.77071,
+-4.15124
+],
+"km": 5.04,
+"up": 94,
+"emin": 994,
+"emax": 1084,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-cervera-de-pisuerga-pico-de-las-cruces.gpx": {
+"n": 1114,
+"start": [
+42.85709,
+-4.49949
+],
+"end": [
+42.85719,
+-4.49963
+],
+"km": 9.47,
+"up": 634,
+"emin": 949,
+"emax": 1560,
+"loop_m": 16,
+"wpts": []
+},
+"sendero-cillamayor-montes-de-matabuena.gpx": {
+"n": 860,
+"start": [
+42.86254,
+-4.27877
+],
+"end": [
+42.86239,
+-4.27882
+],
+"km": 8.72,
+"up": 250,
+"emin": 917,
+"emax": 1035,
+"loop_m": 18,
+"wpts": []
+},
+"sendero-collado-del-pinar-fuentes-carrionas.gpx": {
+"n": 277,
+"start": [
+42.8486,
+-4.83557
+],
+"end": [
+42.8486,
+-4.83557
+],
+"km": 10.67,
+"up": 703,
+"emin": 1160,
+"emax": 1611,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-cueva-de-los-franceses-pozo-de-los-lobos.gpx": {
+"n": 205,
+"start": [
+42.77212,
+-4.11582
+],
+"end": [
+42.77365,
+-4.09395
+],
+"km": 3.14,
+"up": 96,
+"emin": 1125,
+"emax": 1219,
+"loop_m": 1793,
+"wpts": []
+},
+"sendero-cueva-dorada-fuentes-carrionas.gpx": {
+"n": 219,
+"start": [
+42.89511,
+-4.74564
+],
+"end": [
+42.89399,
+-4.71382
+],
+"km": 3.98,
+"up": 343,
+"emin": 1224,
+"emax": 1567,
+"loop_m": 2596,
+"wpts": []
+},
+"sendero-de-los-lobos-al-balcon-de-judas.gpx": {
+"n": 563,
+"start": [
+42.78991,
+-4.84312
+],
+"end": [
+42.78991,
+-4.84312
+],
+"km": 14.87,
+"up": 628,
+"emin": 1095,
+"emax": 1491,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-de-muda-a-monasterio.gpx": {
+"n": 708,
+"start": [
+42.87619,
+-4.39526
+],
+"end": [
+42.87619,
+-4.39526
+],
+"km": 6.49,
+"up": 128,
+"emin": 990,
+"emax": 1107,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-de-ujapero-y-cocoto.gpx": {
+"n": 399,
+"start": [
+42.90879,
+-4.28813
+],
+"end": [
+42.90859,
+-4.28842
+],
+"km": 19.12,
+"up": 505,
+"emin": 1027,
+"emax": 1492,
+"loop_m": 32,
+"wpts": []
+},
+"sendero-de-valdelobos-prc-p-14.gpx": {
+"n": 1070,
+"start": [
+42.68089,
+-4.82386
+],
+"end": [
+42.68087,
+-4.82386
+],
+"km": 11.85,
+"up": 127,
+"emin": 1011,
+"emax": 1089,
+"loop_m": 2,
+"wpts": []
+},
+"sendero-del-ribero-pintado.gpx": {
+"n": 291,
+"start": [
+42.99148,
+-4.42837
+],
+"end": [
+42.99148,
+-4.42837
+],
+"km": 6.26,
+"up": 174,
+"emin": 1216,
+"emax": 1373,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-el-sabinar-de-pena-lampa.gpx": {
+"n": 262,
+"start": [
+42.84085,
+-4.85707
+],
+"end": [
+42.84085,
+-4.85707
+],
+"km": 10.16,
+"up": 688,
+"emin": 1140,
+"emax": 1803,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-la-mata-del-fraile-y-el-calero-de-branosera.gpx": {
+"n": 242,
+"start": [
+42.91143,
+-4.28835
+],
+"end": [
+42.91143,
+-4.28839
+],
+"km": 10.5,
+"up": 342,
+"emin": 1047,
+"emax": 1330,
+"loop_m": 3,
+"wpts": []
+},
+"sendero-las-minas-de-san-cebrian-de-muda.gpx": {
+"n": 158,
+"start": [
+42.89711,
+-4.38622
+],
+"end": [
+42.89712,
+-4.38623
+],
+"km": 5.09,
+"up": 120,
+"emin": 1058,
+"emax": 1181,
+"loop_m": 1,
+"wpts": []
+},
+"sendero-ligueerzana-a-la-vega-de-quintanaluengos.gpx": {
+"n": 76,
+"start": [
+42.85677,
+-4.45841
+],
+"end": [
+42.85676,
+-4.45842
+],
+"km": 8.72,
+"up": 83,
+"emin": 965,
+"emax": 1029,
+"loop_m": 2,
+"wpts": []
+},
+"sendero-monte-corcos-y-ermita-del-cristo.gpx": {
+"n": 301,
+"start": [
+42.79048,
+-4.84548
+],
+"end": [
+42.78995,
+-4.8555
+],
+"km": 10.78,
+"up": 222,
+"emin": 1090,
+"emax": 1292,
+"loop_m": 820,
+"wpts": []
+},
+"sendero-polentinos-abadia-de-lebanza.gpx": {
+"n": 1319,
+"start": [
+42.93841,
+-4.52466
+],
+"end": [
+42.93841,
+-4.52466
+],
+"km": 8.89,
+"up": 384,
+"emin": 1186,
+"emax": 1406,
+"loop_m": 0,
+"wpts": []
+},
+"sendero-roblon-del-monasterio-prc-p-12.gpx": {
+"n": 459,
+"start": [
+42.83371,
+-4.84872
+],
+"end": [
+42.8338,
+-4.84874
+],
+"km": 11.83,
+"up": 394,
+"emin": 1139,
+"emax": 1452,
+"loop_m": 10,
+"wpts": []
+},
+"sendero-salcedillo-rojadillo-y-branosera.gpx": {
+"n": 551,
+"start": [
+42.94085,
+-4.27437
+],
+"end": [
+42.9359,
+-4.30814
+],
+"km": 12.4,
+"up": 395,
+"emin": 1059,
+"emax": 1451,
+"loop_m": 2804,
+"wpts": []
+},
+"sendero-san-juan-de-redondo-corrala-de-bismo.gpx": {
+"n": 957,
+"start": [
+42.98999,
+-4.44842
+],
+"end": [
+42.99009,
+-4.44831
+],
+"km": 9.51,
+"up": 373,
+"emin": 1197,
+"emax": 1444,
+"loop_m": 14,
+"wpts": []
+},
+"sendero-triollo-hornamiel.gpx": {
+"n": 1197,
+"start": [
+42.92303,
+-4.67943
+],
+"end": [
+42.92305,
+-4.67946
+],
+"km": 9.7,
+"up": 375,
+"emin": 1274,
+"emax": 1450,
+"loop_m": 3,
+"wpts": []
+},
+"sendero-valberzoso-puente-rojadillo.gpx": {
+"n": 773,
+"start": [
+42.92382,
+-4.23767
+],
+"end": [
+42.92378,
+-4.23766
+],
+"km": 6.6,
+"up": 149,
+"emin": 1062,
+"emax": 1168,
+"loop_m": 4,
+"wpts": []
+},
+"sendero-valles-san-quirce-y-corcos.gpx": {
+"n": 477,
+"start": [
+42.79054,
+-4.84581
+],
+"end": [
+42.79053,
+-4.84593
+],
+"km": 14.32,
+"up": 344,
+"emin": 1089,
+"emax": 1422,
+"loop_m": 10,
+"wpts": []
+},
+"sendero-vidrieros-pie-del-curavacas.gpx": {
+"n": 494,
+"start": [
+42.94283,
+-4.66461
+],
+"end": [
+42.95483,
+-4.67381
+],
+"km": 4.81,
+"up": 393,
+"emin": 1282,
+"emax": 1671,
+"loop_m": 1530,
+"wpts": []
+},
+"subida-al-monte-coriscao-fuentes-carrionas.gpx": {
+"n": 420,
+"start": [
+42.89467,
+-4.74735
+],
+"end": [
+42.89564,
+-4.74925
+],
+"km": 10.14,
+"up": 440,
+"emin": 1234,
+"emax": 1554,
+"loop_m": 188,
+"wpts": []
+},
+"valberzoso-collado-de-somahoz.gpx": {
+"n": 174,
+"start": [
+42.92384,
+-4.23766
+],
+"end": [
+42.9603,
+-4.23556
+],
+"km": 5.23,
+"up": 199,
+"emin": 1055,
+"emax": 1216,
+"loop_m": 4058,
+"wpts": []
+},
+"valdecebollas-y-el-cueto.gpx": {
+"n": 395,
+"start": [
+42.93659,
+-4.31027
+],
+"end": [
+42.96728,
+-4.33704
+],
+"km": 13.15,
+"up": 969,
+"emin": 1183,
+"emax": 2138,
+"loop_m": 4049,
+"wpts": []
+}
+}
